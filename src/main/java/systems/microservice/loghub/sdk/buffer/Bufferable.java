@@ -17,9 +17,12 @@
 
 package systems.microservice.loghub.sdk.buffer;
 
+import java.util.Map;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
 public interface Bufferable {
+    public int write(byte[] buffer, int index, Map<Object, Object> map);
 }

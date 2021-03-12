@@ -32,7 +32,7 @@ public class LogHub {
         return logger;
     }
 
-    public static void logEvent() {
+    public static void logEvent(long time) {
     }
 
     public static void logMetric() {

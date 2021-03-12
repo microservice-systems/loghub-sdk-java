@@ -18,7 +18,7 @@
 package systems.microservice.loghub.sdk.event;
 
 import java.io.Serializable;
-import java.util.UUID;
+import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov
@@ -27,25 +27,31 @@ import java.util.UUID;
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final UUID id;
-    public final long time;
-    public final String type;
-    public final String platform;
-    public final String environment;
-    public final String application;
-    public final String version;
-    public final String instance;
-    public final String logger;
-
-    public Event(UUID id, long time, String type, String platform, String environment, String application, String version, String instance, String logger) {
-        this.id = id;
-        this.time = time;
-        this.type = type;
-        this.platform = platform;
-        this.environment = environment;
-        this.application = application;
-        this.version = version;
-        this.instance = instance;
-        this.logger = logger;
-    }
+    public String id;
+    public long time;
+    public String platform;
+    public String environment;
+    public String application;
+    public String version;
+    public String instance;
+    public String instanceHost;
+    public String instanceIp;
+    public String process;
+    public long processId;
+    public long processStart;
+    public String thread;
+    public long threadId;
+    public String threadName;
+    public int threadPriority;
+    public String level;
+    public int levelId;
+    public String type;
+    public String logger;
+    public String message;
+    public Map<String, Object> tags;
+    public int size;
+    public long totalCount;
+    public long totalSize;
+    public long lostCount;
+    public long lostSize;
 }

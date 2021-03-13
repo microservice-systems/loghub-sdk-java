@@ -22,6 +22,9 @@ package systems.microservice.loghub.sdk.v1;
  * @since 1.0
  */
 public class LogHub {
+    private static final LogEventWriter eventWriter = new LogEventWriter();
+    private static final LogMetricWriter metricWriter = new LogMetricWriter();
+
     protected final String logger;
 
     public LogHub(String logger) {

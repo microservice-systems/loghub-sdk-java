@@ -43,8 +43,8 @@ public class Event implements Serializable {
     public long threadId;
     public String threadName;
     public int threadPriority;
-    public String level;
-    public int levelId;
+    public int level;
+    public String levelName;
     public String type;
     public String logger;
     public String message;

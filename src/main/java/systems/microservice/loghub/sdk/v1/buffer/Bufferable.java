@@ -24,5 +24,5 @@ import java.util.Map;
  * @since 1.0
  */
 public interface Bufferable {
-    public int write(byte[] buffer, int index, Map<Object, Object> map);
+    public int write(byte[] buffer, int index, Map<String, Object> context);
 }

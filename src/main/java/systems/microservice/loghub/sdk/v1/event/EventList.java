@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.event;
+package systems.microservice.loghub.sdk.v1.event;
 
 import java.util.Collection;
 import java.util.Iterator;

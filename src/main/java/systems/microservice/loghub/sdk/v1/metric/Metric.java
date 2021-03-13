@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.metric;
+package systems.microservice.loghub.sdk.v1.metric;
 
 import java.io.Serializable;
 

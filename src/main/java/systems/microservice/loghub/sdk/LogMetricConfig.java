@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.v1;
+package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.v1.buffer.Bufferable;
+import systems.microservice.loghub.sdk.buffer.Bufferable;
 
 import java.io.Serializable;
 import java.util.Map;

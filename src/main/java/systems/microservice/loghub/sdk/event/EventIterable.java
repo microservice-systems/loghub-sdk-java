@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.v1.event;
+package systems.microservice.loghub.sdk.event;
 
 /**
  * @author Dmitry Kotlyarov

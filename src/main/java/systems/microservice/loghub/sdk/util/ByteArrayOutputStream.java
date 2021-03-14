@@ -37,7 +37,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public ByteArrayOutputStream(int size) {
-        ArgumentUtil.inRangeInt("size", size, 1, Integer.MAX_VALUE);
+        ArgumentUtil.inRangeInt("size", size, 0, Integer.MAX_VALUE);
 
         this.buffer = new byte[size];
         this.count = 0;

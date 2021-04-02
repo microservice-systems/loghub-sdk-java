@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.ArgumentUtil;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 
 import javax.imageio.ImageIO;
@@ -32,31 +33,56 @@ import java.io.IOException;
  * @since 1.0
  */
 public class LogImage {
-    protected final LogImageFormat format;
-    protected final byte[] data;
+    protected final String contentType;
+    protected final byte[] content;
 
-    public LogImage(LogImageFormat format, byte[] data) {
-        this.format = format;
-        this.data = data;
+    public LogImage(String contentType, byte[] content) {
+        ArgumentUtil.notNull("contentType", contentType);
+        ArgumentUtil.notNull("content", content);
+
+        this.contentType = contentType;
+        this.content = content;
     }
 
-    public LogImageFormat getFormat() {
-        return format;
+    public String getContentType() {
+        return contentType;
     }
 
-    public byte[] getData() {
-        return data;
+    public byte[] getContent() {
+        return content;
     }
 
-    public static LogImage takeScreenshot(LogImageFormat format) {
+    public static String getContentType(String format) {
+        ArgumentUtil.notNull("format", format);
+
+        if (format.equals("jpeg")) {
+            return "image/jpeg";
+        } else if (format.equals("png")) {
+            return "image/png";
+        } else if (format.equals("gif")) {
+            return "image/gif";
+        } else if (format.equals("bmp")) {
+            return "image/bmp";
+        } else if (format.equals("webmp")) {
+            return "image/webmp";
+        } else if (format.equals("svg")) {
+            return "image/svg";
+        } else {
+            throw new IllegalArgumentException(String.format("Image format '%s' is not found", format));
+        }
+    }
+
+    public static LogImage takeScreenshot(String format) {
+        ArgumentUtil.notNull("format", format);
+
         try {
             Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage bi = new Robot().createScreenCapture(r);
-            try (ByteArrayOutputStream out = new ByteArrayOutputStream(262144)) {
-                if (ImageIO.write(bi, format.name, out)) {
-                    return new LogImage(format, out.toByteArray());
+            try (ByteArrayOutputStream out = new ByteArrayOutputStream(131072)) {
+                if (ImageIO.write(bi, format, out)) {
+                    return new LogImage(getContentType(format), out.toByteArray());
                 } else {
-                    throw new IllegalArgumentException(String.format("Image IO format '%s' is not found", format.name));
+                    throw new IllegalArgumentException(String.format("Image IO format '%s' is not found", format));
                 }
             }
         } catch (AWTException | IOException e) {

@@ -24,12 +24,13 @@ import java.util.Map;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class Event implements Serializable {
+public class Event implements Comparable<Event>, Serializable {
     private static final long serialVersionUID = 1L;
 
     public String id;
-    public long time;
+    public String type;
     public String platform;
+    public String account;
     public String environment;
     public String application;
     public String version;
@@ -43,15 +44,31 @@ public class Event implements Serializable {
     public long threadId;
     public String threadName;
     public int threadPriority;
+    public long time;
     public int level;
     public String levelName;
-    public String type;
     public String logger;
     public String message;
     public Map<String, Object> tags;
+    public Map<String, String> images;
+    public Map<String, String> blobs;
     public int size;
     public long totalCount;
     public long totalSize;
     public long lostCount;
     public long lostSize;
+
+    public Event() {
+    }
+
+    @Override
+    public int compareTo(Event event) {
+        if (time < event.time) {
+            return -1;
+        } else if (time > event.time) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

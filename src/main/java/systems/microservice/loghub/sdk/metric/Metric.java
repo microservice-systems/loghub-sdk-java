@@ -26,31 +26,17 @@ import java.io.Serializable;
 public class Metric implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final String name;
-    public final long time;
-    public final String platform;
-    public final String environment;
-    public final String application;
-    public final String version;
-    public final String instance;
-    public final String logger;
-    public final long count;
-    public final double sum;
-    public final double min;
-    public final double max;
-
-    public Metric(String name, long time, String platform, String environment, String application, String version, String instance, String logger, long count, double sum, double min, double max) {
-        this.name = name;
-        this.time = time;
-        this.platform = platform;
-        this.environment = environment;
-        this.application = application;
-        this.version = version;
-        this.instance = instance;
-        this.logger = logger;
-        this.count = count;
-        this.sum = sum;
-        this.min = min;
-        this.max = max;
-    }
+    public String name;
+    public long time;
+    public String platform;
+    public String environment;
+    public String application;
+    public String version;
+    public String instance;
+    public String logger;
+    public long count;
+    public double sum;
+    public double avg;
+    public double min;
+    public double max;
 }

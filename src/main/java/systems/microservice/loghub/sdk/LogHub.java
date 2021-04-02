@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.ArgumentUtil;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
@@ -50,10 +51,25 @@ public final class LogHub {
     private LogHub() {
     }
 
-    public static void logEvent(long time) {
+    public static void logEvent(String type,
+                                String thread,
+                                long threadId,
+                                String threadName,
+                                int threadPriority,
+                                long time,
+                                int level,
+                                String levelName,
+                                String logger,
+                                String message,
+                                Bufferable tagsWriter,
+                                Bufferable imagesWriter,
+                                Bufferable blobsWriter) {
     }
 
-    public static void logMetric() {
+    public static void logMetric(String name,
+                                 long value,
+                                 byte point,
+                                 String unit) {
     }
 
     private static Map<String, String> createProperties() {

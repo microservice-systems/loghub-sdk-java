@@ -25,8 +25,8 @@ import java.util.UUID;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class ArgumentUtil {
-    private ArgumentUtil() {
+public final class Argument {
+    private Argument() {
     }
 
     public static <T> T notNull(String argument, T value) {
@@ -42,7 +42,7 @@ public final class ArgumentUtil {
     }
 
     public static boolean True(String argument, boolean value) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if (value) {
             return value;
@@ -52,7 +52,7 @@ public final class ArgumentUtil {
     }
 
     public static boolean False(String argument, boolean value) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if (!value) {
             return value;
@@ -62,7 +62,7 @@ public final class ArgumentUtil {
     }
 
     public static byte inRangeByte(String argument, byte value, byte min, byte max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -72,7 +72,7 @@ public final class ArgumentUtil {
     }
 
     public static char inRangeChar(String argument, char value, char min, char max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -82,7 +82,7 @@ public final class ArgumentUtil {
     }
 
     public static short inRangeShort(String argument, short value, short min, short max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -92,7 +92,7 @@ public final class ArgumentUtil {
     }
 
     public static int inRangeInt(String argument, int value, int min, int max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -102,7 +102,7 @@ public final class ArgumentUtil {
     }
 
     public static long inRangeLong(String argument, long value, long min, long max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -112,7 +112,7 @@ public final class ArgumentUtil {
     }
 
     public static float inRangeFloat(String argument, float value, float min, float max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -122,7 +122,7 @@ public final class ArgumentUtil {
     }
 
     public static double inRangeDouble(String argument, double value, double min, double max) {
-        ArgumentUtil.notNull("argument", argument);
+        Argument.notNull("argument", argument);
 
         if ((value >= min) && (value <= max)) {
             return value;
@@ -132,10 +132,10 @@ public final class ArgumentUtil {
     }
 
     public static UUID inRangeUUID(String argument, UUID value, UUID min, UUID max) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("value", value);
-        ArgumentUtil.notNull("min", min);
-        ArgumentUtil.notNull("max", max);
+        Argument.notNull("argument", argument);
+        Argument.notNull("value", value);
+        Argument.notNull("min", min);
+        Argument.notNull("max", max);
 
         if ((value.compareTo(min) >= 0) && (value.compareTo(max) <= 0)) {
             return value;
@@ -145,10 +145,10 @@ public final class ArgumentUtil {
     }
 
     public static BigInteger inRangeBigInteger(String argument, BigInteger value, BigInteger min, BigInteger max) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("value", value);
-        ArgumentUtil.notNull("min", min);
-        ArgumentUtil.notNull("max", max);
+        Argument.notNull("argument", argument);
+        Argument.notNull("value", value);
+        Argument.notNull("min", min);
+        Argument.notNull("max", max);
 
         if ((value.compareTo(min) >= 0) && (value.compareTo(max) <= 0)) {
             return value;
@@ -158,10 +158,10 @@ public final class ArgumentUtil {
     }
 
     public static BigDecimal inRangeBigDecimal(String argument, BigDecimal value, BigDecimal min, BigDecimal max) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("value", value);
-        ArgumentUtil.notNull("min", min);
-        ArgumentUtil.notNull("max", max);
+        Argument.notNull("argument", argument);
+        Argument.notNull("value", value);
+        Argument.notNull("min", min);
+        Argument.notNull("max", max);
 
         if ((value.compareTo(min) >= 0) && (value.compareTo(max) <= 0)) {
             return value;
@@ -171,8 +171,8 @@ public final class ArgumentUtil {
     }
 
     public static String environment(String argument, String environment) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("environment", environment);
+        Argument.notNull("argument", argument);
+        Argument.notNull("environment", environment);
 
         if (SpellUtil.isEnvironment(environment)) {
             return environment;
@@ -182,8 +182,8 @@ public final class ArgumentUtil {
     }
 
     public static String application(String argument, String application) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("application", application);
+        Argument.notNull("argument", argument);
+        Argument.notNull("application", application);
 
         if (SpellUtil.isApplication(application)) {
             return application;
@@ -193,8 +193,8 @@ public final class ArgumentUtil {
     }
 
     public static String version(String argument, String version) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("version", version);
+        Argument.notNull("argument", argument);
+        Argument.notNull("version", version);
 
         if (SpellUtil.isVersion(version)) {
             return version;
@@ -204,8 +204,8 @@ public final class ArgumentUtil {
     }
 
     public static String instance(String argument, String instance) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("instance", instance);
+        Argument.notNull("argument", argument);
+        Argument.notNull("instance", instance);
 
         if (SpellUtil.isInstance(instance)) {
             return instance;
@@ -215,8 +215,8 @@ public final class ArgumentUtil {
     }
 
     public static String process(String argument, String process) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("process", process);
+        Argument.notNull("argument", argument);
+        Argument.notNull("process", process);
 
         if (SpellUtil.isProcess(process)) {
             return process;
@@ -226,8 +226,8 @@ public final class ArgumentUtil {
     }
 
     public static String secret(String argument, String secret) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("secret", secret);
+        Argument.notNull("argument", argument);
+        Argument.notNull("secret", secret);
 
         if (SpellUtil.isSecret(secret)) {
             return secret;
@@ -237,8 +237,8 @@ public final class ArgumentUtil {
     }
 
     public static String user(String argument, String user) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("user", user);
+        Argument.notNull("argument", argument);
+        Argument.notNull("user", user);
 
         if (SpellUtil.isUser(user)) {
             return user;
@@ -248,8 +248,8 @@ public final class ArgumentUtil {
     }
 
     public static String url(String argument, String url) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("url", url);
+        Argument.notNull("argument", argument);
+        Argument.notNull("url", url);
 
         if (SpellUtil.isUrl(url)) {
             return url;
@@ -259,8 +259,8 @@ public final class ArgumentUtil {
     }
 
     public static String email(String argument, String email) {
-        ArgumentUtil.notNull("argument", argument);
-        ArgumentUtil.notNull("email", email);
+        Argument.notNull("argument", argument);
+        Argument.notNull("email", email);
 
         if (SpellUtil.isEmail(email)) {
             return email;

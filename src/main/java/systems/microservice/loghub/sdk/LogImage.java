@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.util.ArgumentUtil;
+import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 
 import javax.imageio.ImageIO;
@@ -37,8 +37,8 @@ public class LogImage {
     protected final byte[] content;
 
     public LogImage(String contentType, byte[] content) {
-        ArgumentUtil.notNull("contentType", contentType);
-        ArgumentUtil.notNull("content", content);
+        Argument.notNull("contentType", contentType);
+        Argument.notNull("content", content);
 
         this.contentType = contentType;
         this.content = content;
@@ -53,7 +53,7 @@ public class LogImage {
     }
 
     public static String getContentType(String format) {
-        ArgumentUtil.notNull("format", format);
+        Argument.notNull("format", format);
 
         if (format.equals("jpeg")) {
             return "image/jpeg";
@@ -73,7 +73,7 @@ public class LogImage {
     }
 
     public static LogImage takeScreenshot(String format) {
-        ArgumentUtil.notNull("format", format);
+        Argument.notNull("format", format);
 
         try {
             Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());

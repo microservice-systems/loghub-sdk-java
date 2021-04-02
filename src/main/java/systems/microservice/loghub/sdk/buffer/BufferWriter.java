@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.buffer;
 
-import systems.microservice.loghub.sdk.util.ArgumentUtil;
+import systems.microservice.loghub.sdk.util.Argument;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -246,7 +246,7 @@ public final class BufferWriter {
     }
 
     public static int writeBooleans(byte[] buffer, int index, boolean[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -257,7 +257,7 @@ public final class BufferWriter {
     }
 
     public static int writeBytes(byte[] buffer, int index, byte[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -268,7 +268,7 @@ public final class BufferWriter {
     }
 
     public static int writeChars(byte[] buffer, int index, char[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -279,7 +279,7 @@ public final class BufferWriter {
     }
 
     public static int writeShorts(byte[] buffer, int index, short[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -290,7 +290,7 @@ public final class BufferWriter {
     }
 
     public static int writeInts(byte[] buffer, int index, int[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -301,7 +301,7 @@ public final class BufferWriter {
     }
 
     public static int writeLongs(byte[] buffer, int index, long[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -312,7 +312,7 @@ public final class BufferWriter {
     }
 
     public static int writeFloats(byte[] buffer, int index, float[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -323,7 +323,7 @@ public final class BufferWriter {
     }
 
     public static int writeDoubles(byte[] buffer, int index, double[] value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -334,14 +334,14 @@ public final class BufferWriter {
     }
 
     public static int writeUUID(byte[] buffer, int index, UUID value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         index = writeLong(buffer, index, value.getMostSignificantBits());
         return writeLong(buffer, index, value.getLeastSignificantBits());
     }
 
     public static int writeString(byte[] buffer, int index, String value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         int ci = value.length();
         index = writeLength(buffer, index, ci);
@@ -352,7 +352,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -387,7 +387,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -428,7 +428,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2, String param3) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -475,7 +475,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2, String param3, String param4) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -528,7 +528,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2, String param3, String param4, String param5) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -587,14 +587,14 @@ public final class BufferWriter {
     }
 
     public static int writeBufferable(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("value", value);
 
         return value.write(buffer, index, context);
     }
 
     public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Class clazz, Object value) {
-        ArgumentUtil.notNull("clazz", clazz);
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("clazz", clazz);
+        Argument.notNull("value", value);
 
         ObjectWriter ow = OBJECT_WRITERS.get(clazz);
         if (ow != null) {
@@ -605,8 +605,8 @@ public final class BufferWriter {
     }
 
     public static int writeObjects(byte[] buffer, int index, Map<String, Object> context, Class clazz, Object[] value) {
-        ArgumentUtil.notNull("clazz", clazz);
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("clazz", clazz);
+        Argument.notNull("value", value);
 
         ObjectWriter ow = OBJECT_WRITERS.get(clazz);
         if (ow != null) {
@@ -622,8 +622,8 @@ public final class BufferWriter {
     }
 
     public static int writeObjects(byte[] buffer, int index, Map<String, Object> context, Class clazz, Collection value) {
-        ArgumentUtil.notNull("clazz", clazz);
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("clazz", clazz);
+        Argument.notNull("value", value);
 
         ObjectWriter ow = OBJECT_WRITERS.get(clazz);
         if (ow != null) {
@@ -639,9 +639,9 @@ public final class BufferWriter {
     }
 
     public static int writeObjects(byte[] buffer, int index, Map<String, Object> context, Class keyClazz, Class valueClazz, Map value) {
-        ArgumentUtil.notNull("keyClazz", keyClazz);
-        ArgumentUtil.notNull("valueClazz", valueClazz);
-        ArgumentUtil.notNull("value", value);
+        Argument.notNull("keyClazz", keyClazz);
+        Argument.notNull("valueClazz", valueClazz);
+        Argument.notNull("value", value);
 
         ObjectWriter kow = OBJECT_WRITERS.get(keyClazz);
         if (kow != null) {

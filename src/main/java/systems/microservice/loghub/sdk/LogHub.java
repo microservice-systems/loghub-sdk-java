@@ -18,7 +18,7 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.Bufferable;
-import systems.microservice.loghub.sdk.util.ArgumentUtil;
+import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
 import java.io.BufferedReader;
@@ -51,19 +51,15 @@ public final class LogHub {
     private LogHub() {
     }
 
-    public static void logEvent(String type,
-                                String thread,
-                                long threadId,
-                                String threadName,
-                                int threadPriority,
-                                long time,
+    public static void logEvent(long time,
                                 int level,
                                 String levelName,
                                 String logger,
-                                String message,
-                                Bufferable tagsWriter,
-                                Bufferable imagesWriter,
-                                Bufferable blobsWriter) {
+                                Throwable exception,
+                                Map<String, LogTag> tags,
+                                Map<String, LogImage> images,
+                                Map<String, LogBlob> blobs,
+                                String message) {
     }
 
     public static void logMetric(String name,
@@ -103,7 +99,7 @@ public final class LogHub {
                 }
             }
         }
-        return ArgumentUtil.environment("loghub.environment", e);
+        return Argument.environment("loghub.environment", e);
     }
 
     private static String createApplication(Map<String, String> properties) {
@@ -117,7 +113,7 @@ public final class LogHub {
                 }
             }
         }
-        return ArgumentUtil.application("loghub.application", a);
+        return Argument.application("loghub.application", a);
     }
 
     private static String createVersion(Map<String, String> properties) {
@@ -131,7 +127,7 @@ public final class LogHub {
                 }
             }
         }
-        return ArgumentUtil.version("loghub.version", v);
+        return Argument.version("loghub.version", v);
     }
 
     private static String createInstance(Map<String, String> properties) {
@@ -154,7 +150,7 @@ public final class LogHub {
                 }
             }
         }
-        return ArgumentUtil.instance("loghub.instance", i);
+        return Argument.instance("loghub.instance", i);
     }
 
     private static String createAWSInstance() {

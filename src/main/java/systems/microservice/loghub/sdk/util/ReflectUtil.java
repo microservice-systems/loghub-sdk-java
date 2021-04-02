@@ -28,8 +28,8 @@ public final class ReflectUtil {
     }
 
     public static void set(Object object, Field field, Object value) {
-        ArgumentUtil.notNull("object", object);
-        ArgumentUtil.notNull("field", field);
+        Argument.notNull("object", object);
+        Argument.notNull("field", field);
 
         try {
             field.set(object, value);
@@ -39,8 +39,8 @@ public final class ReflectUtil {
     }
 
     public static Field makeAccessible(Class clazz, String field) {
-        ArgumentUtil.notNull("clazz", clazz);
-        ArgumentUtil.notNull("field", field);
+        Argument.notNull("clazz", clazz);
+        Argument.notNull("field", field);
 
         try {
             Field f = clazz.getDeclaredField(field);

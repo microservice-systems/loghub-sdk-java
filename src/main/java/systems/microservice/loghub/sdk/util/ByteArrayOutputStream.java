@@ -37,7 +37,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public ByteArrayOutputStream(int size) {
-        ArgumentUtil.inRangeInt("size", size, 0, Integer.MAX_VALUE);
+        Argument.inRangeInt("size", size, 0, Integer.MAX_VALUE);
 
         this.buffer = new byte[size];
         this.count = 0;
@@ -77,7 +77,7 @@ public class ByteArrayOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        ArgumentUtil.notNull("b", b);
+        Argument.notNull("b", b);
         if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) - b.length > 0)) {
             throw new IndexOutOfBoundsException();
         }
@@ -88,7 +88,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public void writeTo(OutputStream out) throws IOException {
-        ArgumentUtil.notNull("out", out);
+        Argument.notNull("out", out);
 
         out.write(buffer, 0, count);
     }
@@ -111,7 +111,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public String toString(String charsetName) {
-        ArgumentUtil.notNull("charsetName", charsetName);
+        Argument.notNull("charsetName", charsetName);
 
         try {
             return new String(buffer, 0, count, charsetName);

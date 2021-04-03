@@ -20,6 +20,8 @@ package systems.microservice.loghub.sdk;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -38,6 +40,8 @@ public final class LogHub {
     private static final String application = createApplication(properties);
     private static final String version = createVersion(properties);
     private static final String instance = createInstance(properties);
+    private static final URL url = createUrl(properties, account);
+    private static final String basicUser = createBasicUser(properties);
     private static final LogEventWriter eventWriter = new LogEventWriter();
     private static final LogMetricWriter metricWriter = new LogMetricWriter();
 
@@ -87,9 +91,6 @@ public final class LogHub {
             a = System.getenv("LOGHUB_ACCOUNT");
             if (a == null) {
                 a = properties.get("loghub.account");
-                if (a == null) {
-                    return null;
-                }
             }
         }
         return a;
@@ -101,9 +102,6 @@ public final class LogHub {
             e = System.getenv("LOGHUB_ENVIRONMENT");
             if (e == null) {
                 e = properties.get("loghub.environment");
-                if (e == null) {
-                    return null;
-                }
             }
         }
         return e;
@@ -115,9 +113,6 @@ public final class LogHub {
             a = System.getenv("LOGHUB_APPLICATION");
             if (a == null) {
                 a = properties.get("loghub.application");
-                if (a == null) {
-                    return null;
-                }
             }
         }
         return a;
@@ -129,9 +124,6 @@ public final class LogHub {
             v = System.getenv("LOGHUB_VERSION");
             if (v == null) {
                 v = properties.get("loghub.version");
-                if (v == null) {
-                    return null;
-                }
             }
         }
         return v;
@@ -171,5 +163,45 @@ public final class LogHub {
         } catch (UnknownHostException e) {
             return null;
         }
+    }
+
+    private static URL createUrl(Map<String, String> properties, String account) {
+        String u = System.getProperty("loghub.url");
+        if (u == null) {
+            u = System.getenv("LOGHUB_URL");
+            if (u == null) {
+                u = properties.get("loghub.url");
+                if (u == null) {
+                    u = String.format("https://%s/loghub/api/account/log/event", account);
+                }
+            }
+        }
+        try {
+            return new URL(u);
+        } catch (MalformedURLException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
+    private static String createBasicUser(Map<String, String> properties) {
+        String bu = System.getProperty("loghub.basic.user");
+        if (bu == null) {
+            bu = System.getenv("LOGHUB_BASIC_USER");
+            if (bu == null) {
+                bu = properties.get("loghub.basic.user");
+            }
+        }
+        return bu;
+    }
+
+    private static String createBasicPassword(Map<String, String> properties) {
+        String bp = System.getProperty("loghub.basic.password");
+        if (bp == null) {
+            bp = System.getenv("LOGHUB_BASIC_PASSWORD");
+            if (bp == null) {
+                bp = properties.get("loghub.basic.password");
+            }
+        }
+        return bp;
     }
 }

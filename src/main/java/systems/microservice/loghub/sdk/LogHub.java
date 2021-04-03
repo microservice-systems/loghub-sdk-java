@@ -17,17 +17,9 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.buffer.Bufferable;
-import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -41,6 +33,7 @@ import java.util.UUID;
  */
 public final class LogHub {
     private static final Map<String, String> properties = createProperties();
+    private static final String account = createAccount(properties);
     private static final String environment = createEnvironment(properties);
     private static final String application = createApplication(properties);
     private static final String version = createVersion(properties);
@@ -88,6 +81,20 @@ public final class LogHub {
         return Collections.unmodifiableMap(ps);
     }
 
+    private static String createAccount(Map<String, String> properties) {
+        String a = System.getProperty("loghub.account");
+        if (a == null) {
+            a = System.getenv("LOGHUB_ACCOUNT");
+            if (a == null) {
+                a = properties.get("loghub.account");
+                if (a == null) {
+                    return null;
+                }
+            }
+        }
+        return a;
+    }
+
     private static String createEnvironment(Map<String, String> properties) {
         String e = System.getProperty("loghub.environment");
         if (e == null) {
@@ -99,7 +106,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.environment("loghub.environment", e);
+        return e;
     }
 
     private static String createApplication(Map<String, String> properties) {
@@ -113,7 +120,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.application("loghub.application", a);
+        return a;
     }
 
     private static String createVersion(Map<String, String> properties) {
@@ -127,7 +134,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.version("loghub.version", v);
+        return v;
     }
 
     private static String createInstance(Map<String, String> properties) {
@@ -137,34 +144,17 @@ public final class LogHub {
             if (i == null) {
                 i = properties.get("loghub.instance");
                 if (i == null) {
-                    i = createAWSInstance();
+                    i = createLocalInstanceByHostName();
                     if (i == null) {
-                        i = createLocalInstanceByHostName();
+                        i = createLocalInstanceByHostIP();
                         if (i == null) {
-                            i = createLocalInstanceByHostIP();
-                            if (i == null) {
-                                return UUID.randomUUID().toString();
-                            }
+                            return UUID.randomUUID().toString();
                         }
                     }
                 }
             }
         }
-        return Argument.instance("loghub.instance", i);
-    }
-
-    private static String createAWSInstance() {
-        try {
-            URL u = new URL("http://169.254.169.254/latest/meta-data/instance-id");
-            URLConnection conn = u.openConnection();
-            conn.setConnectTimeout(10000);
-            try (InputStream in = conn.getInputStream()) {
-                BufferedReader r = new BufferedReader(new InputStreamReader(in));
-                return r.readLine();
-            }
-        } catch (IOException e) {
-            return null;
-        }
+        return i;
     }
 
     private static String createLocalInstanceByHostName() {

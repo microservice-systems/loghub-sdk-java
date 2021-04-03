@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**

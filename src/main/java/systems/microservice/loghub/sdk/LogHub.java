@@ -40,6 +40,8 @@ public final class LogHub {
     private static final String application = createApplication(properties);
     private static final String version = createVersion(properties);
     private static final String instance = createInstance(properties);
+    private static final String instanceHost = createInstanceHost();
+    private static final String instanceIp = createInstanceIp();
     private static final URL url = createUrl(properties, account);
     private static final String basicUser = createBasicUser(properties);
     private static final LogEventWriter eventWriter = new LogEventWriter();
@@ -136,11 +138,11 @@ public final class LogHub {
             if (i == null) {
                 i = properties.get("loghub.instance");
                 if (i == null) {
-                    i = createLocalInstanceByHostName();
+                    i = getHostName();
                     if (i == null) {
-                        i = createLocalInstanceByHostIP();
+                        i = getHostAddress();
                         if (i == null) {
-                            return UUID.randomUUID().toString();
+                            i = UUID.randomUUID().toString();
                         }
                     }
                 }
@@ -149,7 +151,23 @@ public final class LogHub {
         return i;
     }
 
-    private static String createLocalInstanceByHostName() {
+    private static String createInstanceHost() {
+        String ih = getHostName();
+        if (ih == null) {
+            ih = "unknown";
+        }
+        return ih;
+    }
+
+    private static String createInstanceIp() {
+        String ii = getHostAddress();
+        if (ii == null) {
+            ii = "unknown";
+        }
+        return ii;
+    }
+
+    private static String getHostName() {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
@@ -157,7 +175,7 @@ public final class LogHub {
         }
     }
 
-    private static String createLocalInstanceByHostIP() {
+    private static String getHostAddress() {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {

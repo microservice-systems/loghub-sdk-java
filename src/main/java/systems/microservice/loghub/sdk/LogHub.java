@@ -19,6 +19,7 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,6 +43,9 @@ public final class LogHub {
     private static final String instance = createInstance(properties);
     private static final String instanceHost = createInstanceHost();
     private static final String instanceIp = createInstanceIp();
+    private static final String process = createProcess();
+    private static final long processId = createProcessId();
+    private static final long processStart = createProcessStart();
     private static final URL url = createUrl(properties, account);
     private static final String basicUser = createBasicUser(properties);
     private static final LogEventWriter eventWriter = new LogEventWriter();
@@ -181,6 +185,28 @@ public final class LogHub {
         } catch (UnknownHostException e) {
             return null;
         }
+    }
+
+    private static String createProcess() {
+        return UUID.randomUUID().toString();
+    }
+
+    private static long createProcessId() {
+        String n = ManagementFactory.getRuntimeMXBean().getName();
+        if (n != null) {
+            String[] ns = n.split("@");
+            if (ns.length > 0) {
+                try {
+                    return Long.parseLong(ns[0]);
+                } catch (Exception e) {
+                }
+            }
+        }
+        return -1L;
+    }
+
+    private static long createProcessStart() {
+        return ManagementFactory.getRuntimeMXBean().getStartTime();
     }
 
     private static URL createUrl(Map<String, String> properties, String account) {

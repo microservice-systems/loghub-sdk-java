@@ -17,9 +17,25 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.Argument;
+
+import java.io.Serializable;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class LogTag {
+public final class LogTag implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public final String key;
+    public final Object value;
+
+    public LogTag(String key, Object value) {
+        Argument.notNull("key", key);
+        Argument.notNull("value", value);
+
+        this.key = key;
+        this.value = value;
+    }
 }

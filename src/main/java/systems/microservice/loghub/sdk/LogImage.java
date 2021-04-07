@@ -27,14 +27,17 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class LogImage {
-    protected final String contentType;
-    protected final byte[] content;
+public final class LogImage implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private final String contentType;
+    private final byte[] content;
 
     public LogImage(String contentType, byte[] content) {
         Argument.notNull("contentType", contentType);

@@ -24,11 +24,14 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Dmitry Kotlyarov
@@ -48,10 +51,89 @@ public final class LogHub {
     private static final long processStart = createProcessStart();
     private static final URL url = createUrl(properties, account);
     private static final String basicUser = createBasicUser(properties);
+    private static final String basicAuth = createBasicAuth(basicUser, createBasicPassword(properties));
+    private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
+    private static final AtomicReference<LogCpuUsage> cpuUsage = new AtomicReference<>(new LogCpuUsage());
+    private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
+    private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
+    private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
+    private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
     private static final LogEventWriter eventWriter = new LogEventWriter();
     private static final LogMetricWriter metricWriter = new LogMetricWriter();
+    private static final Thread monitorThread3;
+    private static final Thread monitorThread10;
 
     private LogHub() {
+    }
+
+    static {
+        monitorThread3 = new Thread("loghub-monitor-3") {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        LogMemoryUsage mu = new LogMemoryUsage();
+                        memoryUsage.set(mu);
+                        logMetric("usage.memory.heapInit", mu.heapInit, 0, "MB");
+                        logMetric("usage.memory.heapUsed", mu.heapUsed, 0, "MB");
+                        logMetric("usage.memory.heapCommitted", mu.heapCommitted, 0, "MB");
+                        logMetric("usage.memory.heapMax", mu.heapMax, 0, "MB");
+                        logMetric("usage.memory.nonHeapInit", mu.nonHeapInit, 0, "MB");
+                        logMetric("usage.memory.nonHeapUsed", mu.nonHeapUsed, 0, "MB");
+                        logMetric("usage.memory.nonHeapCommitted", mu.nonHeapCommitted, 0, "MB");
+                        logMetric("usage.memory.nonHeapMax", mu.nonHeapMax, 0, "MB");
+                        logMetric("usage.memory.objectPendingFinalization", mu.objectPendingFinalization, 0);
+                        LogClassUsage cu = new LogClassUsage();
+                        classUsage.set(cu);
+                        logMetric("usage.class.active", cu.active, 0);
+                        logMetric("usage.class.loaded", cu.loaded, 0);
+                        logMetric("usage.class.unloaded", cu.unloaded, 0);
+                        LogThreadUsage tu = new LogThreadUsage();
+                        threadUsage.set(tu);
+                        logMetric("usage.thread.live", tu.live, 0);
+                        logMetric("usage.thread.daemon", tu.daemon, 0);
+                        logMetric("usage.thread.peak", tu.peak, 0);
+                        logMetric("usage.thread.total", tu.total, 0);
+                        try {
+                            Thread.sleep(3000L);
+                        } catch (InterruptedException e) {
+                        }
+                    } catch (Throwable e) {
+                    }
+                }
+            }
+        };
+        monitorThread3.setDaemon(true);
+        monitorThread3.start();
+        monitorThread10 = new Thread("loghub-monitor-10") {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        LogCpuUsage cu = new LogCpuUsage();
+                        cpuUsage.set(cu);
+                        logMetric("usage.cpu.cpu", LogCpuUsage.CPU, 0);
+                        logMetric("usage.cpu.m1", (long) (cu.m1 * 100.0f), 0, "%");
+                        logMetric("usage.cpu.m5", (long) (cu.m5 * 100.0f), 0, "%");
+                        logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 0, "%");
+                        logMetric("usage.cpu.entityActive", cu.entityActive, 0);
+                        logMetric("usage.cpu.entityTotal", cu.entityTotal, 0);
+                        LogDiskUsage du = new LogDiskUsage();
+                        diskUsage.set(du);
+                        logMetric("usage.disk.total", du.total, 0, "MB");
+                        logMetric("usage.disk.free", du.free, 0, "MB");
+                        logMetric("usage.disk.usable", du.usable, 0, "MB");
+                        try {
+                            Thread.sleep(10000L);
+                        } catch (InterruptedException e) {
+                        }
+                    } catch (Throwable e) {
+                    }
+                }
+            }
+        };
+        monitorThread10.setDaemon(true);
+        monitorThread10.start();
     }
 
     public static void logEvent(long time,
@@ -65,10 +147,11 @@ public final class LogHub {
                                 String message) {
     }
 
-    public static void logMetric(String name,
-                                 long value,
-                                 byte point,
-                                 String unit) {
+    public static void logMetric(String name, long value, int point) {
+        logMetric(name, value, point, null);
+    }
+
+    public static void logMetric(String name, long value, int point, String unit) {
     }
 
     private static Map<String, String> createProperties() {
@@ -142,11 +225,11 @@ public final class LogHub {
             if (i == null) {
                 i = properties.get("loghub.instance");
                 if (i == null) {
-                    i = getHostName();
+                    i = String.format("java-%s", getHostName());
                     if (i == null) {
-                        i = getHostAddress();
+                        i = String.format("java-%s", getHostAddress());
                         if (i == null) {
-                            i = UUID.randomUUID().toString();
+                            i = String.format("java-%s", UUID.randomUUID().toString());
                         }
                     }
                 }
@@ -247,5 +330,13 @@ public final class LogHub {
             }
         }
         return bp;
+    }
+
+    private static String createBasicAuth(String basicUser, String basicPassword) {
+        if ((basicUser != null) && (basicPassword != null) && !basicUser.isEmpty()) {
+            return "Basic " + new String(Base64.getEncoder().encode(String.format("%s:%s", basicUser, basicPassword).getBytes(StandardCharsets.UTF_8)));
+        } else {
+            return null;
+        }
     }
 }

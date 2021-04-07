@@ -18,6 +18,8 @@
 package systems.microservice.loghub.sdk.util;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author Dmitry Kotlyarov
@@ -59,5 +61,13 @@ public final class StringUtil {
 
     public static String deserialize(byte[] data) {
         return new String(data, StandardCharsets.UTF_8);
+    }
+
+    public static String load(String path, String defaultValue) {
+        try {
+            return new String(Files.readAllBytes(Paths.get(path)));
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 }

@@ -19,13 +19,17 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.Argument;
 
+import java.io.Serializable;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class LogBlob {
-    protected final String contentType;
-    protected final byte[] content;
+public final class LogBlob implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private final String contentType;
+    private final byte[] content;
 
     public LogBlob(String contentType, byte[] content) {
         Argument.notNull("contentType", contentType);

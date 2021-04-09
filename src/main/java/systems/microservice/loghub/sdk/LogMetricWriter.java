@@ -30,19 +30,18 @@ final class LogMetricWriter {
     private final ConcurrentLinkedQueue<LogMetricBuffer> buffers = new ConcurrentLinkedQueue<>();
     private final AtomicLong total = new AtomicLong(0L);
     private final AtomicLong lost = new AtomicLong(0L);
+    private final long span;
 
-    public LogMetricWriter() {
-        long b = System.currentTimeMillis() / 60000L;
-        b = b * 60000L;
-        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
-        b += 60000L;
-        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
-        b += 60000L;
-        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
-        b += 60000L;
-        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
-        b += 60000L;
-        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
+    public LogMetricWriter(long span, int buffers) {
+        this.span = span;
+
+        long b = System.currentTimeMillis() / span;
+        b = b * span;
+        for (int i = 0; i < buffers; ++i) {
+            long e = b + span;
+            this.buffers.add(new LogMetricBuffer(b, e));
+            b = e;
+        }
     }
 
     public LogMetricConfig getConfig() {
@@ -60,13 +59,17 @@ final class LogMetricWriter {
     public void log(String name, long value, int point, String unit) {
         if (config.get().enabled) {
             total.incrementAndGet();
-            long t = System.currentTimeMillis();
-            for (LogMetricBuffer b : buffers) {
-                if (b.log(t, name, value, point, unit)) {
-                    return;
+            try {
+                long t = System.currentTimeMillis();
+                for (LogMetricBuffer b : buffers) {
+                    if (b.log(t, name, value, point, unit)) {
+                        return;
+                    }
                 }
+            } catch (Throwable ex) {
+                lost.incrementAndGet();
+                throw ex;
             }
-            lost.incrementAndGet();
         }
     }
 }

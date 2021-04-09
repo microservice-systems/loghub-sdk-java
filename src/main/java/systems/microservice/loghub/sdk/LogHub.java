@@ -60,7 +60,7 @@ public final class LogHub {
     private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
     private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
     private static final LogEventWriter eventWriter = new LogEventWriter();
-    private static final LogMetricWriter metricWriter = new LogMetricWriter();
+    private static final LogMetricWriter metricWriter = new LogMetricWriter(60000L, 5);
     private static final Thread monitorThread3;
     private static final Thread monitorThread10;
 

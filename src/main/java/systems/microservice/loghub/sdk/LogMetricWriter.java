@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -24,12 +26,47 @@ import java.util.concurrent.atomic.AtomicReference;
  * @since 1.0
  */
 final class LogMetricWriter {
-    private final AtomicReference<LogMetricConfig> config = new AtomicReference<>();
+    private final AtomicReference<LogMetricConfig> config = new AtomicReference<>(null);
+    private final ConcurrentLinkedQueue<LogMetricBuffer> buffers = new ConcurrentLinkedQueue<>();
+    private final AtomicLong total = new AtomicLong(0L);
+    private final AtomicLong lost = new AtomicLong(0L);
 
     public LogMetricWriter() {
+        long b = System.currentTimeMillis() / 60000L;
+        b = b * 60000L;
+        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
+        b += 60000L;
+        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
+        b += 60000L;
+        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
+        b += 60000L;
+        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
+        b += 60000L;
+        this.buffers.add(new LogMetricBuffer(b, b + 60000L));
     }
 
     public LogMetricConfig getConfig() {
         return config.get();
+    }
+
+    public long getTotal() {
+        return total.get();
+    }
+
+    public long getLost() {
+        return lost.get();
+    }
+
+    public void log(String name, long value, int point, String unit) {
+        if (config.get().enabled) {
+            total.incrementAndGet();
+            long t = System.currentTimeMillis();
+            for (LogMetricBuffer b : buffers) {
+                if (b.log(t, name, value, point, unit)) {
+                    return;
+                }
+            }
+            lost.incrementAndGet();
+        }
     }
 }

@@ -41,32 +41,26 @@ final class LogMetricValue implements Bufferable {
     public final int point;
     public final String unit;
 
-    public LogMetricValue(String name, long value, int point, String unit) {
+    public LogMetricValue(String name, int point, String unit) {
         this.name = name;
-        this.time = new AtomicLong(System.currentTimeMillis());
-        this.count = new AtomicLong(1L);
-        this.sum = new AtomicLong(value);
-        this.min = new AtomicLong(value);
-        this.max = new AtomicLong(value);
+        this.time = new AtomicLong(0L);
+        this.count = new AtomicLong(0L);
+        this.sum = new AtomicLong(0L);
+        this.min = new AtomicLong(Long.MAX_VALUE);
+        this.max = new AtomicLong(Long.MIN_VALUE);
         this.point = point;
         this.unit = unit;
     }
 
-    public boolean add(long begin, long end, long value) {
-        long t = System.currentTimeMillis();
-        if ((t >= begin) && (t < end)) {
-            time.set(t);
-            count.incrementAndGet();
-            sum.addAndGet(value);
-            for (long m = min.get(); value < m; m = min.get()) {
-                min.compareAndSet(m, value);
-            }
-            for (long m = max.get(); value > m; m = max.get()) {
-                max.compareAndSet(m, value);
-            }
-            return true;
-        } else {
-            return false;
+    public void log(long time, long value) {
+        this.time.set(time);
+        count.incrementAndGet();
+        sum.addAndGet(value);
+        for (long m = min.get(); value < m; m = min.get()) {
+            min.compareAndSet(m, value);
+        }
+        for (long m = max.get(); value > m; m = max.get()) {
+            max.compareAndSet(m, value);
         }
     }
 

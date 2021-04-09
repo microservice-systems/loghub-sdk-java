@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
 import java.lang.management.ManagementFactory;
@@ -148,10 +149,15 @@ public final class LogHub {
     }
 
     public static void logMetric(String name, long value, int point) {
-        logMetric(name, value, point, null);
+        logMetric(name, value, point, "");
     }
 
     public static void logMetric(String name, long value, int point, String unit) {
+        Argument.notNull("name", name);
+        Argument.inRangeInt("point", point, 0, 15);
+        Argument.notNull("unit", unit);
+
+        metricWriter.log(name, value, point, unit);
     }
 
     private static Map<String, String> createProperties() {

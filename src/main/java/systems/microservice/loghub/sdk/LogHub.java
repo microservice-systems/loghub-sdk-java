@@ -187,16 +187,16 @@ public final class LogHub {
                                 String message) {
     }
 
-    public static void logMetric(String name, long value, int point) {
-        logMetric(name, value, point, "");
+    public static boolean logMetric(String name, long value, int point) {
+        return logMetric(name, value, point, "");
     }
 
-    public static void logMetric(String name, long value, int point, String unit) {
+    public static boolean logMetric(String name, long value, int point, String unit) {
         Argument.notNull("name", name);
         Argument.inRangeInt("point", point, 0, 15);
         Argument.notNull("unit", unit);
 
-        metricWriter.log(name, value, point, unit);
+        return metricWriter.log(name, value, point, unit);
     }
 
     private static Map<String, String> createProperties() {

@@ -54,7 +54,7 @@ public class LogMetric implements Serializable {
         return unit;
     }
 
-    public void log(long value) {
-        LogHub.logMetric(name, value, point, unit);
+    public boolean log(long value) {
+        return LogHub.logMetric(name, value, point, unit);
     }
 }

@@ -20,12 +20,15 @@ package systems.microservice.loghub.sdk;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -53,6 +56,8 @@ public final class LogHub {
     private static final URL url = createUrl(properties, account);
     private static final String basicUser = createBasicUser(properties);
     private static final String basicAuth = createBasicAuth(basicUser, createBasicPassword(properties));
+    private static final String persistencePathBase = createPersistencePathBase(properties);
+    private static final String persistencePathFull = createPersistencePathFull(persistencePathBase, account, environment, application, instance);
     private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
     private static final AtomicReference<LogCpuUsage> cpuUsage = new AtomicReference<>(new LogCpuUsage());
     private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
@@ -341,6 +346,51 @@ public final class LogHub {
     private static String createBasicAuth(String basicUser, String basicPassword) {
         if ((basicUser != null) && (basicPassword != null) && !basicUser.isEmpty()) {
             return "Basic " + new String(Base64.getEncoder().encode(String.format("%s:%s", basicUser, basicPassword).getBytes(StandardCharsets.UTF_8)));
+        } else {
+            return null;
+        }
+    }
+
+    private static String createPersistencePathBase(Map<String, String> properties) {
+        String ppb = System.getProperty("loghub.persistence.path.base");
+        if (ppb == null) {
+            ppb = System.getenv("LOGHUB_PERSISTENCE_PATH_BASE");
+            if (ppb == null) {
+                ppb = properties.get("loghub.persistence.path.base");
+                if (ppb == null) {
+                    String os = System.getProperty("os.name");
+                    if ((os != null) && os.toLowerCase().contains("windows")) {
+                        ppb = System.getProperty("java.io.tmpdir");
+                    } else {
+                        ppb = "/var/tmp";
+                    }
+                }
+            }
+        }
+        if (ppb != null) {
+            ppb = ppb.trim();
+            while (ppb.endsWith("/")) {
+                ppb = ppb.substring(0, ppb.length() - 1);
+            }
+        }
+        return ppb;
+    }
+
+    private static String createPersistencePathFull(String persistencePathBase,
+                                                    String account,
+                                                    String environment,
+                                                    String application,
+                                                    String instance) {
+        if (persistencePathBase != null) {
+            String ppf = persistencePathBase + "/loghub/" + account + "/" + environment + "/" + application + "/" + instance;
+            try {
+                Files.createDirectories(Paths.get(ppf));
+                Files.createDirectories(Paths.get(ppf + "/event"));
+                Files.createDirectories(Paths.get(ppf + "/metric"));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            return ppf;
         } else {
             return null;
         }

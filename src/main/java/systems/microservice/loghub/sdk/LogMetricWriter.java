@@ -26,18 +26,28 @@ import java.util.concurrent.atomic.AtomicReference;
  * @since 1.0
  */
 final class LogMetricWriter {
-    private final AtomicReference<LogMetricConfig> config = new AtomicReference<>(null);
-    private final ConcurrentLinkedQueue<LogMetricBuffer> buffers = new ConcurrentLinkedQueue<>();
-    private final AtomicLong total = new AtomicLong(0L);
-    private final AtomicLong lost = new AtomicLong(0L);
     private final long span;
+    private final int bufferCount;
+    private final AtomicReference<LogMetricConfig> config;
+    private final ConcurrentLinkedQueue<LogMetricBuffer> buffers;
+    private final AtomicLong totalCount;
+    private final AtomicLong sentCount;
+    private final AtomicLong sentSize;
+    private final AtomicLong lostCount;
 
-    public LogMetricWriter(long span, int buffers) {
+    public LogMetricWriter(long span, int bufferCount) {
         this.span = span;
+        this.bufferCount = bufferCount;
+        this.config = new AtomicReference<>(null);
+        this.buffers = new ConcurrentLinkedQueue<>();
+        this.totalCount = new AtomicLong(0L);
+        this.sentCount = new AtomicLong(0L);
+        this.sentSize = new AtomicLong(0L);
+        this.lostCount = new AtomicLong(0L);
 
         long b = System.currentTimeMillis() / span;
         b = b * span;
-        for (int i = 0; i < buffers; ++i) {
+        for (int i = 0; i < bufferCount; ++i) {
             long e = b + span;
             this.buffers.add(new LogMetricBuffer(b, e));
             b = e;
@@ -48,17 +58,9 @@ final class LogMetricWriter {
         return config.get();
     }
 
-    public long getTotal() {
-        return total.get();
-    }
-
-    public long getLost() {
-        return lost.get();
-    }
-
     public void log(String name, long value, int point, String unit) {
         if (config.get().enabled) {
-            total.incrementAndGet();
+            totalCount.incrementAndGet();
             try {
                 long t = System.currentTimeMillis();
                 for (LogMetricBuffer b : buffers) {
@@ -67,7 +69,7 @@ final class LogMetricWriter {
                     }
                 }
             } catch (Throwable ex) {
-                lost.incrementAndGet();
+                lostCount.incrementAndGet();
                 throw ex;
             }
         }

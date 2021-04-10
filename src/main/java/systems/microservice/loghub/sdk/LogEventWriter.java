@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -25,6 +26,12 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 final class LogEventWriter {
     private final AtomicReference<LogEventConfig> config = new AtomicReference<>();
+    private final AtomicLong totalCount = new AtomicLong(0L);
+    private final AtomicLong totalSize = new AtomicLong(0L);
+    private final AtomicLong sentCount = new AtomicLong(0L);
+    private final AtomicLong sentSize = new AtomicLong(0L);
+    private final AtomicLong lostCount = new AtomicLong(0L);
+    private final AtomicLong lostSize = new AtomicLong(0L);
 
     public LogEventWriter() {
     }

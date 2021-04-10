@@ -161,12 +161,15 @@ public final class LogHub {
         flushMetricsThread = new Thread("loghub-flush-metrics") {
             @Override
             public void run() {
+                final LogMetricWriter mw = LogHub.metricWriter;
+                final long s = mw.getSpan();
                 while (true) {
                     try {
                         try {
-                            Thread.sleep(3000L);
+                            Thread.sleep(s);
                         } catch (InterruptedException e) {
                         }
+                        mw.flush();
                     } catch (Throwable e) {
                     }
                 }

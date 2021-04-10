@@ -54,6 +54,14 @@ final class LogMetricWriter {
         }
     }
 
+    public long getSpan() {
+        return span;
+    }
+
+    public int getBufferCount() {
+        return bufferCount;
+    }
+
     public LogMetricConfig getConfig() {
         return config.get();
     }
@@ -81,5 +89,8 @@ final class LogMetricWriter {
             }
         }
         return false;
+    }
+
+    public void flush() {
     }
 }

@@ -66,14 +66,16 @@ public final class LogHub {
     private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
     private static final LogEventWriter eventWriter = new LogEventWriter();
     private static final LogMetricWriter metricWriter = new LogMetricWriter(60000L, 5);
-    private static final Thread monitorThread3;
-    private static final Thread monitorThread10;
+    private static final Thread monitor3Thread;
+    private static final Thread monitor10Thread;
+    private static final Thread flushEventsThread;
+    private static final Thread flushMetricsThread;
 
     private LogHub() {
     }
 
     static {
-        monitorThread3 = new Thread("loghub-monitor-3") {
+        monitor3Thread = new Thread("loghub-monitor-3") {
             @Override
             public void run() {
                 while (true) {
@@ -109,9 +111,9 @@ public final class LogHub {
                 }
             }
         };
-        monitorThread3.setDaemon(true);
-        monitorThread3.start();
-        monitorThread10 = new Thread("loghub-monitor-10") {
+        monitor3Thread.setDaemon(true);
+        monitor3Thread.start();
+        monitor10Thread = new Thread("loghub-monitor-10") {
             @Override
             public void run() {
                 while (true) {
@@ -138,8 +140,40 @@ public final class LogHub {
                 }
             }
         };
-        monitorThread10.setDaemon(true);
-        monitorThread10.start();
+        monitor10Thread.setDaemon(true);
+        monitor10Thread.start();
+        flushEventsThread = new Thread("loghub-flush-events") {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        try {
+                            Thread.sleep(3000L);
+                        } catch (InterruptedException e) {
+                        }
+                    } catch (Throwable e) {
+                    }
+                }
+            }
+        };
+        flushEventsThread.setDaemon(false);
+        flushEventsThread.start();
+        flushMetricsThread = new Thread("loghub-flush-metrics") {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        try {
+                            Thread.sleep(3000L);
+                        } catch (InterruptedException e) {
+                        }
+                    } catch (Throwable e) {
+                    }
+                }
+            }
+        };
+        flushMetricsThread.setDaemon(false);
+        flushMetricsThread.start();
     }
 
     public static void logEvent(long time,

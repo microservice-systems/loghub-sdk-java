@@ -163,13 +163,14 @@ public final class LogHub {
             public void run() {
                 final LogMetricWriter mw = LogHub.metricWriter;
                 final long s = mw.getSpan();
+                final LogMetricFlushInfo fi = new LogMetricFlushInfo();
                 while (true) {
                     try {
                         try {
                             Thread.sleep(s);
                         } catch (InterruptedException e) {
                         }
-                        mw.flush();
+                        mw.flush(fi);
                     } catch (Throwable e) {
                     }
                 }

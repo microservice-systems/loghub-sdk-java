@@ -91,6 +91,23 @@ final class LogMetricWriter {
         return false;
     }
 
-    public void flush() {
+    private LogMetricBuffer pollBuffer(long time) {
+        LogMetricBuffer hb = buffers.peek();
+        if (hb != null) {
+            if (time >= hb.getEnd()) {
+                return buffers.poll();
+            }
+        }
+        return null;
+    }
+
+    public boolean flush(LogMetricFlushInfo info) {
+        long t = System.currentTimeMillis();
+        boolean r = false;
+        for (LogMetricBuffer b = pollBuffer(t); b != null; b = pollBuffer(t)) {
+            info.writeContent(b);
+            r = true;
+        }
+        return r;
     }
 }

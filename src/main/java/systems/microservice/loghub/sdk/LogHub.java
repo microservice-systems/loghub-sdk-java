@@ -59,6 +59,8 @@ public final class LogHub {
     private static final String basicAuth = createBasicAuth(basicUser, createBasicPassword(properties));
     private static final String persistencePathBase = createPersistencePathBase(properties);
     private static final String persistencePathFull = createPersistencePathFull(persistencePathBase, account, environment, application, instance);
+    private static final boolean infoEnabled = createInfoEnabled(properties);
+    private static final boolean debugEnabled = createDebugEnabled(properties);
     private static final AtomicBoolean enabled = new AtomicBoolean(createEnabled(properties, account, environment, application, version, instance));
     private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
     private static final AtomicReference<LogCpuUsage> cpuUsage = new AtomicReference<>(new LogCpuUsage());
@@ -219,29 +221,6 @@ public final class LogHub {
             flushMetricsThread = null;
             shutdownThread = null;
         }
-    }
-
-    public static void logEvent(long time,
-                                int level,
-                                String levelName,
-                                String logger,
-                                Throwable exception,
-                                Map<String, LogTag> tags,
-                                Map<String, LogImage> images,
-                                Map<String, LogBlob> blobs,
-                                String message) {
-    }
-
-    public static boolean logMetric(String name, long value, int point) {
-        return logMetric(name, value, point, "");
-    }
-
-    public static boolean logMetric(String name, long value, int point, String unit) {
-        Argument.notNull("name", name);
-        Argument.inRangeInt("point", point, 0, 15);
-        Argument.notNull("unit", unit);
-
-        return metricWriter.log(name, value, point, unit);
     }
 
     private static Map<String, String> createProperties() {
@@ -475,6 +454,34 @@ public final class LogHub {
         }
     }
 
+    private static boolean createInfoEnabled(Map<String, String> properties) {
+        String ie = System.getProperty("loghub.info.enabled");
+        if (ie == null) {
+            ie = System.getenv("LOGHUB_INFO_ENABLED");
+            if (ie == null) {
+                ie = properties.get("loghub.info.enabled");
+                if (ie == null) {
+                    ie = "true";
+                }
+            }
+        }
+        return Boolean.parseBoolean(ie);
+    }
+
+    private static boolean createDebugEnabled(Map<String, String> properties) {
+        String de = System.getProperty("loghub.debug.enabled");
+        if (de == null) {
+            de = System.getenv("LOGHUB_DEBUG_ENABLED");
+            if (de == null) {
+                de = properties.get("loghub.debug.enabled");
+                if (de == null) {
+                    de = "true";
+                }
+            }
+        }
+        return Boolean.parseBoolean(de);
+    }
+
     private static boolean createEnabled(Map<String, String> properties,
                                          String account,
                                          String environment,
@@ -498,5 +505,48 @@ public final class LogHub {
             }
         }
         return false;
+    }
+
+    protected static void info(Class logger, String message) {
+        if (infoEnabled) {
+            Argument.notNull("logger", logger);
+            Argument.notNull("message", message);
+
+            String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
+            System.out.println(String.format("%s [%s] [%s] LOGHUB - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
+        }
+    }
+
+    protected static void debug(Class logger, String message) {
+        if (debugEnabled) {
+            Argument.notNull("logger", logger);
+            Argument.notNull("message", message);
+
+            String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
+            System.out.println(String.format("%s [%s] [%s] LOGHUB - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
+        }
+    }
+
+    public static void logEvent(long time,
+                                int level,
+                                String levelName,
+                                String logger,
+                                Throwable exception,
+                                Map<String, LogTag> tags,
+                                Map<String, LogImage> images,
+                                Map<String, LogBlob> blobs,
+                                String message) {
+    }
+
+    public static boolean logMetric(String name, long value, int point) {
+        return logMetric(name, value, point, "");
+    }
+
+    public static boolean logMetric(String name, long value, int point, String unit) {
+        Argument.notNull("name", name);
+        Argument.inRangeInt("point", point, 0, 15);
+        Argument.notNull("unit", unit);
+
+        return metricWriter.log(name, value, point, unit);
     }
 }

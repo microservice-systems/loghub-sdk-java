@@ -28,8 +28,8 @@ import java.util.Map;
 public class Log {
     protected final String logger;
 
-    public Log(Class clazz) {
-        this(Argument.notNull("clazz", clazz).getName());
+    public Log(Class logger) {
+        this(Argument.notNull("logger", logger).getName());
     }
 
     public Log(String logger) {

@@ -29,7 +29,7 @@ public class Log {
     protected final String logger;
 
     public Log(Class logger) {
-        this(Argument.notNull("logger", logger).getName());
+        this(Argument.notNull("logger", logger).getCanonicalName());
     }
 
     public Log(String logger) {

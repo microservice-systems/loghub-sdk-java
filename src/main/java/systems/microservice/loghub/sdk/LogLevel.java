@@ -23,6 +23,7 @@ package systems.microservice.loghub.sdk;
  */
 public enum LogLevel {
     OFF(0),
+    LIFECYCLE(1),
     LOGIC(50),
     FATAL(100),
     ERROR(200),

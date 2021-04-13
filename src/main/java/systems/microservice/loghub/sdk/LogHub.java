@@ -212,6 +212,10 @@ public final class LogHub {
                 }
             };
             shutdownThread.setDaemon(false);
+            Runtime.getRuntime().addShutdownHook(shutdownThread);
+            logEvent(true, System.currentTimeMillis(), LogLevel.LIFECYCLE.level, LogLevel.LIFECYCLE.name(), LogHub.class.getCanonicalName(), "Hello World!");
+            info(LogHub.class, String.format("LogHub is ready for collecting events & metrics: [account='%s', environment='%s', application='%s', version='%s', instance='%s']",
+                                             account, environment, application, version, instance));
         } else {
             eventWriter = null;
             metricWriter = null;
@@ -434,11 +438,7 @@ public final class LogHub {
         return ppb;
     }
 
-    private static String createPersistencePathFull(String persistencePathBase,
-                                                    String account,
-                                                    String environment,
-                                                    String application,
-                                                    String instance) {
+    private static String createPersistencePathFull(String persistencePathBase, String account, String environment, String application, String instance) {
         if (persistencePathBase != null) {
             String ppf = persistencePathBase + "/loghub/" + account + "/" + environment + "/" + application + "/" + instance;
             try {
@@ -482,12 +482,7 @@ public final class LogHub {
         return Boolean.parseBoolean(de);
     }
 
-    private static boolean createEnabled(Map<String, String> properties,
-                                         String account,
-                                         String environment,
-                                         String application,
-                                         String version,
-                                         String instance) {
+    private static boolean createEnabled(Map<String, String> properties, String account, String environment, String application, String version, String instance) {
         String e = System.getProperty("loghub.enabled");
         if (e == null) {
             e = System.getenv("LOGHUB_ENABLED");
@@ -513,7 +508,7 @@ public final class LogHub {
             Argument.notNull("message", message);
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
-            System.out.println(String.format("%s [%s] [%s] LOGHUB - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
+            System.out.println(String.format("%s [%s] [%s] INFO - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
         }
     }
 
@@ -523,19 +518,14 @@ public final class LogHub {
             Argument.notNull("message", message);
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
-            System.out.println(String.format("%s [%s] [%s] LOGHUB - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
+            System.out.println(String.format("%s [%s] [%s] DEBUG - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
         }
     }
 
-    public static void logEvent(long time,
-                                int level,
-                                String levelName,
-                                String logger,
-                                Throwable exception,
-                                Map<String, LogTag> tags,
-                                Map<String, LogImage> images,
-                                Map<String, LogBlob> blobs,
-                                String message) {
+    private static void logEvent(boolean start, long time, int level, String levelName, String logger, String message) {
+    }
+
+    public static void logEvent(long time, int level, String levelName, String logger, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
     }
 
     public static boolean logMetric(String name, long value, int point) {

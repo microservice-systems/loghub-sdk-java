@@ -22,5 +22,5 @@ package systems.microservice.loghub.sdk;
  * @since 1.0
  */
 public enum LogType {
-    START, FINISH, DEFAULT, EXCEPTION
+    START, FINISH, THREADS, DEFAULT, EXCEPTION
 }

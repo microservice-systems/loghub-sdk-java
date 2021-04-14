@@ -69,6 +69,7 @@ public final class LogHub {
     private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
     private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
     private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(new LogDescriptorUsage());
+    private static final AtomicReference<LogGarbageCollectorUsage> garbageCollectorUsage = new AtomicReference<>(new LogGarbageCollectorUsage());
     private static final LogEventWriter eventWriter;
     private static final LogMetricWriter metricWriter;
     private static final Thread monitor3Thread;
@@ -148,6 +149,11 @@ public final class LogHub {
                             logMetric("usage.disk.total", du.total, 0, "MB");
                             logMetric("usage.disk.free", du.free, 0, "MB");
                             logMetric("usage.disk.usable", du.usable, 0, "MB");
+                            LogGarbageCollectorUsage gcuPrev = garbageCollectorUsage.get();
+                            LogGarbageCollectorUsage gcu = new LogGarbageCollectorUsage();
+                            garbageCollectorUsage.set(gcu);
+                            logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
+                            logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 3, "s");
                             try {
                                 Thread.sleep(10000L);
                             } catch (InterruptedException ex) {

@@ -28,7 +28,7 @@ import java.io.Serializable;
 public final class LogCpuUsage implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final int CPU = Runtime.getRuntime().availableProcessors();
+    public static final int COUNT = Runtime.getRuntime().availableProcessors();
 
     public final float m1;
     public final float m5;

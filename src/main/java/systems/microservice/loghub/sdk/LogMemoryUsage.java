@@ -17,10 +17,13 @@
 
 package systems.microservice.loghub.sdk;
 
+import com.sun.management.OperatingSystemMXBean;
+
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
+import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov
@@ -28,16 +31,19 @@ import java.lang.management.MemoryUsage;
  */
 public final class LogMemoryUsage implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final OperatingSystemMXBean OS_MX_BEAN = createOperatingSystemMXBean();
     private static final MemoryMXBean MEMORY_MX_BEAN = ManagementFactory.getMemoryMXBean();
 
+    public final long physicalTotal;
+    public final long physicalFree;
     public final long heapInit;
     public final long heapUsed;
     public final long heapCommitted;
     public final long heapMax;
-    public final long nonHeapInit;
-    public final long nonHeapUsed;
-    public final long nonHeapCommitted;
-    public final long nonHeapMax;
+    public final long nonheapInit;
+    public final long nonheapUsed;
+    public final long nonheapCommitted;
+    public final long nonheapMax;
     public final int objectPendingFinalization;
 
     public LogMemoryUsage() {
@@ -45,14 +51,25 @@ public final class LogMemoryUsage implements Serializable {
         MemoryUsage hmu = MEMORY_MX_BEAN.getHeapMemoryUsage();
         MemoryUsage nhmu = MEMORY_MX_BEAN.getNonHeapMemoryUsage();
 
+        this.physicalTotal = (OS_MX_BEAN != null) ? OS_MX_BEAN.getTotalPhysicalMemorySize() / mb : -1L;
+        this.physicalFree = (OS_MX_BEAN != null) ? OS_MX_BEAN.getFreePhysicalMemorySize() / mb : -1L;
         this.heapInit = hmu.getInit() / mb;
         this.heapUsed = hmu.getUsed() / mb;
         this.heapCommitted = hmu.getCommitted() / mb;
         this.heapMax = hmu.getMax() / mb;
-        this.nonHeapInit = nhmu.getInit() / mb;
-        this.nonHeapUsed = nhmu.getUsed() / mb;
-        this.nonHeapCommitted = nhmu.getCommitted() / mb;
-        this.nonHeapMax = nhmu.getMax() / mb;
+        this.nonheapInit = nhmu.getInit() / mb;
+        this.nonheapUsed = nhmu.getUsed() / mb;
+        this.nonheapCommitted = nhmu.getCommitted() / mb;
+        this.nonheapMax = nhmu.getMax() / mb;
         this.objectPendingFinalization = MEMORY_MX_BEAN.getObjectPendingFinalizationCount();
+    }
+
+    private static OperatingSystemMXBean createOperatingSystemMXBean() {
+        java.lang.management.OperatingSystemMXBean osb = ManagementFactory.getOperatingSystemMXBean();
+        if (osb instanceof OperatingSystemMXBean) {
+            return (OperatingSystemMXBean) osb;
+        } else {
+            return null;
+        }
     }
 }

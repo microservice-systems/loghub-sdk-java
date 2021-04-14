@@ -52,15 +52,15 @@ final class LogMetricValue implements Bufferable {
         this.unit = unit;
     }
 
-    public void log(long time, long value) {
+    public void log(long time, long count, long value) {
         this.time.set(time);
-        count.incrementAndGet();
-        sum.addAndGet(value);
-        for (long m = min.get(); value < m; m = min.get()) {
-            min.compareAndSet(m, value);
+        this.count.addAndGet(count);
+        this.sum.addAndGet(value * count);
+        for (long m = this.min.get(); value < m; m = this.min.get()) {
+            this.min.compareAndSet(m, value);
         }
-        for (long m = max.get(); value > m; m = max.get()) {
-            max.compareAndSet(m, value);
+        for (long m = this.max.get(); value > m; m = this.max.get()) {
+            this.max.compareAndSet(m, value);
         }
     }
 

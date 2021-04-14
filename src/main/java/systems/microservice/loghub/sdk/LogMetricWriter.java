@@ -66,19 +66,19 @@ final class LogMetricWriter {
         return config.get();
     }
 
-    public boolean log(String name, long value, int point, String unit) {
+    public void log(String name, long count, long value, int point, String unit) {
         if (config.get().enabled) {
             totalCount.incrementAndGet();
             try {
                 long t = System.currentTimeMillis();
                 LogMetricBuffer hb = buffers.peek();
                 if (hb != null) {
-                    if (hb.log(t, name, value, point, unit)) {
-                        return true;
+                    if (hb.log(t, name, count, value, point, unit)) {
+                        return;
                     } else {
                         for (LogMetricBuffer b : buffers) {
-                            if (b.log(t, name, value, point, unit)) {
-                                return true;
+                            if (b.log(t, name, count, value, point, unit)) {
+                                return;
                             }
                         }
                     }
@@ -88,7 +88,6 @@ final class LogMetricWriter {
                 throw ex;
             }
         }
-        return false;
     }
 
     private LogMetricBuffer pollBuffer(long time) {

@@ -91,15 +91,15 @@ public final class LogHub {
                         try {
                             LogMemoryUsage mu = new LogMemoryUsage();
                             memoryUsage.set(mu);
-                            logMetric("usage.memory.heapInit", mu.heapInit, 0, "MB");
-                            logMetric("usage.memory.heapUsed", mu.heapUsed, 0, "MB");
-                            logMetric("usage.memory.heapCommitted", mu.heapCommitted, 0, "MB");
-                            logMetric("usage.memory.heapMax", mu.heapMax, 0, "MB");
-                            logMetric("usage.memory.nonHeapInit", mu.nonHeapInit, 0, "MB");
-                            logMetric("usage.memory.nonHeapUsed", mu.nonHeapUsed, 0, "MB");
-                            logMetric("usage.memory.nonHeapCommitted", mu.nonHeapCommitted, 0, "MB");
-                            logMetric("usage.memory.nonHeapMax", mu.nonHeapMax, 0, "MB");
-                            logMetric("usage.memory.objectPendingFinalization", mu.objectPendingFinalization, 0);
+                            logMetric("usage.memory.heap.init", mu.heapInit, 0, "MB");
+                            logMetric("usage.memory.heap.used", mu.heapUsed, 0, "MB");
+                            logMetric("usage.memory.heap.committed", mu.heapCommitted, 0, "MB");
+                            logMetric("usage.memory.heap.max", mu.heapMax, 0, "MB");
+                            logMetric("usage.memory.nonheap.init", mu.nonheapInit, 0, "MB");
+                            logMetric("usage.memory.nonheap.used", mu.nonheapUsed, 0, "MB");
+                            logMetric("usage.memory.nonheap.committed", mu.nonheapCommitted, 0, "MB");
+                            logMetric("usage.memory.nonheap.max", mu.nonheapMax, 0, "MB");
+                            logMetric("usage.memory.object.pending.finalization", mu.objectPendingFinalization, 0);
                             LogClassUsage cu = new LogClassUsage();
                             classUsage.set(cu);
                             logMetric("usage.class.active", cu.active, 0);
@@ -130,12 +130,12 @@ public final class LogHub {
                         try {
                             LogCpuUsage cu = new LogCpuUsage();
                             cpuUsage.set(cu);
-                            logMetric("usage.cpu.cpu", LogCpuUsage.CPU, 0);
+                            logMetric("usage.cpu.count", LogCpuUsage.COUNT, 0);
                             logMetric("usage.cpu.m1", (long) (cu.m1 * 100.0f), 0, "%");
                             logMetric("usage.cpu.m5", (long) (cu.m5 * 100.0f), 0, "%");
                             logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 0, "%");
-                            logMetric("usage.cpu.entityActive", cu.entityActive, 0);
-                            logMetric("usage.cpu.entityTotal", cu.entityTotal, 0);
+                            logMetric("usage.cpu.entity.active", cu.entityActive, 0);
+                            logMetric("usage.cpu.entity.total", cu.entityTotal, 0);
                             LogDiskUsage du = new LogDiskUsage();
                             diskUsage.set(du);
                             logMetric("usage.disk.total", du.total, 0, "MB");
@@ -248,9 +248,9 @@ public final class LogHub {
     }
 
     private static String createAccount(Map<String, String> properties) {
-        String a = System.getProperty("loghub.account");
+        String a = System.getenv("LOGHUB_ACCOUNT");
         if (a == null) {
-            a = System.getenv("LOGHUB_ACCOUNT");
+            a = System.getProperty("loghub.account");
             if (a == null) {
                 a = properties.get("loghub.account");
             }
@@ -259,9 +259,9 @@ public final class LogHub {
     }
 
     private static String createEnvironment(Map<String, String> properties) {
-        String e = System.getProperty("loghub.environment");
+        String e = System.getenv("LOGHUB_ENVIRONMENT");
         if (e == null) {
-            e = System.getenv("LOGHUB_ENVIRONMENT");
+            e = System.getProperty("loghub.environment");
             if (e == null) {
                 e = properties.get("loghub.environment");
             }
@@ -270,9 +270,9 @@ public final class LogHub {
     }
 
     private static String createApplication(Map<String, String> properties) {
-        String a = System.getProperty("loghub.application");
+        String a = System.getenv("LOGHUB_APPLICATION");
         if (a == null) {
-            a = System.getenv("LOGHUB_APPLICATION");
+            a = System.getProperty("loghub.application");
             if (a == null) {
                 a = properties.get("loghub.application");
             }
@@ -281,9 +281,9 @@ public final class LogHub {
     }
 
     private static String createVersion(Map<String, String> properties) {
-        String v = System.getProperty("loghub.version");
+        String v = System.getenv("LOGHUB_VERSION");
         if (v == null) {
-            v = System.getenv("LOGHUB_VERSION");
+            v = System.getProperty("loghub.version");
             if (v == null) {
                 v = properties.get("loghub.version");
             }
@@ -292,9 +292,9 @@ public final class LogHub {
     }
 
     private static String createInstance(Map<String, String> properties) {
-        String i = System.getProperty("loghub.instance");
+        String i = System.getenv("LOGHUB_INSTANCE");
         if (i == null) {
-            i = System.getenv("LOGHUB_INSTANCE");
+            i = System.getProperty("loghub.instance");
             if (i == null) {
                 i = properties.get("loghub.instance");
                 if (i == null) {
@@ -366,9 +366,9 @@ public final class LogHub {
     }
 
     private static URL createUrl(Map<String, String> properties, String account) {
-        String u = System.getProperty("loghub.url");
+        String u = System.getenv("LOGHUB_URL");
         if (u == null) {
-            u = System.getenv("LOGHUB_URL");
+            u = System.getProperty("loghub.url");
             if (u == null) {
                 u = properties.get("loghub.url");
                 if (u == null) {
@@ -384,9 +384,9 @@ public final class LogHub {
     }
 
     private static String createBasicUser(Map<String, String> properties) {
-        String bu = System.getProperty("loghub.basic.user");
+        String bu = System.getenv("LOGHUB_BASIC_USER");
         if (bu == null) {
-            bu = System.getenv("LOGHUB_BASIC_USER");
+            bu = System.getProperty("loghub.basic.user");
             if (bu == null) {
                 bu = properties.get("loghub.basic.user");
             }
@@ -395,9 +395,9 @@ public final class LogHub {
     }
 
     private static String createBasicPassword(Map<String, String> properties) {
-        String bp = System.getProperty("loghub.basic.password");
+        String bp = System.getenv("LOGHUB_BASIC_PASSWORD");
         if (bp == null) {
-            bp = System.getenv("LOGHUB_BASIC_PASSWORD");
+            bp = System.getProperty("loghub.basic.password");
             if (bp == null) {
                 bp = properties.get("loghub.basic.password");
             }
@@ -414,9 +414,9 @@ public final class LogHub {
     }
 
     private static String createPersistencePathBase(Map<String, String> properties) {
-        String ppb = System.getProperty("loghub.persistence.path.base");
+        String ppb = System.getenv("LOGHUB_PERSISTENCE_PATH_BASE");
         if (ppb == null) {
-            ppb = System.getenv("LOGHUB_PERSISTENCE_PATH_BASE");
+            ppb = System.getProperty("loghub.persistence.path.base");
             if (ppb == null) {
                 ppb = properties.get("loghub.persistence.path.base");
                 if (ppb == null) {
@@ -455,9 +455,9 @@ public final class LogHub {
     }
 
     private static boolean createInfoEnabled(Map<String, String> properties) {
-        String ie = System.getProperty("loghub.info.enabled");
+        String ie = System.getenv("LOGHUB_INFO_ENABLED");
         if (ie == null) {
-            ie = System.getenv("LOGHUB_INFO_ENABLED");
+            ie = System.getProperty("loghub.info.enabled");
             if (ie == null) {
                 ie = properties.get("loghub.info.enabled");
                 if (ie == null) {
@@ -469,13 +469,13 @@ public final class LogHub {
     }
 
     private static boolean createDebugEnabled(Map<String, String> properties) {
-        String de = System.getProperty("loghub.debug.enabled");
+        String de = System.getenv("LOGHUB_DEBUG_ENABLED");
         if (de == null) {
-            de = System.getenv("LOGHUB_DEBUG_ENABLED");
+            de = System.getProperty("loghub.debug.enabled");
             if (de == null) {
                 de = properties.get("loghub.debug.enabled");
                 if (de == null) {
-                    de = "true";
+                    de = "false";
                 }
             }
         }
@@ -483,9 +483,9 @@ public final class LogHub {
     }
 
     private static boolean createEnabled(Map<String, String> properties, String account, String environment, String application, String version, String instance) {
-        String e = System.getProperty("loghub.enabled");
+        String e = System.getenv("LOGHUB_ENABLED");
         if (e == null) {
-            e = System.getenv("LOGHUB_ENABLED");
+            e = System.getProperty("loghub.enabled");
             if (e == null) {
                 e = properties.get("loghub.enabled");
                 if (e == null) {
@@ -494,12 +494,7 @@ public final class LogHub {
             }
         }
         boolean eb = Boolean.parseBoolean(e);
-        if (eb) {
-            if ((account != null) && (environment != null) && (application != null) && (version != null) && (instance != null)) {
-                return true;
-            }
-        }
-        return false;
+        return eb && (account != null) && (environment != null) && (application != null) && (version != null) && (instance != null);
     }
 
     protected static void info(Class logger, String message) {
@@ -508,7 +503,7 @@ public final class LogHub {
             Argument.notNull("message", message);
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
-            System.out.println(String.format("%s [%s] [%s] INFO - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
+            System.out.println(String.format("%s [%s] [%s] INFO - %s", t, Thread.currentThread().getName(), logger.getCanonicalName(), message));
         }
     }
 
@@ -518,7 +513,7 @@ public final class LogHub {
             Argument.notNull("message", message);
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
-            System.out.println(String.format("%s [%s] [%s] DEBUG - %s", t, Thread.currentThread().getName(), logger.getSimpleName(), message));
+            System.out.println(String.format("%s [%s] [%s] DEBUG - %s", t, Thread.currentThread().getName(), logger.getCanonicalName(), message));
         }
     }
 
@@ -528,15 +523,24 @@ public final class LogHub {
     public static void logEvent(long time, int level, String levelName, String logger, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
     }
 
-    public static boolean logMetric(String name, long value, int point) {
-        return logMetric(name, value, point, "");
+    public static void logMetric(String name, long value, int point) {
+        logMetric(name, value, point, "");
     }
 
-    public static boolean logMetric(String name, long value, int point, String unit) {
+    public static void logMetric(String name, long value, int point, String unit) {
+        logMetric(name, 1L, value, point, unit);
+    }
+
+    public static void logMetric(String name, long count, long value, int point) {
+        logMetric(name, count, value, point, "");
+    }
+
+    public static void logMetric(String name, long count, long value, int point, String unit) {
         Argument.notNull("name", name);
+        Argument.inRangeLong("count", count, 0L, Long.MAX_VALUE);
         Argument.inRangeInt("point", point, 0, 15);
         Argument.notNull("unit", unit);
 
-        return metricWriter.log(name, value, point, unit);
+        metricWriter.log(name, count, value, point, unit);
     }
 }

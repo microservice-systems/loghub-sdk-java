@@ -58,7 +58,7 @@ final class LogMetricBuffer implements Bufferable {
     public void updateSpan() {
     }
 
-    public boolean log(long time, String name, long value, int point, String unit) {
+    public boolean log(long time, String name, long count, long value, int point, String unit) {
         long b = begin.get();
         long e = end.get();
         if ((time >= b) && (time < e)) {
@@ -68,7 +68,7 @@ final class LogMetricBuffer implements Bufferable {
                     if (v == null) {
                         v = MapUtil.putIfAbsent(metrics, name, new LogMetricValue(name, point, unit));
                     }
-                    v.log(time, value);
+                    v.log(time, count, value);
                     return true;
                 } finally {
                     section.leave();

@@ -91,6 +91,8 @@ public final class LogHub {
                         try {
                             LogMemoryUsage mu = new LogMemoryUsage();
                             memoryUsage.set(mu);
+                            logMetric("usage.memory.physical.total", mu.physicalTotal, 0, "MB");
+                            logMetric("usage.memory.physical.free", mu.physicalFree, 0, "MB");
                             logMetric("usage.memory.heap.init", mu.heapInit, 0, "MB");
                             logMetric("usage.memory.heap.used", mu.heapUsed, 0, "MB");
                             logMetric("usage.memory.heap.committed", mu.heapCommitted, 0, "MB");

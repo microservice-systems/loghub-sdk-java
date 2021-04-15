@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogCpuUsage implements Serializable {
+public final class LogCPUUsage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final int COUNT = Runtime.getRuntime().availableProcessors();
@@ -36,7 +36,7 @@ public final class LogCpuUsage implements Serializable {
     public final int entityActive;
     public final int entityTotal;
 
-    public LogCpuUsage() {
+    public LogCPUUsage() {
         String avg = StringUtil.load("/proc/loadavg", "0.0 0.0 0.0 0/0 0");
         String[] avgs = avg.split(" ");
         String[] ents = avgs[3].split("/");

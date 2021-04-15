@@ -34,9 +34,9 @@ public enum LogLevel {
     TRACE(600),
     ALL(Integer.MAX_VALUE);
 
-    public final int level;
+    public final int id;
 
-    LogLevel(int level) {
-        this.level = level;
+    LogLevel(int id) {
+        this.id = id;
     }
 }

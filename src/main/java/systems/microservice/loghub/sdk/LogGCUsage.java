@@ -26,13 +26,13 @@ import java.util.List;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogGarbageCollectorUsage implements Serializable {
+public final class LogGCUsage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final long collectionCount;
     public final long collectionTime;
 
-    public LogGarbageCollectorUsage() {
+    public LogGCUsage() {
         long ccs = 0L;
         long cts = 0L;
         List<GarbageCollectorMXBean> gcbs = ManagementFactory.getGarbageCollectorMXBeans();

@@ -49,27 +49,35 @@ public final class LogHub {
     private static final String application = createApplication(properties);
     private static final String version = createVersion(properties);
     private static final String instance = createInstance(properties);
-    private static final String instanceHost = createInstanceHost();
-    private static final String instanceIp = createInstanceIp();
-    private static final String process = createProcess();
-    private static final long processId = createProcessId();
+    private static final String hostName = createHostName();
+    private static final String hostIP = createHostIP();
+    private static final int cpuCount = createCPUCount();
+    private static final String osArch = createOSArch();
+    private static final String osName = createOSName();
+    private static final String osVersion = createOSVersion();
+    private static final String processUUID = createProcessUUID();
+    private static final long processID = createProcessID();
     private static final long processStart = createProcessStart();
-    private static final URL url = createUrl(properties, account);
+    private static final URL url = createURL(properties, account);
     private static final String basicUser = createBasicUser(properties);
     private static final String basicAuth = createBasicAuth(basicUser, createBasicPassword(properties));
     private static final String persistencePathBase = createPersistencePathBase(properties);
     private static final String persistencePathFull = createPersistencePathFull(persistencePathBase, account, environment, application, instance);
+    private static final LogLevel eventLevel = createEventLevel(properties);
+    private static final int eventLevelID = createEventLevelID(properties, eventLevel);
+    private static final int eventFlushSize = createEventFlushSize(properties);
+    private static final long eventFlushSpan = createEventFlushSpan(properties);
     private static final boolean infoEnabled = createInfoEnabled(properties);
     private static final boolean debugEnabled = createDebugEnabled(properties);
     private static final AtomicBoolean enabled = new AtomicBoolean(createEnabled(properties, account, environment, application, version, instance));
     private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
-    private static final AtomicReference<LogCpuUsage> cpuUsage = new AtomicReference<>(new LogCpuUsage());
+    private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
     private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
     private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
     private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
     private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
     private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(new LogDescriptorUsage());
-    private static final AtomicReference<LogGarbageCollectorUsage> garbageCollectorUsage = new AtomicReference<>(new LogGarbageCollectorUsage());
+    private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(new LogGCUsage());
     private static final LogEventWriter eventWriter;
     private static final LogMetricWriter metricWriter;
     private static final Thread monitor3Thread;
@@ -136,9 +144,9 @@ public final class LogHub {
                     final AtomicBoolean e = enabled;
                     while (e.get()) {
                         try {
-                            LogCpuUsage cu = new LogCpuUsage();
+                            LogCPUUsage cu = new LogCPUUsage();
                             cpuUsage.set(cu);
-                            logMetric("usage.cpu.count", LogCpuUsage.COUNT, 0);
+                            logMetric("usage.cpu.count", LogCPUUsage.COUNT, 0);
                             logMetric("usage.cpu.m1", (long) (cu.m1 * 100.0f), 0, "%");
                             logMetric("usage.cpu.m5", (long) (cu.m5 * 100.0f), 0, "%");
                             logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 0, "%");
@@ -149,9 +157,9 @@ public final class LogHub {
                             logMetric("usage.disk.total", du.total, 0, "MB");
                             logMetric("usage.disk.free", du.free, 0, "MB");
                             logMetric("usage.disk.usable", du.usable, 0, "MB");
-                            LogGarbageCollectorUsage gcuPrev = garbageCollectorUsage.get();
-                            LogGarbageCollectorUsage gcu = new LogGarbageCollectorUsage();
-                            garbageCollectorUsage.set(gcu);
+                            LogGCUsage gcuPrev = gcUsage.get();
+                            LogGCUsage gcu = new LogGCUsage();
+                            gcUsage.set(gcu);
                             logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
                             logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 3, "s");
                             try {
@@ -226,7 +234,7 @@ public final class LogHub {
             };
             shutdownThread.setDaemon(false);
             Runtime.getRuntime().addShutdownHook(shutdownThread);
-            logEvent(true, System.currentTimeMillis(), LogLevel.LIFECYCLE.level, LogLevel.LIFECYCLE.name(), LogHub.class.getCanonicalName(), "Hello World!");
+            logEvent(true, System.currentTimeMillis(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), LogHub.class.getCanonicalName(), "Hello World!");
             info(LogHub.class, String.format("LogHub is ready for collecting events & metrics: [account='%s', environment='%s', application='%s', version='%s', instance='%s']",
                                              account, environment, application, version, instance));
         } else {
@@ -324,7 +332,7 @@ public final class LogHub {
         return i;
     }
 
-    private static String createInstanceHost() {
+    private static String createHostName() {
         String ih = getHostName();
         if (ih == null) {
             ih = "unknown";
@@ -332,7 +340,7 @@ public final class LogHub {
         return ih;
     }
 
-    private static String createInstanceIp() {
+    private static String createHostIP() {
         String ii = getHostAddress();
         if (ii == null) {
             ii = "unknown";
@@ -356,11 +364,27 @@ public final class LogHub {
         }
     }
 
-    private static String createProcess() {
+    private static int createCPUCount() {
+        return ManagementFactory.getOperatingSystemMXBean().getAvailableProcessors();
+    }
+
+    private static String createOSArch() {
+        return ManagementFactory.getOperatingSystemMXBean().getArch();
+    }
+
+    private static String createOSName() {
+        return ManagementFactory.getOperatingSystemMXBean().getName();
+    }
+
+    private static String createOSVersion() {
+        return ManagementFactory.getOperatingSystemMXBean().getVersion();
+    }
+
+    private static String createProcessUUID() {
         return UUID.randomUUID().toString();
     }
 
-    private static long createProcessId() {
+    private static long createProcessID() {
         String n = ManagementFactory.getRuntimeMXBean().getName();
         if (n != null) {
             String[] ns = n.split("@");
@@ -378,14 +402,14 @@ public final class LogHub {
         return ManagementFactory.getRuntimeMXBean().getStartTime();
     }
 
-    private static URL createUrl(Map<String, String> properties, String account) {
+    private static URL createURL(Map<String, String> properties, String account) {
         String u = System.getenv("LOGHUB_URL");
         if (u == null) {
             u = System.getProperty("loghub.url");
             if (u == null) {
                 u = properties.get("loghub.url");
                 if (u == null) {
-                    u = String.format("https://%s/loghub/api/account/log/event", account);
+                    u = String.format("https://%s/loghub/api/account/log", account);
                 }
             }
         }
@@ -465,6 +489,70 @@ public final class LogHub {
         } else {
             return null;
         }
+    }
+
+    private static LogLevel createEventLevel(Map<String, String> properties) {
+        String el = System.getenv("LOGHUB_EVENT_LEVEL");
+        if (el == null) {
+            el = System.getProperty("loghub.event.level");
+            if (el == null) {
+                el = properties.get("loghub.event.level");
+                if (el == null) {
+                    return LogLevel.ALL;
+                }
+            }
+        }
+        try {
+            return LogLevel.valueOf(el);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private static int createEventLevelID(Map<String, String> properties, LogLevel eventLevel) {
+        if (eventLevel != null) {
+            return eventLevel.id;
+        } else {
+            String el = System.getenv("LOGHUB_EVENT_LEVEL");
+            if (el == null) {
+                el = System.getProperty("loghub.event.level");
+                if (el == null) {
+                    el = properties.get("loghub.event.level");
+                    if (el == null) {
+                        return LogLevel.ALL.id;
+                    }
+                }
+            }
+            return Integer.parseInt(el);
+        }
+    }
+
+    private static int createEventFlushSize(Map<String, String> properties) {
+        String efs = System.getenv("LOGHUB_EVENT_FLUSH_SIZE");
+        if (efs == null) {
+            efs = System.getProperty("loghub.event.flush.size");
+            if (efs == null) {
+                efs = properties.get("loghub.event.flush.size");
+                if (efs == null) {
+                    efs = "10485760";
+                }
+            }
+        }
+        return Argument.inRangeInt("loghub.event.flush.size", Integer.parseInt(efs), 0, Integer.MAX_VALUE);
+    }
+
+    private static long createEventFlushSpan(Map<String, String> properties) {
+        String efs = System.getenv("LOGHUB_EVENT_FLUSH_SPAN");
+        if (efs == null) {
+            efs = System.getProperty("loghub.event.flush.span");
+            if (efs == null) {
+                efs = properties.get("loghub.event.flush.span");
+                if (efs == null) {
+                    efs = "60000";
+                }
+            }
+        }
+        return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 2419200000L);
     }
 
     private static boolean createInfoEnabled(Map<String, String> properties) {

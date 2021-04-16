@@ -67,8 +67,11 @@ public final class LogHub {
     private static final int eventLevelID = createEventLevelID(properties, eventLevel);
     private static final int eventFlushSize = createEventFlushSize(properties);
     private static final long eventFlushSpan = createEventFlushSpan(properties);
-    private static final boolean infoEnabled = createInfoEnabled(properties);
-    private static final boolean debugEnabled = createDebugEnabled(properties);
+    private static final int eventFlushRetryCount = createEventFlushRetryCount(properties);
+    private static final long eventFlushRetryDelay = createEventFlushRetryDelay(properties);
+    private static final boolean uncaughtExceptionHandler = createUncaughtExceptionHandler(properties);
+    private static final boolean info = createInfo(properties);
+    private static final boolean debug = createDebug(properties);
     private static final AtomicBoolean enabled = new AtomicBoolean(createEnabled(properties, account, environment, application, version, instance));
     private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
     private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
@@ -235,6 +238,22 @@ public final class LogHub {
             shutdownThread.setDaemon(false);
             Runtime.getRuntime().addShutdownHook(shutdownThread);
             logEvent(true, System.currentTimeMillis(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), LogHub.class.getCanonicalName(), "Hello World!");
+            if (uncaughtExceptionHandler) {
+                try {
+                    Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                        @Override
+                        public void uncaughtException(Thread t, Throwable e) {
+                            try {
+                                logEvent(System.currentTimeMillis(), LogLevel.ERROR.id, LogLevel.ERROR.name(), LogHub.class.getCanonicalName(), e, null, null, null, "Uncaught exception: " + e.getClass().getCanonicalName());
+                            } catch (Throwable ex) {
+                                info(LogHub.class, ex.toString());
+                            }
+                        }
+                    });
+                } catch (Exception ex) {
+                    info(LogHub.class, ex.toString());
+                }
+            }
             info(LogHub.class, String.format("LogHub is ready for collecting events & metrics: [account='%s', environment='%s', application='%s', version='%s', instance='%s']",
                                              account, environment, application, version, instance));
         } else {
@@ -414,7 +433,7 @@ public final class LogHub {
             }
         }
         try {
-            return new URL(u);
+            return new URL(u.trim());
         } catch (MalformedURLException ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -505,6 +524,10 @@ public final class LogHub {
         try {
             return LogLevel.valueOf(el);
         } catch (Exception ex) {
+        }
+        try {
+            return LogLevel.getLevel(Integer.parseInt(el));
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -534,7 +557,7 @@ public final class LogHub {
             if (efs == null) {
                 efs = properties.get("loghub.event.flush.size");
                 if (efs == null) {
-                    efs = "10485760";
+                    return 10485760;
                 }
             }
         }
@@ -548,35 +571,77 @@ public final class LogHub {
             if (efs == null) {
                 efs = properties.get("loghub.event.flush.span");
                 if (efs == null) {
-                    efs = "60000";
+                    return 60000L;
                 }
             }
         }
-        return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 2419200000L);
+        return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 86400000L);
     }
 
-    private static boolean createInfoEnabled(Map<String, String> properties) {
-        String ie = System.getenv("LOGHUB_INFO_ENABLED");
+    private static int createEventFlushRetryCount(Map<String, String> properties) {
+        String efrc = System.getenv("LOGHUB_EVENT_FLUSH_RETRY_COUNT");
+        if (efrc == null) {
+            efrc = System.getProperty("loghub.event.flush.retry.count");
+            if (efrc == null) {
+                efrc = properties.get("loghub.event.flush.retry.count");
+                if (efrc == null) {
+                    return 5;
+                }
+            }
+        }
+        return Argument.inRangeInt("loghub.event.flush.retry.count", Integer.parseInt(efrc), 1, Integer.MAX_VALUE);
+    }
+
+    private static long createEventFlushRetryDelay(Map<String, String> properties) {
+        String efrd = System.getenv("LOGHUB_EVENT_FLUSH_RETRY_DELAY");
+        if (efrd == null) {
+            efrd = System.getProperty("loghub.event.flush.retry.delay");
+            if (efrd == null) {
+                efrd = properties.get("loghub.event.flush.retry.delay");
+                if (efrd == null) {
+                    return 3000L;
+                }
+            }
+        }
+        return Argument.inRangeLong("loghub.event.flush.retry.delay", Long.parseLong(efrd), 0L, 86400000L);
+    }
+
+    private static boolean createUncaughtExceptionHandler(Map<String, String> properties) {
+        String ie = System.getenv("LOGHUB_UNCAUGHT_EXCEPTION_HANDLER");
         if (ie == null) {
-            ie = System.getProperty("loghub.info.enabled");
+            ie = System.getProperty("loghub.uncaught.exception.handler");
             if (ie == null) {
-                ie = properties.get("loghub.info.enabled");
+                ie = properties.get("loghub.uncaught.exception.handler");
                 if (ie == null) {
-                    ie = "true";
+                    return true;
                 }
             }
         }
         return Boolean.parseBoolean(ie);
     }
 
-    private static boolean createDebugEnabled(Map<String, String> properties) {
-        String de = System.getenv("LOGHUB_DEBUG_ENABLED");
+    private static boolean createInfo(Map<String, String> properties) {
+        String ie = System.getenv("LOGHUB_INFO");
+        if (ie == null) {
+            ie = System.getProperty("loghub.info");
+            if (ie == null) {
+                ie = properties.get("loghub.info");
+                if (ie == null) {
+                    return true;
+                }
+            }
+        }
+        return Boolean.parseBoolean(ie);
+    }
+
+    private static boolean createDebug(Map<String, String> properties) {
+        String de = System.getenv("LOGHUB_DEBUG");
         if (de == null) {
-            de = System.getProperty("loghub.debug.enabled");
+            de = System.getProperty("loghub.debug");
             if (de == null) {
-                de = properties.get("loghub.debug.enabled");
+                de = properties.get("loghub.debug");
                 if (de == null) {
-                    de = "false";
+                    return false;
                 }
             }
         }
@@ -599,7 +664,7 @@ public final class LogHub {
     }
 
     protected static void info(Class logger, String message) {
-        if (infoEnabled) {
+        if (info) {
             Argument.notNull("logger", logger);
             Argument.notNull("message", message);
 
@@ -609,7 +674,7 @@ public final class LogHub {
     }
 
     protected static void debug(Class logger, String message) {
-        if (debugEnabled) {
+        if (debug) {
             Argument.notNull("logger", logger);
             Argument.notNull("message", message);
 

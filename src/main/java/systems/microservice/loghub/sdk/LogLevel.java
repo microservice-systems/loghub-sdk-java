@@ -17,6 +17,9 @@
 
 package systems.microservice.loghub.sdk;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
@@ -34,9 +37,31 @@ public enum LogLevel {
     TRACE(600),
     ALL(Integer.MAX_VALUE);
 
+    private static final HashMap<Integer, LogLevel> levels = createLevels();
+
     public final int id;
 
     LogLevel(int id) {
         this.id = id;
+    }
+
+    private static HashMap<Integer, LogLevel> createLevels() {
+        HashMap<Integer, LogLevel> ls = new HashMap<>(16);
+        ls.put(0, OFF);
+        ls.put(1, LIFECYCLE);
+        ls.put(2, DUMP);
+        ls.put(50, LOGIC);
+        ls.put(100, FATAL);
+        ls.put(200, ERROR);
+        ls.put(300, WARN);
+        ls.put(400, INFO);
+        ls.put(500, DEBUG);
+        ls.put(600, TRACE);
+        ls.put(Integer.MAX_VALUE, ALL);
+        return ls;
+    }
+
+    public static LogLevel getLevel(int id) {
+        return levels.get(id);
     }
 }

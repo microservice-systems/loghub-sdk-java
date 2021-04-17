@@ -21,6 +21,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -46,16 +47,15 @@ public final class TimeUtil {
     }
 
     public static String formatPath(long time) {
-        Calendar calendar = new GregorianCalendar(TIMEZONE_UTC);
-        calendar.setTimeInMillis(time);
-        return String.format("/%04d/%02d/%02d/%02d/%02d/%02d/%03d",
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1,
-                calendar.get(Calendar.DAY_OF_MONTH),
-                calendar.get(Calendar.HOUR),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND),
-                calendar.get(Calendar.MILLISECOND));
+        Calendar c = new GregorianCalendar(TIMEZONE_UTC, Locale.US);
+        c.setTimeInMillis(time);
+        return String.format("/%04d/%02d/%02d/%02d/%02d/%02d/%03d", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
+    }
+
+    public static String formatName(long time) {
+        Calendar c = new GregorianCalendar(TIMEZONE_UTC, Locale.US);
+        c.setTimeInMillis(time);
+        return String.format("%04d-%02d-%02d-%02d-%02d-%02d-%03d", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND), c.get(Calendar.MILLISECOND));
     }
 
     public static String formatMicroSpan(long time) {

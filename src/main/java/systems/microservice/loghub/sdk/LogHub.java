@@ -19,6 +19,7 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
+import systems.microservice.loghub.sdk.util.TimeUtil;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -70,6 +71,9 @@ public final class LogHub {
     private static final int eventFlushRetryCount = createEventFlushRetryCount(properties);
     private static final long eventFlushRetryDelay = createEventFlushRetryDelay(properties);
     private static final boolean uncaughtExceptionHandler = createUncaughtExceptionHandler(properties);
+    private static final boolean systemOut = createSystemOut(properties);
+    private static final boolean fileOut = createFileOut(properties);
+    private static final String filePath = createFilePath(properties, persistencePathFull, processStart);
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
     private static final AtomicBoolean enabled = new AtomicBoolean(createEnabled(properties, account, environment, application, version, instance));
@@ -501,6 +505,7 @@ public final class LogHub {
                 Files.createDirectories(Paths.get(ppf + "/config"));
                 Files.createDirectories(Paths.get(ppf + "/event"));
                 Files.createDirectories(Paths.get(ppf + "/metric"));
+                Files.createDirectories(Paths.get(ppf + "/file"));
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -607,45 +612,87 @@ public final class LogHub {
     }
 
     private static boolean createUncaughtExceptionHandler(Map<String, String> properties) {
-        String ie = System.getenv("LOGHUB_UNCAUGHT_EXCEPTION_HANDLER");
-        if (ie == null) {
-            ie = System.getProperty("loghub.uncaught.exception.handler");
-            if (ie == null) {
-                ie = properties.get("loghub.uncaught.exception.handler");
-                if (ie == null) {
+        String ueh = System.getenv("LOGHUB_UNCAUGHT_EXCEPTION_HANDLER");
+        if (ueh == null) {
+            ueh = System.getProperty("loghub.uncaught.exception.handler");
+            if (ueh == null) {
+                ueh = properties.get("loghub.uncaught.exception.handler");
+                if (ueh == null) {
                     return true;
                 }
             }
         }
-        return Boolean.parseBoolean(ie);
+        return Boolean.parseBoolean(ueh);
     }
 
-    private static boolean createInfo(Map<String, String> properties) {
-        String ie = System.getenv("LOGHUB_INFO");
-        if (ie == null) {
-            ie = System.getProperty("loghub.info");
-            if (ie == null) {
-                ie = properties.get("loghub.info");
-                if (ie == null) {
-                    return true;
-                }
-            }
-        }
-        return Boolean.parseBoolean(ie);
-    }
-
-    private static boolean createDebug(Map<String, String> properties) {
-        String de = System.getenv("LOGHUB_DEBUG");
-        if (de == null) {
-            de = System.getProperty("loghub.debug");
-            if (de == null) {
-                de = properties.get("loghub.debug");
-                if (de == null) {
+    private static boolean createSystemOut(Map<String, String> properties) {
+        String so = System.getenv("LOGHUB_SYSTEM_OUT");
+        if (so == null) {
+            so = System.getProperty("loghub.system.out");
+            if (so == null) {
+                so = properties.get("loghub.system.out");
+                if (so == null) {
                     return false;
                 }
             }
         }
-        return Boolean.parseBoolean(de);
+        return Boolean.parseBoolean(so);
+    }
+
+    private static boolean createFileOut(Map<String, String> properties) {
+        String fo = System.getenv("LOGHUB_FILE_OUT");
+        if (fo == null) {
+            fo = System.getProperty("loghub.file.out");
+            if (fo == null) {
+                fo = properties.get("loghub.file.out");
+                if (fo == null) {
+                    return false;
+                }
+            }
+        }
+        return Boolean.parseBoolean(fo);
+    }
+
+    private static String createFilePath(Map<String, String> properties, String persistencePathFull, long processStart) {
+        String fp = System.getenv("LOGHUB_FILE_PATH");
+        if (fp == null) {
+            fp = System.getProperty("loghub.file.path");
+            if (fp == null) {
+                fp = properties.get("loghub.file.path");
+                if (fp == null) {
+                    return persistencePathFull + "/file/" + TimeUtil.formatName(processStart) + ".log";
+                }
+            }
+        }
+        return fp.trim();
+    }
+
+    private static boolean createInfo(Map<String, String> properties) {
+        String i = System.getenv("LOGHUB_INFO");
+        if (i == null) {
+            i = System.getProperty("loghub.info");
+            if (i == null) {
+                i = properties.get("loghub.info");
+                if (i == null) {
+                    return true;
+                }
+            }
+        }
+        return Boolean.parseBoolean(i);
+    }
+
+    private static boolean createDebug(Map<String, String> properties) {
+        String d = System.getenv("LOGHUB_DEBUG");
+        if (d == null) {
+            d = System.getProperty("loghub.debug");
+            if (d == null) {
+                d = properties.get("loghub.debug");
+                if (d == null) {
+                    return false;
+                }
+            }
+        }
+        return Boolean.parseBoolean(d);
     }
 
     private static boolean createEnabled(Map<String, String> properties, String account, String environment, String application, String version, String instance) {

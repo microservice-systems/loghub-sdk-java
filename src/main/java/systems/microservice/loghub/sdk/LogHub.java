@@ -21,7 +21,10 @@ import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 import systems.microservice.loghub.sdk.util.TimeUtil;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -38,6 +41,8 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Dmitry Kotlyarov
@@ -77,14 +82,16 @@ public final class LogHub {
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
     private static final AtomicBoolean enabled = new AtomicBoolean(createEnabled(properties, account, environment, application, version, instance));
-    private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
-    private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
-    private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
-    private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
-    private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
-    private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
-    private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(new LogDescriptorUsage());
-    private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(new LogGCUsage());
+    private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> createThreadInfo(enabled.get()));
+    private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(createCPUUsage(enabled.get()));
+    private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(createMemoryUsage(enabled.get()));
+    private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(createDiskUsage(enabled.get()));
+    private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(createClassUsage(enabled.get()));
+    private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(createThreadUsage(enabled.get()));
+    private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(createDescriptorUsage(enabled.get()));
+    private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(createGCUsage(enabled.get()));
+    private static final Lock outLock = createOutLock(enabled.get(), systemOut, fileOut);
+    private static final PrintStream fileOutStream = createFileOutStream(enabled.get(), fileOut, filePath);
     private static final LogEventWriter eventWriter;
     private static final LogMetricWriter metricWriter;
     private static final Thread monitor3Thread;
@@ -708,6 +715,90 @@ public final class LogHub {
         }
         boolean eb = Boolean.parseBoolean(e);
         return eb && (account != null) && (environment != null) && (application != null) && (version != null) && (instance != null);
+    }
+
+    private static LogThreadInfo createThreadInfo(boolean enabled) {
+        if (enabled) {
+            return new LogThreadInfo();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogCPUUsage createCPUUsage(boolean enabled) {
+        if (enabled) {
+            return new LogCPUUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogMemoryUsage createMemoryUsage(boolean enabled) {
+        if (enabled) {
+            return new LogMemoryUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogDiskUsage createDiskUsage(boolean enabled) {
+        if (enabled) {
+            return new LogDiskUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogClassUsage createClassUsage(boolean enabled) {
+        if (enabled) {
+            return new LogClassUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogThreadUsage createThreadUsage(boolean enabled) {
+        if (enabled) {
+            return new LogThreadUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogDescriptorUsage createDescriptorUsage(boolean enabled) {
+        if (enabled) {
+            return new LogDescriptorUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogGCUsage createGCUsage(boolean enabled) {
+        if (enabled) {
+            return new LogGCUsage();
+        } else {
+            return null;
+        }
+    }
+
+    private static Lock createOutLock(boolean enabled, boolean systemOut, boolean fileOut) {
+        if (enabled && (systemOut || fileOut)) {
+            return new ReentrantLock();
+        } else {
+            return null;
+        }
+    }
+
+    private static PrintStream createFileOutStream(boolean enabled, boolean fileOut, String filePath) {
+        if (enabled && fileOut) {
+            try {
+                return new PrintStream(filePath, StandardCharsets.UTF_8.name());
+            } catch (FileNotFoundException | UnsupportedEncodingException e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     protected static void info(Class logger, String message) {

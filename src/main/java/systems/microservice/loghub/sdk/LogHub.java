@@ -92,8 +92,8 @@ public final class LogHub {
     private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(createGCUsage(enabled.get()));
     private static final Lock outLock = createOutLock(enabled.get(), systemOut, fileOut);
     private static final PrintStream fileOutStream = createFileOutStream(enabled.get(), fileOut, filePath);
-    private static final LogEventWriter eventWriter;
-    private static final LogMetricWriter metricWriter;
+    private static final LogEventWriter eventWriter = createEventWriter(enabled.get());
+    private static final LogMetricWriter metricWriter = createMetricWriter(enabled.get());
     private static final Thread monitor3Thread;
     private static final Thread monitor10Thread;
     private static final Thread flushEventsThread;
@@ -105,8 +105,6 @@ public final class LogHub {
 
     static {
         if (enabled.get()) {
-            eventWriter = new LogEventWriter();
-            metricWriter = new LogMetricWriter(60000L, 5);
             monitor3Thread = new Thread("loghub-monitor-3") {
                 @Override
                 public void run() {
@@ -268,8 +266,6 @@ public final class LogHub {
             info(LogHub.class, String.format("LogHub is ready for collecting events & metrics: [account='%s', environment='%s', application='%s', version='%s', instance='%s']",
                                              account, environment, application, version, instance));
         } else {
-            eventWriter = null;
-            metricWriter = null;
             monitor3Thread = null;
             monitor10Thread = null;
             flushEventsThread = null;
@@ -783,7 +779,7 @@ public final class LogHub {
 
     private static Lock createOutLock(boolean enabled, boolean systemOut, boolean fileOut) {
         if (enabled && (systemOut || fileOut)) {
-            return new ReentrantLock();
+            return new ReentrantLock(false);
         } else {
             return null;
         }
@@ -796,6 +792,22 @@ public final class LogHub {
             } catch (FileNotFoundException | UnsupportedEncodingException e) {
                 return null;
             }
+        } else {
+            return null;
+        }
+    }
+
+    private static LogEventWriter createEventWriter(boolean enabled) {
+        if (enabled) {
+            return new LogEventWriter();
+        } else {
+            return null;
+        }
+    }
+
+    private static LogMetricWriter createMetricWriter(boolean enabled) {
+        if (enabled) {
+            return new LogMetricWriter(60000L, 5);
         } else {
             return null;
         }

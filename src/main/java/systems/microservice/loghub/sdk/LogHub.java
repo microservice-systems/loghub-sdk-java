@@ -94,157 +94,21 @@ public final class LogHub {
     private static final PrintStream fileOutStream = createFileOutStream(enabled.get(), fileOut, filePath);
     private static final LogEventWriter eventWriter = createEventWriter(enabled.get());
     private static final LogMetricWriter metricWriter = createMetricWriter(enabled.get());
-    private static final Thread monitor3Thread;
-    private static final Thread monitor10Thread;
-    private static final Thread flushEventsThread;
-    private static final Thread flushMetricsThread;
-    private static final Thread shutdownThread;
+    private static final Thread monitor3Thread = createMonitor3Thread(enabled.get());
+    private static final Thread monitor10Thread = createMonitor10Thread(enabled.get());
+    private static final Thread flushEventsThread = createFlushEventsThread(enabled.get());
+    private static final Thread flushMetricsThread = createFlushMetricsThread(enabled.get());
+    private static final Thread shutdownThread = createShutdownThread(enabled.get());
 
     private LogHub() {
     }
 
     static {
         if (enabled.get()) {
-            monitor3Thread = new Thread("loghub-monitor-3") {
-                @Override
-                public void run() {
-                    final AtomicBoolean e = enabled;
-                    while (e.get()) {
-                        try {
-                            LogMemoryUsage mu = new LogMemoryUsage();
-                            memoryUsage.set(mu);
-                            logMetric("usage.memory.physical.total", mu.physicalTotal, 0, "MB");
-                            logMetric("usage.memory.physical.free", mu.physicalFree, 0, "MB");
-                            logMetric("usage.memory.heap.init", mu.heapInit, 0, "MB");
-                            logMetric("usage.memory.heap.used", mu.heapUsed, 0, "MB");
-                            logMetric("usage.memory.heap.committed", mu.heapCommitted, 0, "MB");
-                            logMetric("usage.memory.heap.max", mu.heapMax, 0, "MB");
-                            logMetric("usage.memory.nonheap.init", mu.nonheapInit, 0, "MB");
-                            logMetric("usage.memory.nonheap.used", mu.nonheapUsed, 0, "MB");
-                            logMetric("usage.memory.nonheap.committed", mu.nonheapCommitted, 0, "MB");
-                            logMetric("usage.memory.nonheap.max", mu.nonheapMax, 0, "MB");
-                            logMetric("usage.memory.object.pending.finalization", mu.objectPendingFinalization, 0);
-                            LogClassUsage cu = new LogClassUsage();
-                            classUsage.set(cu);
-                            logMetric("usage.class.active", cu.active, 0);
-                            logMetric("usage.class.loaded", cu.loaded, 0);
-                            logMetric("usage.class.unloaded", cu.unloaded, 0);
-                            LogThreadUsage tu = new LogThreadUsage();
-                            threadUsage.set(tu);
-                            logMetric("usage.thread.live", tu.live, 0);
-                            logMetric("usage.thread.daemon", tu.daemon, 0);
-                            logMetric("usage.thread.peak", tu.peak, 0);
-                            logMetric("usage.thread.total", tu.total, 0);
-                            LogDescriptorUsage du = new LogDescriptorUsage();
-                            descriptorUsage.set(du);
-                            logMetric("usage.descriptor.file.max", du.fileMax, 0);
-                            logMetric("usage.descriptor.file.open", du.fileOpen, 0);
-                            try {
-                                Thread.sleep(3000L);
-                            } catch (InterruptedException ex) {
-                            }
-                        } catch (Throwable ex) {
-                        }
-                    }
-                }
-            };
-            monitor3Thread.setDaemon(true);
             monitor3Thread.start();
-            monitor10Thread = new Thread("loghub-monitor-10") {
-                @Override
-                public void run() {
-                    final AtomicBoolean e = enabled;
-                    while (e.get()) {
-                        try {
-                            LogCPUUsage cu = new LogCPUUsage();
-                            cpuUsage.set(cu);
-                            logMetric("usage.cpu.count", LogCPUUsage.COUNT, 0);
-                            logMetric("usage.cpu.m1", (long) (cu.m1 * 100.0f), 0, "%");
-                            logMetric("usage.cpu.m5", (long) (cu.m5 * 100.0f), 0, "%");
-                            logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 0, "%");
-                            logMetric("usage.cpu.entity.active", cu.entityActive, 0);
-                            logMetric("usage.cpu.entity.total", cu.entityTotal, 0);
-                            LogDiskUsage du = new LogDiskUsage();
-                            diskUsage.set(du);
-                            logMetric("usage.disk.total", du.total, 0, "MB");
-                            logMetric("usage.disk.free", du.free, 0, "MB");
-                            logMetric("usage.disk.usable", du.usable, 0, "MB");
-                            LogGCUsage gcuPrev = gcUsage.get();
-                            LogGCUsage gcu = new LogGCUsage();
-                            gcUsage.set(gcu);
-                            logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
-                            logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 3, "s");
-                            try {
-                                Thread.sleep(10000L);
-                            } catch (InterruptedException ex) {
-                            }
-                        } catch (Throwable ex) {
-                        }
-                    }
-                }
-            };
-            monitor10Thread.setDaemon(true);
             monitor10Thread.start();
-            flushEventsThread = new Thread("loghub-flush-events") {
-                @Override
-                public void run() {
-                    final AtomicBoolean e = enabled;
-                    while (e.get()) {
-                        try {
-                            try {
-                                Thread.sleep(3000L);
-                            } catch (InterruptedException ex) {
-                            }
-                        } catch (Throwable ex) {
-                        }
-                    }
-                }
-            };
-            flushEventsThread.setDaemon(false);
             flushEventsThread.start();
-            flushMetricsThread = new Thread("loghub-flush-metrics") {
-                @Override
-                public void run() {
-                    final AtomicBoolean e = enabled;
-                    final LogMetricWriter mw = LogHub.metricWriter;
-                    final long s = mw.getSpan();
-                    final LogMetricFlushInfo fi = new LogMetricFlushInfo();
-                    while (e.get()) {
-                        try {
-                            try {
-                                Thread.sleep(s);
-                            } catch (InterruptedException ex) {
-                            }
-                            mw.flush(fi);
-                        } catch (Throwable ex) {
-                        }
-                    }
-                }
-            };
-            flushMetricsThread.setDaemon(false);
             flushMetricsThread.start();
-            shutdownThread = new Thread("loghub-shutdown") {
-                @Override
-                public void run() {
-                    final AtomicBoolean e = enabled;
-                    final Thread fet = flushEventsThread;
-                    final Thread fmt = flushMetricsThread;
-                    e.set(false);
-                    if (fet.isAlive()) {
-                        try {
-                            fet.join();
-                        } catch (InterruptedException ex) {
-                        }
-                    }
-                    if (fmt.isAlive()) {
-                        try {
-                            fmt.join();
-                        } catch (InterruptedException ex) {
-                        }
-                    }
-                }
-            };
-            shutdownThread.setDaemon(false);
             Runtime.getRuntime().addShutdownHook(shutdownThread);
             logEvent(true, System.currentTimeMillis(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), LogHub.class.getCanonicalName(), "Hello World!");
             if (uncaughtExceptionHandler) {
@@ -265,12 +129,6 @@ public final class LogHub {
             }
             info(LogHub.class, String.format("LogHub is ready for collecting events & metrics: [account='%s', environment='%s', application='%s', version='%s', instance='%s']",
                                              account, environment, application, version, instance));
-        } else {
-            monitor3Thread = null;
-            monitor10Thread = null;
-            flushEventsThread = null;
-            flushMetricsThread = null;
-            shutdownThread = null;
         }
     }
 
@@ -808,6 +666,182 @@ public final class LogHub {
     private static LogMetricWriter createMetricWriter(boolean enabled) {
         if (enabled) {
             return new LogMetricWriter(60000L, 5);
+        } else {
+            return null;
+        }
+    }
+
+    private static Thread createMonitor3Thread(boolean enabled) {
+        if (enabled) {
+            Thread t = new Thread("loghub-monitor-3") {
+                @Override
+                public void run() {
+                    final AtomicBoolean e = LogHub.enabled;
+                    while (e.get()) {
+                        try {
+                            LogMemoryUsage mu = new LogMemoryUsage();
+                            memoryUsage.set(mu);
+                            logMetric("usage.memory.physical.total", mu.physicalTotal, 0, "MB");
+                            logMetric("usage.memory.physical.free", mu.physicalFree, 0, "MB");
+                            logMetric("usage.memory.heap.init", mu.heapInit, 0, "MB");
+                            logMetric("usage.memory.heap.used", mu.heapUsed, 0, "MB");
+                            logMetric("usage.memory.heap.committed", mu.heapCommitted, 0, "MB");
+                            logMetric("usage.memory.heap.max", mu.heapMax, 0, "MB");
+                            logMetric("usage.memory.nonheap.init", mu.nonheapInit, 0, "MB");
+                            logMetric("usage.memory.nonheap.used", mu.nonheapUsed, 0, "MB");
+                            logMetric("usage.memory.nonheap.committed", mu.nonheapCommitted, 0, "MB");
+                            logMetric("usage.memory.nonheap.max", mu.nonheapMax, 0, "MB");
+                            logMetric("usage.memory.object.pending.finalization", mu.objectPendingFinalization, 0);
+                            LogClassUsage cu = new LogClassUsage();
+                            classUsage.set(cu);
+                            logMetric("usage.class.active", cu.active, 0);
+                            logMetric("usage.class.loaded", cu.loaded, 0);
+                            logMetric("usage.class.unloaded", cu.unloaded, 0);
+                            LogThreadUsage tu = new LogThreadUsage();
+                            threadUsage.set(tu);
+                            logMetric("usage.thread.live", tu.live, 0);
+                            logMetric("usage.thread.daemon", tu.daemon, 0);
+                            logMetric("usage.thread.peak", tu.peak, 0);
+                            logMetric("usage.thread.total", tu.total, 0);
+                            LogDescriptorUsage du = new LogDescriptorUsage();
+                            descriptorUsage.set(du);
+                            logMetric("usage.descriptor.file.max", du.fileMax, 0);
+                            logMetric("usage.descriptor.file.open", du.fileOpen, 0);
+                            try {
+                                Thread.sleep(3000L);
+                            } catch (InterruptedException ex) {
+                            }
+                        } catch (Throwable ex) {
+                        }
+                    }
+                }
+            };
+            t.setDaemon(true);
+            return t;
+        } else {
+            return null;
+        }
+    }
+
+    private static Thread createMonitor10Thread(boolean enabled) {
+        if (enabled) {
+            Thread t = new Thread("loghub-monitor-10") {
+                @Override
+                public void run() {
+                    final AtomicBoolean e = LogHub.enabled;
+                    while (e.get()) {
+                        try {
+                            LogCPUUsage cu = new LogCPUUsage();
+                            cpuUsage.set(cu);
+                            logMetric("usage.cpu.count", LogCPUUsage.COUNT, 0);
+                            logMetric("usage.cpu.m1", (long) (cu.m1 * 100.0f), 0, "%");
+                            logMetric("usage.cpu.m5", (long) (cu.m5 * 100.0f), 0, "%");
+                            logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 0, "%");
+                            logMetric("usage.cpu.entity.active", cu.entityActive, 0);
+                            logMetric("usage.cpu.entity.total", cu.entityTotal, 0);
+                            LogDiskUsage du = new LogDiskUsage();
+                            diskUsage.set(du);
+                            logMetric("usage.disk.total", du.total, 0, "MB");
+                            logMetric("usage.disk.free", du.free, 0, "MB");
+                            logMetric("usage.disk.usable", du.usable, 0, "MB");
+                            LogGCUsage gcuPrev = gcUsage.get();
+                            LogGCUsage gcu = new LogGCUsage();
+                            gcUsage.set(gcu);
+                            logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
+                            logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 3, "s");
+                            try {
+                                Thread.sleep(10000L);
+                            } catch (InterruptedException ex) {
+                            }
+                        } catch (Throwable ex) {
+                        }
+                    }
+                }
+            };
+            t.setDaemon(true);
+            return t;
+        } else {
+            return null;
+        }
+    }
+
+    private static Thread createFlushEventsThread(boolean enabled) {
+        if (enabled) {
+            Thread t = new Thread("loghub-flush-events") {
+                @Override
+                public void run() {
+                    final AtomicBoolean e = LogHub.enabled;
+                    while (e.get()) {
+                        try {
+                            try {
+                                Thread.sleep(3000L);
+                            } catch (InterruptedException ex) {
+                            }
+                        } catch (Throwable ex) {
+                        }
+                    }
+                }
+            };
+            t.setDaemon(false);
+            return t;
+        } else {
+            return null;
+        }
+    }
+
+    private static Thread createFlushMetricsThread(boolean enabled) {
+        if (enabled) {
+            Thread t = new Thread("loghub-flush-metrics") {
+                @Override
+                public void run() {
+                    final AtomicBoolean e = LogHub.enabled;
+                    final LogMetricWriter mw = LogHub.metricWriter;
+                    final long s = mw.getSpan();
+                    final LogMetricFlushInfo fi = new LogMetricFlushInfo();
+                    while (e.get()) {
+                        try {
+                            try {
+                                Thread.sleep(s);
+                            } catch (InterruptedException ex) {
+                            }
+                            mw.flush(fi);
+                        } catch (Throwable ex) {
+                        }
+                    }
+                }
+            };
+            t.setDaemon(false);
+            return t;
+        } else {
+            return null;
+        }
+    }
+
+    private static Thread createShutdownThread(boolean enabled) {
+        if (enabled) {
+            Thread t = new Thread("loghub-shutdown") {
+                @Override
+                public void run() {
+                    final AtomicBoolean e = LogHub.enabled;
+                    final Thread fet = LogHub.flushEventsThread;
+                    final Thread fmt = LogHub.flushMetricsThread;
+                    e.set(false);
+                    if (fet.isAlive()) {
+                        try {
+                            fet.join();
+                        } catch (InterruptedException ex) {
+                        }
+                    }
+                    if (fmt.isAlive()) {
+                        try {
+                            fmt.join();
+                        } catch (InterruptedException ex) {
+                        }
+                    }
+                }
+            };
+            t.setDaemon(false);
+            return t;
         } else {
             return null;
         }

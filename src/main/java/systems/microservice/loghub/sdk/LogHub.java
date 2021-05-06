@@ -771,6 +771,8 @@ public final class LogHub {
                 @Override
                 public void run() {
                     final AtomicBoolean e = LogHub.enabled;
+                    final Lock ol = LogHub.outLock;
+                    final PrintStream fos = LogHub.fileOutStream;
                     while (e.get()) {
                         try {
                             try {
@@ -778,6 +780,14 @@ public final class LogHub {
                             } catch (InterruptedException ex) {
                             }
                         } catch (Throwable ex) {
+                        }
+                    }
+                    if ((ol != null) && (fos != null)) {
+                        ol.lock();
+                        try {
+                            fos.close();
+                        } finally {
+                            ol.unlock();
                         }
                     }
                 }
@@ -864,6 +874,24 @@ public final class LogHub {
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
             System.out.println(String.format("%s [%s] [%s] DEBUG - %s", t, Thread.currentThread().getName(), logger.getCanonicalName(), message));
+        }
+    }
+
+    private static void logEventOut(long time, int level, String levelName, String logger, Throwable exception, String message) {
+        if (outLock != null) {
+            String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", time);
+            String s = String.format("%s [%s] [%s] %s - %s", t, Thread.currentThread().getName(), logger, levelName, message);
+            outLock.lock();
+            try {
+                if (systemOut) {
+                    System.out.println(s);
+                }
+                if (fileOutStream != null) {
+                    fileOutStream.println(s);
+                }
+            } finally {
+                outLock.unlock();
+            }
         }
     }
 

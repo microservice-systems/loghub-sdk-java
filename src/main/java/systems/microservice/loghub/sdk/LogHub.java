@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -55,6 +56,7 @@ public final class LogHub {
     private static final String application = createApplication(properties);
     private static final String version = createVersion(properties);
     private static final String instance = createInstance(properties);
+    private static final boolean enabled = createEnabled(properties, account, environment, application, version, instance);
     private static final String hostName = createHostName();
     private static final String hostIP = createHostIP();
     private static final int cpuCount = createCPUCount();
@@ -81,30 +83,31 @@ public final class LogHub {
     private static final String filePath = createFilePath(properties, persistencePathFull, processStart);
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
-    private static final AtomicBoolean enabled = new AtomicBoolean(createEnabled(properties, account, environment, application, version, instance));
-    private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> createThreadInfo(enabled.get()));
-    private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(createCPUUsage(enabled.get()));
-    private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(createMemoryUsage(enabled.get()));
-    private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(createDiskUsage(enabled.get()));
-    private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(createClassUsage(enabled.get()));
-    private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(createThreadUsage(enabled.get()));
-    private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(createDescriptorUsage(enabled.get()));
-    private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(createGCUsage(enabled.get()));
-    private static final Lock outLock = createOutLock(enabled.get(), systemOut, fileOut);
-    private static final PrintStream fileOutStream = createFileOutStream(enabled.get(), fileOut, filePath);
-    private static final LogEventWriter eventWriter = createEventWriter(enabled.get());
-    private static final LogMetricWriter metricWriter = createMetricWriter(enabled.get());
-    private static final Thread monitor3Thread = createMonitor3Thread(enabled.get());
-    private static final Thread monitor10Thread = createMonitor10Thread(enabled.get());
-    private static final Thread flushEventsThread = createFlushEventsThread(enabled.get());
-    private static final Thread flushMetricsThread = createFlushMetricsThread(enabled.get());
-    private static final Thread shutdownThread = createShutdownThread(enabled.get());
+    private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
+    private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
+    private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
+    private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
+    private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
+    private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
+    private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(new LogDescriptorUsage());
+    private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(new LogGCUsage());
+    private static final AtomicBoolean active = new AtomicBoolean(enabled);
+    private static final AtomicInteger finished = new AtomicInteger(2);
+    private static final Lock outLock = createOutLock(enabled, systemOut, fileOut);
+    private static final PrintStream fileOutStream = createFileOutStream(enabled, fileOut, filePath);
+    private static final LogEventWriter eventWriter = createEventWriter(enabled);
+    private static final LogMetricWriter metricWriter = createMetricWriter(enabled);
+    private static final Thread monitor3Thread = createMonitor3Thread(enabled);
+    private static final Thread monitor10Thread = createMonitor10Thread(enabled);
+    private static final Thread flushEventsThread = createFlushEventsThread(enabled);
+    private static final Thread flushMetricsThread = createFlushMetricsThread(enabled);
+    private static final Thread shutdownThread = createShutdownThread(enabled);
 
     private LogHub() {
     }
 
     static {
-        if (enabled.get()) {
+        if (enabled) {
             monitor3Thread.start();
             monitor10Thread.start();
             flushEventsThread.start();
@@ -214,6 +217,21 @@ public final class LogHub {
             }
         }
         return i;
+    }
+
+    private static boolean createEnabled(Map<String, String> properties, String account, String environment, String application, String version, String instance) {
+        String e = System.getenv("LOGHUB_ENABLED");
+        if (e == null) {
+            e = System.getProperty("loghub.enabled");
+            if (e == null) {
+                e = properties.get("loghub.enabled");
+                if (e == null) {
+                    e = "true";
+                }
+            }
+        }
+        boolean eb = Boolean.parseBoolean(e);
+        return eb && (account != null) && (environment != null) && (application != null) && (version != null) && (instance != null);
     }
 
     private static String createHostName() {
@@ -556,85 +574,6 @@ public final class LogHub {
         return Boolean.parseBoolean(d);
     }
 
-    private static boolean createEnabled(Map<String, String> properties, String account, String environment, String application, String version, String instance) {
-        String e = System.getenv("LOGHUB_ENABLED");
-        if (e == null) {
-            e = System.getProperty("loghub.enabled");
-            if (e == null) {
-                e = properties.get("loghub.enabled");
-                if (e == null) {
-                    e = "true";
-                }
-            }
-        }
-        boolean eb = Boolean.parseBoolean(e);
-        return eb && (account != null) && (environment != null) && (application != null) && (version != null) && (instance != null);
-    }
-
-    private static LogThreadInfo createThreadInfo(boolean enabled) {
-        if (enabled) {
-            return new LogThreadInfo();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogCPUUsage createCPUUsage(boolean enabled) {
-        if (enabled) {
-            return new LogCPUUsage();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogMemoryUsage createMemoryUsage(boolean enabled) {
-        if (enabled) {
-            return new LogMemoryUsage();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogDiskUsage createDiskUsage(boolean enabled) {
-        if (enabled) {
-            return new LogDiskUsage();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogClassUsage createClassUsage(boolean enabled) {
-        if (enabled) {
-            return new LogClassUsage();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogThreadUsage createThreadUsage(boolean enabled) {
-        if (enabled) {
-            return new LogThreadUsage();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogDescriptorUsage createDescriptorUsage(boolean enabled) {
-        if (enabled) {
-            return new LogDescriptorUsage();
-        } else {
-            return null;
-        }
-    }
-
-    private static LogGCUsage createGCUsage(boolean enabled) {
-        if (enabled) {
-            return new LogGCUsage();
-        } else {
-            return null;
-        }
-    }
-
     private static Lock createOutLock(boolean enabled, boolean systemOut, boolean fileOut) {
         if (enabled && (systemOut || fileOut)) {
             return new ReentrantLock(false);
@@ -676,8 +615,8 @@ public final class LogHub {
             Thread t = new Thread("loghub-monitor-3") {
                 @Override
                 public void run() {
-                    final AtomicBoolean e = LogHub.enabled;
-                    while (e.get()) {
+                    final AtomicBoolean a = LogHub.active;
+                    while (a.get()) {
                         try {
                             LogMemoryUsage mu = new LogMemoryUsage();
                             memoryUsage.set(mu);
@@ -728,8 +667,8 @@ public final class LogHub {
             Thread t = new Thread("loghub-monitor-10") {
                 @Override
                 public void run() {
-                    final AtomicBoolean e = LogHub.enabled;
-                    while (e.get()) {
+                    final AtomicBoolean a = LogHub.active;
+                    while (a.get()) {
                         try {
                             LogCPUUsage cu = new LogCPUUsage();
                             cpuUsage.set(cu);
@@ -770,25 +709,34 @@ public final class LogHub {
             Thread t = new Thread("loghub-flush-events") {
                 @Override
                 public void run() {
-                    final AtomicBoolean e = LogHub.enabled;
+                    final AtomicBoolean a = LogHub.active;
+                    final AtomicInteger f = LogHub.finished;
                     final Lock ol = LogHub.outLock;
                     final PrintStream fos = LogHub.fileOutStream;
-                    while (e.get()) {
-                        try {
+                    final LogEventWriter ew = LogHub.eventWriter;
+                    try {
+                        while (a.get()) {
                             try {
-                                Thread.sleep(3000L);
-                            } catch (InterruptedException ex) {
+                                try {
+                                    Thread.sleep(3000L);
+                                } catch (InterruptedException ex) {
+                                }
+                            } catch (Throwable ex) {
                             }
-                        } catch (Throwable ex) {
                         }
-                    }
-                    if ((ol != null) && (fos != null)) {
-                        ol.lock();
-                        try {
-                            fos.close();
-                        } finally {
-                            ol.unlock();
+                        if ((ol != null) && (fos != null)) {
+                            ol.lock();
+                            try {
+                                try {
+                                    fos.close();
+                                } catch (Throwable ex) {
+                                }
+                            } finally {
+                                ol.unlock();
+                            }
                         }
+                    } finally {
+                        f.decrementAndGet();
                     }
                 }
             };
@@ -804,19 +752,24 @@ public final class LogHub {
             Thread t = new Thread("loghub-flush-metrics") {
                 @Override
                 public void run() {
-                    final AtomicBoolean e = LogHub.enabled;
+                    final AtomicBoolean a = LogHub.active;
+                    final AtomicInteger f = LogHub.finished;
                     final LogMetricWriter mw = LogHub.metricWriter;
-                    final long s = mw.getSpan();
-                    final LogMetricFlushInfo fi = new LogMetricFlushInfo();
-                    while (e.get()) {
-                        try {
+                    try {
+                        final long s = mw.getSpan();
+                        final LogMetricFlushInfo fi = new LogMetricFlushInfo();
+                        while (a.get()) {
                             try {
-                                Thread.sleep(s);
-                            } catch (InterruptedException ex) {
+                                try {
+                                    Thread.sleep(s);
+                                } catch (InterruptedException ex) {
+                                }
+                                mw.flush(fi);
+                            } catch (Throwable ex) {
                             }
-                            mw.flush(fi);
-                        } catch (Throwable ex) {
                         }
+                    } finally {
+                        f.decrementAndGet();
                     }
                 }
             };
@@ -832,10 +785,10 @@ public final class LogHub {
             Thread t = new Thread("loghub-shutdown") {
                 @Override
                 public void run() {
-                    final AtomicBoolean e = LogHub.enabled;
+                    final AtomicBoolean a = LogHub.active;
                     final Thread fet = LogHub.flushEventsThread;
                     final Thread fmt = LogHub.flushMetricsThread;
-                    e.set(false);
+                    a.set(false);
                     if (fet.isAlive()) {
                         try {
                             fet.join();

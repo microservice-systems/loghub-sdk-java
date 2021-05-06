@@ -108,6 +108,14 @@ public final class LogHub {
 
     static {
         if (enabled) {
+            try {
+                Files.createDirectories(Paths.get(persistencePathFull + "/config"));
+                Files.createDirectories(Paths.get(persistencePathFull + "/event"));
+                Files.createDirectories(Paths.get(persistencePathFull + "/metric"));
+                Files.createDirectories(Paths.get(persistencePathFull + "/file"));
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             monitor3Thread.start();
             monitor10Thread.start();
             flushEventsThread.start();
@@ -368,27 +376,16 @@ public final class LogHub {
                 }
             }
         }
-        if (ppb != null) {
-            ppb = ppb.trim();
-            while (ppb.endsWith("/")) {
-                ppb = ppb.substring(0, ppb.length() - 1);
-            }
+        ppb = ppb.trim();
+        while (ppb.endsWith("/")) {
+            ppb = ppb.substring(0, ppb.length() - 1);
         }
         return ppb;
     }
 
     private static String createPersistencePathFull(String persistencePathBase, String account, String environment, String application, String instance) {
-        if (persistencePathBase != null) {
-            String ppf = persistencePathBase + "/loghub/" + account + "/" + environment + "/" + application + "/" + instance;
-            try {
-                Files.createDirectories(Paths.get(ppf + "/config"));
-                Files.createDirectories(Paths.get(ppf + "/event"));
-                Files.createDirectories(Paths.get(ppf + "/metric"));
-                Files.createDirectories(Paths.get(ppf + "/file"));
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-            return ppf;
+        if ((account != null) && (environment != null) && (application != null) && (instance != null)) {
+            return persistencePathBase + "/loghub/" + account + "/" + environment + "/" + application + "/" + instance;
         } else {
             return null;
         }

@@ -41,34 +41,34 @@ public class Log {
     }
 
     protected void logEvent(int level, String levelName, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, null, null, null, null, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, null, null, null, message);
     }
 
     protected void logEvent(int level, String levelName, Map<String, LogTag> tags, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, null, tags, null, null, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, tags, null, null, message);
     }
 
     protected void logEvent(int level, String levelName, Map<String, LogTag> tags, Map<String, LogImage> images, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, null, tags, images, null, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, tags, images, null, message);
     }
 
     protected void logEvent(int level, String levelName, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, null, tags, images, blobs, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, tags, images, blobs, message);
     }
 
     protected void logEvent(int level, String levelName, Throwable exception, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, exception, null, null, null, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, null, null, null, message);
     }
 
     protected void logEvent(int level, String levelName, Throwable exception, Map<String, LogTag> tags, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, exception, tags, null, null, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, tags, null, null, message);
     }
 
     protected void logEvent(int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, exception, tags, images, null, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, tags, images, null, message);
     }
 
     protected void logEvent(int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
-        LogHub.logEvent(System.currentTimeMillis(), level, levelName, logger, exception, tags, images, blobs, message);
+        LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, tags, images, blobs, message);
     }
 }

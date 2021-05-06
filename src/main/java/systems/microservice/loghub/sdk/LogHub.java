@@ -110,14 +110,14 @@ public final class LogHub {
             flushEventsThread.start();
             flushMetricsThread.start();
             Runtime.getRuntime().addShutdownHook(shutdownThread);
-            logEvent(true, System.currentTimeMillis(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), LogHub.class.getCanonicalName(), "Hello World!");
+            logEvent(true, System.currentTimeMillis(), LogHub.class.getCanonicalName(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), "Hello World!");
             if (uncaughtExceptionHandler) {
                 try {
                     Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                         @Override
                         public void uncaughtException(Thread t, Throwable e) {
                             try {
-                                logEvent(System.currentTimeMillis(), LogLevel.ERROR.id, LogLevel.ERROR.name(), LogHub.class.getCanonicalName(), e, null, null, null, "Uncaught exception: " + e.getClass().getCanonicalName());
+                                logEvent(System.currentTimeMillis(), LogHub.class.getCanonicalName(), LogLevel.ERROR.id, LogLevel.ERROR.name(), e, null, null, null, "Uncaught exception: " + e.getClass().getCanonicalName());
                             } catch (Throwable ex) {
                                 info(LogHub.class, ex.toString());
                             }
@@ -877,7 +877,7 @@ public final class LogHub {
         }
     }
 
-    private static void logEventOut(long time, int level, String levelName, String logger, Throwable exception, String message) {
+    private static void logEventOut(long time, String logger, int level, String levelName, Throwable exception, String message) {
         if (outLock != null) {
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", time);
             String s = String.format("%s [%s] [%s] %s - %s", t, Thread.currentThread().getName(), logger, levelName, message);
@@ -895,10 +895,10 @@ public final class LogHub {
         }
     }
 
-    private static void logEvent(boolean start, long time, int level, String levelName, String logger, String message) {
+    private static void logEvent(boolean start, long time, String logger, int level, String levelName, String message) {
     }
 
-    public static void logEvent(long time, int level, String levelName, String logger, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
+    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
     }
 
     public static void logMetric(String name, long value, int point) {

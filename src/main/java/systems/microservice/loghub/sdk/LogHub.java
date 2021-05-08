@@ -243,19 +243,19 @@ public final class LogHub {
     }
 
     private static String createHostName() {
-        String ih = getHostName();
-        if (ih == null) {
-            ih = "unknown";
+        String hn = getHostName();
+        if (hn == null) {
+            hn = "unknown";
         }
-        return ih;
+        return hn;
     }
 
     private static String createHostIP() {
-        String ii = getHostAddress();
-        if (ii == null) {
-            ii = "unknown";
+        String hi = getHostAddress();
+        if (hi == null) {
+            hi = "unknown";
         }
-        return ii;
+        return hi;
     }
 
     private static String getHostName() {

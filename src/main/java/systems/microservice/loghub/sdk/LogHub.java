@@ -75,6 +75,7 @@ public final class LogHub {
     private static final int eventLevelID = createEventLevelID(properties, eventLevel);
     private static final int eventFlushSize = createEventFlushSize(properties);
     private static final long eventFlushSpan = createEventFlushSpan(properties);
+    private static final long eventPersistenceSize = createEventPersistenceSize(properties);
     private static final int eventFlushRetryCount = createEventFlushRetryCount(properties);
     private static final long eventFlushRetryDelay = createEventFlushRetryDelay(properties);
     private static final boolean uncaughtExceptionHandler = createUncaughtExceptionHandler(properties);
@@ -459,6 +460,20 @@ public final class LogHub {
         return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 86400000L);
     }
 
+    private static long createEventPersistenceSize(Map<String, String> properties) {
+        String eps = System.getenv("LOGHUB_EVENT_PERSISTENCE_SIZE");
+        if (eps == null) {
+            eps = System.getProperty("loghub.event.persistence.size");
+            if (eps == null) {
+                eps = properties.get("loghub.event.persistence.size");
+                if (eps == null) {
+                    return 1073741824L;
+                }
+            }
+        }
+        return Argument.inRangeLong("loghub.event.persistence.size", Long.parseLong(eps), 0L, Long.MAX_VALUE);
+    }
+
     private static int createEventFlushRetryCount(Map<String, String> properties) {
         String efrc = System.getenv("LOGHUB_EVENT_FLUSH_RETRY_COUNT");
         if (efrc == null) {
@@ -536,7 +551,11 @@ public final class LogHub {
             if (fp == null) {
                 fp = properties.get("loghub.file.path");
                 if (fp == null) {
-                    return persistencePathFull + "/file/" + TimeUtil.formatName(processStart) + ".log";
+                    if (persistencePathFull != null) {
+                        return persistencePathFull + "/file/" + TimeUtil.formatName(processStart) + ".log";
+                    } else {
+                        return null;
+                    }
                 }
             }
         }

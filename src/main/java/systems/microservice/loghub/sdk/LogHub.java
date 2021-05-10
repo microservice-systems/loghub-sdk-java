@@ -77,6 +77,7 @@ public final class LogHub {
     private static final int eventLevelID = createEventLevelID(properties, eventLevel);
     private static final int eventFlushSize = createEventFlushSize(properties);
     private static final long eventFlushSpan = createEventFlushSpan(properties);
+    private static final boolean eventCompressEnabled = createEventCompressEnabled(properties);
     private static final long eventPersistenceSize = createEventPersistenceSize(properties);
     private static final int eventFlushRetryCount = createEventFlushRetryCount(properties);
     private static final long eventFlushRetryDelay = createEventFlushRetryDelay(properties);
@@ -470,6 +471,20 @@ public final class LogHub {
         return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 86400000L);
     }
 
+    private static boolean createEventCompressEnabled(Map<String, String> properties) {
+        String ece = System.getenv("LOGHUB_EVENT_COMPRESS_ENABLED");
+        if (ece == null) {
+            ece = System.getProperty("loghub.event.compress.enabled");
+            if (ece == null) {
+                ece = properties.get("loghub.event.compress.enabled");
+                if (ece == null) {
+                    return true;
+                }
+            }
+        }
+        return Boolean.parseBoolean(ece);
+    }
+
     private static long createEventPersistenceSize(Map<String, String> properties) {
         String eps = System.getenv("LOGHUB_EVENT_PERSISTENCE_SIZE");
         if (eps == null) {
@@ -834,6 +849,186 @@ public final class LogHub {
         } else {
             return null;
         }
+    }
+
+    public static Map<String, String> getProperties() {
+        return properties;
+    }
+
+    public static String getAccount() {
+        return account;
+    }
+
+    public static String getEnvironment() {
+        return environment;
+    }
+
+    public static String getApplication() {
+        return application;
+    }
+
+    public static String getVersion() {
+        return version;
+    }
+
+    public static String getInstance() {
+        return instance;
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
+    }
+
+    public static String getHostIP() {
+        return hostIP;
+    }
+
+    public static int getCPUCount() {
+        return cpuCount;
+    }
+
+    public static String getOSArch() {
+        return osArch;
+    }
+
+    public static String getOSName() {
+        return osName;
+    }
+
+    public static String getOSVersion() {
+        return osVersion;
+    }
+
+    public static String getProcessUUID() {
+        return processUUID;
+    }
+
+    public static long getProcessID() {
+        return processID;
+    }
+
+    public static long getProcessStart() {
+        return processStart;
+    }
+
+    public static String getProcessCmdline() {
+        return processCmdline;
+    }
+
+    public static URL getURL() {
+        return url;
+    }
+
+    public static String getBasicUser() {
+        return basicUser;
+    }
+
+    public static String getBasicAuth() {
+        return basicAuth;
+    }
+
+    public static String getPersistencePathBase() {
+        return persistencePathBase;
+    }
+
+    public static String getPersistencePathFull() {
+        return persistencePathFull;
+    }
+
+    public static LogLevel getEventLevel() {
+        return eventLevel;
+    }
+
+    public static int getEventLevelID() {
+        return eventLevelID;
+    }
+
+    public static int getEventFlushSize() {
+        return eventFlushSize;
+    }
+
+    public static long getEventFlushSpan() {
+        return eventFlushSpan;
+    }
+
+    public static boolean isEventCompressEnabled() {
+        return eventCompressEnabled;
+    }
+
+    public static long getEventPersistenceSize() {
+        return eventPersistenceSize;
+    }
+
+    public static int getEventFlushRetryCount() {
+        return eventFlushRetryCount;
+    }
+
+    public static long getEventFlushRetryDelay() {
+        return eventFlushRetryDelay;
+    }
+
+    public static boolean isUncaughtExceptionHandler() {
+        return uncaughtExceptionHandler;
+    }
+
+    public static boolean isSystemOut() {
+        return systemOut;
+    }
+
+    public static boolean isFileOut() {
+        return fileOut;
+    }
+
+    public static String getFilePath() {
+        return filePath;
+    }
+
+    public static boolean isInfo() {
+        return info;
+    }
+
+    public static boolean isDebug() {
+        return debug;
+    }
+
+    public static LogThreadInfo getThreadInfo() {
+        return threadInfo.get();
+    }
+
+    public static LogCPUUsage getCPUUsage() {
+        return cpuUsage.get();
+    }
+
+    public static LogMemoryUsage getMemoryUsage() {
+        return memoryUsage.get();
+    }
+
+    public static LogDiskUsage getDiskUsage() {
+        return diskUsage.get();
+    }
+
+    public static LogClassUsage getClassUsage() {
+        return classUsage.get();
+    }
+
+    public static LogThreadUsage getThreadUsage() {
+        return threadUsage.get();
+    }
+
+    public static LogDescriptorUsage getDescriptorUsage() {
+        return descriptorUsage.get();
+    }
+
+    public static LogGCUsage getGCUsage() {
+        return gcUsage.get();
+    }
+
+    public static boolean isActive() {
+        return active.get();
+    }
+
+    public static boolean isFinished() {
+        return finished.get() <= 0;
     }
 
     protected static void info(Class logger, String message) {

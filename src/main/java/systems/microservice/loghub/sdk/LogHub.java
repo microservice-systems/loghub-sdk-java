@@ -19,6 +19,7 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
+import systems.microservice.loghub.sdk.util.StringUtil;
 import systems.microservice.loghub.sdk.util.TimeUtil;
 
 import java.io.FileNotFoundException;
@@ -66,6 +67,7 @@ public final class LogHub {
     private static final String processUUID = createProcessUUID();
     private static final long processID = createProcessID();
     private static final long processStart = createProcessStart();
+    private static final String processCmdline = createProcessCmdline(processID);
     private static final URL url = createURL(properties, account);
     private static final String basicUser = createBasicUser(properties);
     private static final String basicAuth = createBasicAuth(basicUser, createBasicPassword(properties));
@@ -311,6 +313,14 @@ public final class LogHub {
 
     private static long createProcessStart() {
         return ManagementFactory.getRuntimeMXBean().getStartTime();
+    }
+
+    private static String createProcessCmdline(long processID) {
+        if (processID != -1L) {
+            return StringUtil.load(String.format("/proc/%d/cmdline", processID), "unknown");
+        } else {
+            return "unknown";
+        }
     }
 
     private static URL createURL(Map<String, String> properties, String account) {

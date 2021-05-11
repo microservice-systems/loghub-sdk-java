@@ -17,9 +17,17 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.ThreadSection;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
 final class LogEventBuffer {
+    private final ThreadSection section = new ThreadSection(true);
+    private final AtomicInteger count = new AtomicInteger(0);
+    private final AtomicInteger size = new AtomicInteger(0);
+    private final byte[] buffer;
 }

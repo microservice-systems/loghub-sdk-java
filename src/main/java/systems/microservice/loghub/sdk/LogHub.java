@@ -77,7 +77,7 @@ public final class LogHub {
     private static final int eventLevelID = createEventLevelID(properties, eventLevel);
     private static final int eventFlushSize = createEventFlushSize(properties);
     private static final long eventFlushSpan = createEventFlushSpan(properties);
-    private static final boolean eventCompressEnabled = createEventCompressEnabled(properties);
+    private static final boolean eventCompressionEnabled = createEventCompressionEnabled(properties);
     private static final long eventPersistenceSize = createEventPersistenceSize(properties);
     private static final int eventFlushRetryCount = createEventFlushRetryCount(properties);
     private static final long eventFlushRetryDelay = createEventFlushRetryDelay(properties);
@@ -471,12 +471,12 @@ public final class LogHub {
         return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 86400000L);
     }
 
-    private static boolean createEventCompressEnabled(Map<String, String> properties) {
-        String ece = System.getenv("LOGHUB_EVENT_COMPRESS_ENABLED");
+    private static boolean createEventCompressionEnabled(Map<String, String> properties) {
+        String ece = System.getenv("LOGHUB_EVENT_COMPRESSION_ENABLED");
         if (ece == null) {
-            ece = System.getProperty("loghub.event.compress.enabled");
+            ece = System.getProperty("loghub.event.compression.enabled");
             if (ece == null) {
-                ece = properties.get("loghub.event.compress.enabled");
+                ece = properties.get("loghub.event.compression.enabled");
                 if (ece == null) {
                     return true;
                 }
@@ -951,8 +951,8 @@ public final class LogHub {
         return eventFlushSpan;
     }
 
-    public static boolean isEventCompressEnabled() {
-        return eventCompressEnabled;
+    public static boolean isEventCompressionEnabled() {
+        return eventCompressionEnabled;
     }
 
     public static long getEventPersistenceSize() {

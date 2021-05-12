@@ -17,8 +17,12 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.buffer.BufferWriter;
+import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -67,5 +71,32 @@ final class LogEventBuffer {
 
     public int getBufferSize() {
         return bufferSize;
+    }
+
+    private int writeEvent(byte[] buffer, int index,
+                           long time, String logger, int level, String levelName, byte type,
+                           Throwable exception, LogThreadInfo threadInfo,
+                           LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
+                           Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,
+                           LogEventCallback callback,
+                           String message) {
+        byte v = 1;
+        index = BufferWriter.writeByte(buffer, index, v);
+        index = BufferWriter.writeLong(buffer, index, time);
+        index = BufferWriter.writeString(buffer, index, logger);
+        index = BufferWriter.writeInt(buffer, index, level);
+        index = BufferWriter.writeString(buffer, index, levelName);
+        index = BufferWriter.writeByte(buffer, index, type);
+        return index;
+    }
+
+    public boolean logEvent(byte[] buffer, int index,
+                            long time, String logger, int level, String levelName, byte type,
+                            Throwable exception, LogThreadInfo threadInfo,
+                            LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
+                            Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,
+                            LogEventCallback callback,
+                            String message) {
+        return false;
     }
 }

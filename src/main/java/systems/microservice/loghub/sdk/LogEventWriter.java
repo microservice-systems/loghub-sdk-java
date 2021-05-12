@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -38,5 +39,8 @@ final class LogEventWriter {
 
     public LogEventConfig getConfig() {
         return config.get();
+    }
+
+    public void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, LogEventCallback callback, String message) {
     }
 }

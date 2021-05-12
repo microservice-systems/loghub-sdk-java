@@ -20,14 +20,52 @@ package systems.microservice.loghub.sdk;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
 final class LogEventBuffer {
-    private final ThreadSection section = new ThreadSection(true);
-    private final AtomicInteger count = new AtomicInteger(0);
-    private final AtomicInteger size = new AtomicInteger(0);
+    private final ThreadSection section;
+    private final AtomicInteger count;
+    private final AtomicInteger size;
+    private final AtomicLong begin;
+    private final AtomicLong end;
+    private final int bufferSize;
     private final byte[] buffer;
+
+    public LogEventBuffer(int bufferSize) {
+        this.section = new ThreadSection(true);
+        this.count = new AtomicInteger(0);
+        this.size = new AtomicInteger(0);
+        this.begin = new AtomicLong(Long.MAX_VALUE);
+        this.end = new AtomicLong(0L);
+        this.bufferSize = bufferSize;
+        this.buffer = new byte[bufferSize];
+    }
+
+    public ThreadSection getSection() {
+        return section;
+    }
+
+    public int getCount() {
+        return count.get();
+    }
+
+    public int getSize() {
+        return size.get();
+    }
+
+    public long getBegin() {
+        return begin.get();
+    }
+
+    public long getEnd() {
+        return end.get();
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
 }

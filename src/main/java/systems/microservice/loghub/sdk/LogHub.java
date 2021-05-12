@@ -1073,6 +1073,13 @@ public final class LogHub {
     }
 
     public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
+        logEvent(time, logger, level, levelName, exception, tags, images, blobs, null, message);
+    }
+
+    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, LogEventCallback callback, String message) {
+        if (eventWriter != null) {
+            eventWriter.logEvent(time, logger, level, levelName, exception, tags, images, blobs, callback, message);
+        }
     }
 
     public static void logMetric(String name, long value, int point) {

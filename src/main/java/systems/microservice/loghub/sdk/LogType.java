@@ -17,10 +17,38 @@
 
 package systems.microservice.loghub.sdk;
 
+import java.util.HashMap;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
 public enum LogType {
-    START, FINISH, THREADS, DEFAULT, EXCEPTION
+    START((byte) 1),
+    FINISH((byte) 2),
+    DEFAULT((byte) 3),
+    EXCEPTION((byte) 4),
+    THREADS((byte) 5);
+
+    private static final HashMap<Byte, LogType> types = createTypes();
+
+    public final byte id;
+
+    LogType(byte id) {
+        this.id = id;
+    }
+
+    private static HashMap<Byte, LogType> createTypes() {
+        HashMap<Byte, LogType> ts = new HashMap<>(16);
+        ts.put(START.id, START);
+        ts.put(FINISH.id, FINISH);
+        ts.put(DEFAULT.id, DEFAULT);
+        ts.put(EXCEPTION.id, EXCEPTION);
+        ts.put(THREADS.id, THREADS);
+        return ts;
+    }
+
+    public static LogType getType(byte id) {
+        return types.get(id);
+    }
 }

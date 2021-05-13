@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov
@@ -47,17 +46,17 @@ public enum LogLevel {
 
     private static HashMap<Integer, LogLevel> createLevels() {
         HashMap<Integer, LogLevel> ls = new HashMap<>(16);
-        ls.put(0, OFF);
-        ls.put(1, LIFECYCLE);
-        ls.put(2, DUMP);
-        ls.put(50, LOGIC);
-        ls.put(100, FATAL);
-        ls.put(200, ERROR);
-        ls.put(300, WARN);
-        ls.put(400, INFO);
-        ls.put(500, DEBUG);
-        ls.put(600, TRACE);
-        ls.put(Integer.MAX_VALUE, ALL);
+        ls.put(OFF.id, OFF);
+        ls.put(LIFECYCLE.id, LIFECYCLE);
+        ls.put(DUMP.id, DUMP);
+        ls.put(LOGIC.id, LOGIC);
+        ls.put(FATAL.id, FATAL);
+        ls.put(ERROR.id, ERROR);
+        ls.put(WARN.id, WARN);
+        ls.put(INFO.id, INFO);
+        ls.put(DEBUG.id, DEBUG);
+        ls.put(TRACE.id, TRACE);
+        ls.put(ALL.id, ALL);
         return ls;
     }
 

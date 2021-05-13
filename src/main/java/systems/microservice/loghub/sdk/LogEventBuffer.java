@@ -18,11 +18,9 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -73,8 +71,15 @@ final class LogEventBuffer {
         return bufferSize;
     }
 
+    private int writeTag(byte[] buffer, int index, String key, Object value) {
+        byte v = 1;
+        index = BufferWriter.writeByte(buffer, index, v);
+        index = BufferWriter.writeString(buffer, index, key);
+        return index;
+    }
+
     private int writeEvent(byte[] buffer, int index,
-                           long time, String logger, int level, String levelName, byte type,
+                           long time, String logger, int level, String levelName, LogType type,
                            Throwable exception, LogThreadInfo threadInfo,
                            LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
                            Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,
@@ -86,12 +91,15 @@ final class LogEventBuffer {
         index = BufferWriter.writeString(buffer, index, logger);
         index = BufferWriter.writeInt(buffer, index, level);
         index = BufferWriter.writeString(buffer, index, levelName);
-        index = BufferWriter.writeByte(buffer, index, type);
+        index = BufferWriter.writeByte(buffer, index, type.id);
+        if (exception != null) {
+        }
+        index = BufferWriter.writeString(buffer, index, message);
         return index;
     }
 
     public boolean logEvent(byte[] buffer, int index,
-                            long time, String logger, int level, String levelName, byte type,
+                            long time, String logger, int level, String levelName, LogType type,
                             Throwable exception, LogThreadInfo threadInfo,
                             LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
                             Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,

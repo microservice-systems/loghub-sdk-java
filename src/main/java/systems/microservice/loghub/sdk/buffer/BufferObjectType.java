@@ -95,4 +95,186 @@ public enum BufferObjectType {
     public static BufferObjectType getObjectType(byte id) {
         return idObjectTypes.get(id);
     }
+
+    private static final class BooleanReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class ByteReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return new Byte(reader.readByte());
+        }
+    }
+
+    private static final class CharacterReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return new Character(reader.readChar());
+        }
+    }
+
+    private static final class ShortReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class IntegerReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class LongReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return new Long(reader.readLong());
+        }
+    }
+
+    private static final class FloatReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class DoubleReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class UUIDReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class DateReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class StringReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class URLReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class BufferableReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class BooleanArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class ByteArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readBytes();
+        }
+    }
+
+    private static final class CharacterArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class ShortArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class IntegerArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class LongArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readLongs();
+        }
+    }
+
+    private static final class FloatArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class DoubleArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class UUIDArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class DateArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class StringArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class URLArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
+
+    private static final class BufferableArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return null;
+        }
+    }
 }

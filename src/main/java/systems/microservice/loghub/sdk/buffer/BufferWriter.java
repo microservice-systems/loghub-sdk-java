@@ -19,7 +19,9 @@ package systems.microservice.loghub.sdk.buffer;
 
 import systems.microservice.loghub.sdk.util.Argument;
 
+import java.net.URL;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,147 +31,15 @@ import java.util.UUID;
  * @since 1.0
  */
 public final class BufferWriter {
-    private static final Map<Class, ObjectWriter> OBJECT_WRITERS = createObjectWriters();
-
     private BufferWriter() {
     }
 
-    private static Map<Class, ObjectWriter> createObjectWriters() {
-        Map<Class, ObjectWriter> ows = new HashMap<>(64);
-        ows.put(Boolean.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Boolean v = (Boolean) value;
-                return BufferWriter.writeBoolean(buffer, index, v);
-            }
-        });
-        ows.put(Byte.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Byte v = (Byte) value;
-                return BufferWriter.writeByte(buffer, index, v);
-            }
-        });
-        ows.put(Character.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Character v = (Character) value;
-                return BufferWriter.writeChar(buffer, index, v);
-            }
-        });
-        ows.put(Short.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Short v = (Short) value;
-                return BufferWriter.writeShort(buffer, index, v);
-            }
-        });
-        ows.put(Integer.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Integer v = (Integer) value;
-                return BufferWriter.writeInt(buffer, index, v);
-            }
-        });
-        ows.put(Long.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Long v = (Long) value;
-                return BufferWriter.writeLong(buffer, index, v);
-            }
-        });
-        ows.put(Float.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Float v = (Float) value;
-                return BufferWriter.writeFloat(buffer, index, v);
-            }
-        });
-        ows.put(Double.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Double v = (Double) value;
-                return BufferWriter.writeDouble(buffer, index, v);
-            }
-        });
-        ows.put(boolean[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                boolean[] v = (boolean[]) value;
-                return BufferWriter.writeBooleans(buffer, index, v);
-            }
-        });
-        ows.put(byte[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                byte[] v = (byte[]) value;
-                return BufferWriter.writeBytes(buffer, index, v);
-            }
-        });
-        ows.put(char[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                char[] v = (char[]) value;
-                return BufferWriter.writeChars(buffer, index, v);
-            }
-        });
-        ows.put(short[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                short[] v = (short[]) value;
-                return BufferWriter.writeShorts(buffer, index, v);
-            }
-        });
-        ows.put(int[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                int[] v = (int[]) value;
-                return BufferWriter.writeInts(buffer, index, v);
-            }
-        });
-        ows.put(long[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                long[] v = (long[]) value;
-                return BufferWriter.writeLongs(buffer, index, v);
-            }
-        });
-        ows.put(float[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                float[] v = (float[]) value;
-                return BufferWriter.writeFloats(buffer, index, v);
-            }
-        });
-        ows.put(double[].class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                double[] v = (double[]) value;
-                return BufferWriter.writeDoubles(buffer, index, v);
-            }
-        });
-        ows.put(UUID.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                UUID v = (UUID) value;
-                return BufferWriter.writeUUID(buffer, index, v);
-            }
-        });
-        ows.put(String.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                String v = (String) value;
-                return BufferWriter.writeString(buffer, index, v);
-            }
-        });
-        ows.put(Bufferable.class, new ObjectWriter() {
-            @Override
-            public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-                Bufferable v = (Bufferable) value;
-                return BufferWriter.writeBufferable(buffer, index, context, v);
-            }
-        });
-        return ows;
+    public static int writeVersion(byte[] buffer, int index, byte value) {
+        return writeByte(buffer, index, value);
+    }
+
+    public static int writeLength(byte[] buffer, int index, int value) {
+        return writeInt(buffer, index, value);
     }
 
     public static int writeBoolean(byte[] buffer, int index, boolean value) {
@@ -237,107 +107,17 @@ public final class BufferWriter {
         return writeLong(buffer, index, Double.doubleToRawLongBits(value));
     }
 
-    public static int writeVersion(byte[] buffer, int index, int value) {
-        return writeInt(buffer, index, value);
-    }
-
-    public static int writeLength(byte[] buffer, int index, int value) {
-        return writeInt(buffer, index, value);
-    }
-
-    public static int writeBooleans(byte[] buffer, int index, boolean[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeBoolean(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeBytes(byte[] buffer, int index, byte[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeByte(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeChars(byte[] buffer, int index, char[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeChar(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeShorts(byte[] buffer, int index, short[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeShort(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeInts(byte[] buffer, int index, int[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeInt(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeLongs(byte[] buffer, int index, long[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeLong(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeFloats(byte[] buffer, int index, float[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeFloat(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeDoubles(byte[] buffer, int index, double[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeDouble(buffer, index, value[i]);
-        }
-        return index;
-    }
-
     public static int writeUUID(byte[] buffer, int index, UUID value) {
         Argument.notNull("value", value);
 
         index = writeLong(buffer, index, value.getMostSignificantBits());
         return writeLong(buffer, index, value.getLeastSignificantBits());
+    }
+
+    public static int writeDate(byte[] buffer, int index, Date value) {
+        Argument.notNull("value", value);
+
+        return writeLong(buffer, index, value.getTime());
     }
 
     public static int writeString(byte[] buffer, int index, String value) {
@@ -586,87 +366,206 @@ public final class BufferWriter {
         return index;
     }
 
+    public static int writeURL(byte[] buffer, int index, URL value) {
+        Argument.notNull("value", value);
+
+        return writeString(buffer, index, value.toExternalForm());
+    }
+
     public static int writeBufferable(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {
         Argument.notNull("value", value);
 
         return value.write(buffer, index, context);
     }
 
-    public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Class clazz, Object value) {
-        Argument.notNull("clazz", clazz);
+    public static int writeBooleanArray(byte[] buffer, int index, boolean[] value) {
         Argument.notNull("value", value);
 
-        ObjectWriter ow = OBJECT_WRITERS.get(clazz);
-        if (ow != null) {
-            return ow.write(buffer, index, context, value);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeBoolean(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeByteArray(byte[] buffer, int index, byte[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeByte(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeCharArray(byte[] buffer, int index, char[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeChar(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeShortArray(byte[] buffer, int index, short[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeShort(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeIntArray(byte[] buffer, int index, int[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeInt(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeLongArray(byte[] buffer, int index, long[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeLong(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeFloatArray(byte[] buffer, int index, float[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeFloat(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeDoubleArray(byte[] buffer, int index, double[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeDouble(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeUUIDArray(byte[] buffer, int index, UUID[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeUUID(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeDateArray(byte[] buffer, int index, Date[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeDate(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeStringArray(byte[] buffer, int index, String[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeString(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeURLArray(byte[] buffer, int index, URL[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeURL(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeBufferableArray(byte[] buffer, int index, Map<String, Object> context, Bufferable[] value) {
+        Argument.notNull("value", value);
+
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeBufferable(buffer, index, context, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        Argument.notNull("value", value);
+
+        Class c = value.getClass();
+        BufferObjectType ot = BufferObjectType.getObjectType(c);
+        if (ot != null) {
+            index = writeByte(buffer, index, ot.id);
+            return ot.writer.write(buffer, index, context, value);
         } else {
-            throw new BufferException(String.format("Class '%s' is not supported", clazz.getName()));
+            throw new BufferException(String.format("Class '%s' is not supported", c.getCanonicalName()));
         }
     }
 
-    public static int writeObjects(byte[] buffer, int index, Map<String, Object> context, Class clazz, Object[] value) {
-        Argument.notNull("clazz", clazz);
+    public static int writeObjectArray(byte[] buffer, int index, Map<String, Object> context, Object[] value) {
         Argument.notNull("value", value);
 
-        ObjectWriter ow = OBJECT_WRITERS.get(clazz);
-        if (ow != null) {
-            int l = value.length;
-            index = writeLength(buffer, index, l);
-            for (int i = 0; i < l; ++i) {
-                index = ow.write(buffer, index, context, value[i]);
-            }
-            return index;
-        } else {
-            throw new BufferException(String.format("Class '%s' is not supported", clazz.getName()));
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeObject(buffer, index, context, value[i]);
         }
+        return index;
     }
 
-    public static int writeObjects(byte[] buffer, int index, Map<String, Object> context, Class clazz, Collection value) {
-        Argument.notNull("clazz", clazz);
+    public static int writeObjectCollection(byte[] buffer, int index, Map<String, Object> context, Collection value) {
         Argument.notNull("value", value);
 
-        ObjectWriter ow = OBJECT_WRITERS.get(clazz);
-        if (ow != null) {
-            int l = value.size();
-            index = writeLength(buffer, index, l);
-            for (Object e : value) {
-                index = ow.write(buffer, index, context, e);
-            }
-            return index;
-        } else {
-            throw new BufferException(String.format("Class '%s' is not supported", clazz.getName()));
+        int l = value.size();
+        index = writeLength(buffer, index, l);
+        for (Object e : value) {
+            index = writeObject(buffer, index, context, e);
         }
+        return index;
     }
 
-    public static int writeObjects(byte[] buffer, int index, Map<String, Object> context, Class keyClazz, Class valueClazz, Map value) {
-        Argument.notNull("keyClazz", keyClazz);
-        Argument.notNull("valueClazz", valueClazz);
+    public static int writeObjectMap(byte[] buffer, int index, Map<String, Object> context, Map value) {
         Argument.notNull("value", value);
 
-        ObjectWriter kow = OBJECT_WRITERS.get(keyClazz);
-        if (kow != null) {
-            ObjectWriter vow = OBJECT_WRITERS.get(valueClazz);
-            if (vow != null) {
-                int l = value.size();
-                index = writeLength(buffer, index, l);
-                for (Object e : value.entrySet()) {
-                    Map.Entry en = (Map.Entry) e;
-                    index = kow.write(buffer, index, context, en.getKey());
-                    index = vow.write(buffer, index, context, en.getValue());
-                }
-                return index;
-            } else {
-                throw new BufferException(String.format("Class '%s' is not supported", valueClazz.getName()));
-            }
-        } else {
-            throw new BufferException(String.format("Class '%s' is not supported", keyClazz.getName()));
+        int l = value.size();
+        index = writeLength(buffer, index, l);
+        for (Object e : value.entrySet()) {
+            Map.Entry en = (Map.Entry) e;
+            index = writeObject(buffer, index, context, en.getKey());
+            index = writeObject(buffer, index, context, en.getValue());
         }
-    }
-
-    private static abstract class ObjectWriter {
-        public ObjectWriter() {
-        }
-
-        public abstract int write(byte[] buffer, int index, Map<String, Object> context, Object value);
+        return index;
     }
 }

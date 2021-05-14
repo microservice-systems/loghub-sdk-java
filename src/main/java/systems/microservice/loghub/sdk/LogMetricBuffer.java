@@ -84,8 +84,8 @@ final class LogMetricBuffer implements Bufferable {
     @Override
     public int write(byte[] buffer, int index, Map<String, Object> context) {
         byte v = 1;
-        index = BufferWriter.writeByte(buffer, index, v);
-        index = BufferWriter.writeObjects(buffer, index, context, String.class, Bufferable.class, metrics);
+        index = BufferWriter.writeVersion(buffer, index, v);
+        index = BufferWriter.writeObjectMap(buffer, index, context, metrics);
         return index;
     }
 }

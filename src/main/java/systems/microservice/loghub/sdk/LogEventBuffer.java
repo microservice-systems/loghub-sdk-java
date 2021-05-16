@@ -18,8 +18,10 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
+import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -72,9 +74,33 @@ final class LogEventBuffer {
     }
 
     private int writeTag(byte[] buffer, int index, String key, Object value) {
-        byte v = 1;
-        index = BufferWriter.writeByte(buffer, index, v);
+        index = BufferWriter.writeBoolean(buffer, index, true);
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         index = BufferWriter.writeString(buffer, index, key);
+        index = BufferWriter.writeObject(buffer, index, null, value);
+        return index;
+    }
+
+    private int writeException(byte[] buffer, int index, Throwable exception) {
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
+        if (exception != null) {
+            index = writeTag(buffer, index, "exception.class", exception.getClass().getCanonicalName());
+            index = writeTag(buffer, index, "exception.message", exception.getMessage());
+            try (StringBuilderWriter sbw = new StringBuilderWriter(4096)) {
+                exception.printStackTrace(new PrintWriter(sbw, false));
+                index = writeTag(buffer, index, "exception.stacktrace", sbw.toString());
+            }
+            Throwable[] sex = exception.getSuppressed();
+            if (sex != null) {
+                index = writeTag(buffer, index, "exception.suppressed.count", sex.length);
+            }
+            Throwable cex = exception.getCause();
+            if (cex != null) {
+                index = writeTag(buffer, index, "exception.cause.class", cex.getClass().getCanonicalName());
+                index = writeTag(buffer, index, "exception.cause.message", cex.getMessage());
+            }
+        }
+        index = BufferWriter.writeBoolean(buffer, index, false);
         return index;
     }
 
@@ -85,15 +111,13 @@ final class LogEventBuffer {
                            Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,
                            LogEventCallback callback,
                            String message) {
-        byte v = 1;
-        index = BufferWriter.writeByte(buffer, index, v);
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         index = BufferWriter.writeLong(buffer, index, time);
         index = BufferWriter.writeString(buffer, index, logger);
         index = BufferWriter.writeInt(buffer, index, level);
         index = BufferWriter.writeString(buffer, index, levelName);
         index = BufferWriter.writeByte(buffer, index, type.id);
-        if (exception != null) {
-        }
+        index = writeException(buffer, index, exception);
         index = BufferWriter.writeString(buffer, index, message);
         return index;
     }

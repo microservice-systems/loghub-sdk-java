@@ -22,7 +22,6 @@ import systems.microservice.loghub.sdk.util.Argument;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 

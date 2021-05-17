@@ -22,7 +22,6 @@ import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

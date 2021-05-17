@@ -36,6 +36,7 @@ final class LogEventBuffer {
     private final AtomicInteger size;
     private final AtomicLong begin;
     private final AtomicLong end;
+    private final LogEventStringMap strings;
     private final int bufferSize;
     private final byte[] buffer;
 
@@ -45,6 +46,7 @@ final class LogEventBuffer {
         this.size = new AtomicInteger(0);
         this.begin = new AtomicLong(Long.MAX_VALUE);
         this.end = new AtomicLong(0L);
+        this.strings = new LogEventStringMap();
         this.bufferSize = bufferSize;
         this.buffer = new byte[bufferSize];
     }
@@ -76,7 +78,11 @@ final class LogEventBuffer {
     private int writeTag(byte[] buffer, int index, String key, Object value) {
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
-        index = BufferWriter.writeString(buffer, index, key);
+        short sid = strings.getStringID(key);
+        index = BufferWriter.writeShort(buffer, index, sid);
+        if (sid == LogEventStringMap.NOT_EXIST_ID) {
+            index = BufferWriter.writeString(buffer, index, key);
+        }
         index = BufferWriter.writeObject(buffer, index, null, value);
         return index;
     }

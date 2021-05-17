@@ -22,6 +22,7 @@ import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 final class LogEventStringMap implements Bufferable {
     private static final int MIN_ID = Short.MIN_VALUE;
     private static final int MAX_ID = Short.MAX_VALUE;
+
     public static final short NOT_EXIST_ID = Short.MAX_VALUE;
 
     private final AtomicInteger idGenerator = new AtomicInteger(MIN_ID);
@@ -59,6 +61,22 @@ final class LogEventStringMap implements Bufferable {
         return sid.getID();
     }
 
+    @SuppressWarnings("unchecked")
+    public void reset() {
+        int id = MIN_ID;
+        Map.Entry<String, StringID>[] ens = stringIDs.entrySet().toArray(new Map.Entry[0]);
+        for (Map.Entry<String, StringID> en : ens) {
+            StringID v = en.getValue();
+            if (v.isUsed()) {
+                v.reset(id);
+                id++;
+            } else {
+                stringIDs.remove(en.getKey());
+            }
+        }
+        idGenerator.set(id);
+    }
+
     @Override
     public int write(byte[] buffer, int index, Map<String, Object> context) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -80,7 +98,7 @@ final class LogEventStringMap implements Bufferable {
 
         public StringID(int id) {
             this.id = new AtomicInteger(id);
-            this.used = new AtomicBoolean(true);
+            this.used = new AtomicBoolean(false);
         }
 
         public short getID() {
@@ -91,8 +109,13 @@ final class LogEventStringMap implements Bufferable {
             return used.get();
         }
 
+        public void reset(int id) {
+            this.id.set(id);
+            this.used.set(false);
+        }
+
         public void touch() {
-            used.compareAndSet(false, true);
+            this.used.compareAndSet(false, true);
         }
     }
 }

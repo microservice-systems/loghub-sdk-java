@@ -87,7 +87,16 @@ final class LogEventBuffer {
         return index;
     }
 
-    private int writeException(byte[] buffer, int index, Throwable exception) {
+    private int writeThreadInfo(byte[] buffer, int index, LogThreadInfo threadInfo) {
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
+        if (threadInfo != null) {
+            index = writeTag(buffer, index, "exception.class", exception.getClass().getCanonicalName());
+        }
+        index = BufferWriter.writeBoolean(buffer, index, false);
+        return index;
+    }
+
+    private int writeTags(byte[] buffer, int index, Throwable exception) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         if (exception != null) {
             index = writeTag(buffer, index, "exception.class", exception.getClass().getCanonicalName());
@@ -123,7 +132,7 @@ final class LogEventBuffer {
         index = BufferWriter.writeInt(buffer, index, level);
         index = BufferWriter.writeString(buffer, index, levelName);
         index = BufferWriter.writeByte(buffer, index, type.id);
-        index = writeException(buffer, index, exception);
+        index = writeTags(buffer, index, exception);
         index = BufferWriter.writeString(buffer, index, message);
         return index;
     }

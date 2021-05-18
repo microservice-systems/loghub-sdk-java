@@ -20,7 +20,6 @@ package systems.microservice.loghub.sdk;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -32,64 +31,10 @@ import java.util.Map;
 public final class LogTagMap implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String threadUUID;
-    private final long threadID;
-    private final String threadName;
-    private final int threadPriority;
-    private final LinkedHashMap<String, ArrayList<LogTag>> tags;
-    private long revision;
+    private final LinkedHashMap<String, LinkedList<LogTag>> tags = new LinkedHashMap<>(32);
+    private long revision = 0L;
 
-    public LogTagMap(String threadUUID, long threadID, String threadName, int threadPriority) {
-        Argument.notNull("threadUUID", threadUUID);
-        Argument.notNull("threadName", threadName);
-
-        this.threadUUID = threadUUID;
-        this.threadID = threadID;
-        this.threadName = threadName;
-        this.threadPriority = threadPriority;
-        this.tags = new LinkedHashMap<>(32);
-        this.revision = 1L;
-
-        {
-            LogTag t = new LogTag("thread.uuid", threadUUID);
-            ArrayList<LogTag> ts = new ArrayList<>(1);
-            ts.add(t);
-            this.tags.put(t.key, ts);
-        }
-        {
-            LogTag t = new LogTag("thread.id", threadID);
-            ArrayList<LogTag> ts = new ArrayList<>(1);
-            ts.add(t);
-            this.tags.put(t.key, ts);
-        }
-        {
-            LogTag t = new LogTag("thread.name", threadName);
-            ArrayList<LogTag> ts = new ArrayList<>(1);
-            ts.add(t);
-            this.tags.put(t.key, ts);
-        }
-        {
-            LogTag t = new LogTag("thread.priority", threadPriority);
-            ArrayList<LogTag> ts = new ArrayList<>(1);
-            ts.add(t);
-            this.tags.put(t.key, ts);
-        }
-    }
-
-    public String getThreadUUID() {
-        return threadUUID;
-    }
-
-    public long getThreadID() {
-        return threadID;
-    }
-
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public int getThreadPriority() {
-        return threadPriority;
+    public LogTagMap() {
     }
 
     public int size() {

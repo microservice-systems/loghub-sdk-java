@@ -27,15 +27,21 @@ import java.util.UUID;
 public final class LogThreadInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public final String uuid;
+    public final long id;
+    public final String name;
+    public final int priority;
     public final LogTagMap tags;
-    public long revision;
     public int depth;
 
     public LogThreadInfo() {
         Thread t = Thread.currentThread();
 
-        this.tags = new LogTagMap(UUID.randomUUID().toString(), t.getId(), t.getName(), t.getPriority());
-        this.revision = 0L;
+        this.uuid = UUID.randomUUID().toString();
+        this.id = t.getId();
+        this.name = t.getName();
+        this.priority = t.getPriority();
+        this.tags = new LogTagMap();
         this.depth = 0;
     }
 }

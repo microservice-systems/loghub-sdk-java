@@ -17,7 +17,11 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.Argument;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 /**
@@ -31,7 +35,7 @@ public final class LogThreadInfo implements Serializable {
     public final long id;
     public final String name;
     public final int priority;
-    public final LogTagMap tags;
+    public final LinkedHashMap<String, ArrayList<LogTag>> tags;
     public int depth;
 
     public LogThreadInfo() {
@@ -41,7 +45,49 @@ public final class LogThreadInfo implements Serializable {
         this.id = t.getId();
         this.name = t.getName();
         this.priority = t.getPriority();
-        this.tags = new LogTagMap();
+        this.tags = new LinkedHashMap<>(32);
         this.depth = 0;
+    }
+
+    public LogTag getTag(String key) {
+        Argument.notNull("key", key);
+
+        ArrayList<LogTag> ts = tags.get(key);
+        if (ts != null) {
+            return ts.get(ts.size() - 1);
+        } else {
+            return null;
+        }
+    }
+
+    public LogTag addTag(LogTag tag) {
+        Argument.notNull("tag", tag);
+
+        ArrayList<LogTag> ts = tags.get(tag.key);
+        if (ts == null) {
+            ts = new ArrayList<>(4);
+            tags.put(tag.key, ts);
+        }
+        ts.add(tag);
+        return tag;
+    }
+
+    public LogTag addTag(String key, Object value) {
+        return addTag(new LogTag(key, value));
+    }
+
+    public LogTag removeTag(String key) {
+        Argument.notNull("key", key);
+
+        ArrayList<LogTag> ts = tags.get(key);
+        if (ts != null) {
+            LogTag t = ts.remove(ts.size() - 1);
+            if (ts.isEmpty()) {
+                tags.remove(key);
+            }
+            return t;
+        } else {
+            return null;
+        }
     }
 }

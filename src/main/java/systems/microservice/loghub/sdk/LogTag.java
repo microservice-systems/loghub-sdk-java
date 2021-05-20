@@ -30,12 +30,18 @@ public final class LogTag implements Serializable {
 
     public final String key;
     public final Object value;
+    public final String unit;
 
     public LogTag(String key, Object value) {
+        this(key, value, null);
+    }
+
+    public LogTag(String key, Object value, String unit) {
         Argument.notNull("key", key);
         Argument.notNull("value", value);
 
         this.key = key;
         this.value = value;
+        this.unit = unit;
     }
 }

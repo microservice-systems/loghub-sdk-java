@@ -76,6 +76,10 @@ public final class LogThreadInfo implements Serializable {
         return addTag(new LogTag(key, value));
     }
 
+    public LogTag addTag(String key, Object value, String unit) {
+        return addTag(new LogTag(key, value, unit));
+    }
+
     public LogTag removeTag(String key) {
         Argument.notNull("key", key);
 

@@ -87,7 +87,11 @@ final class LogEventBuffer {
         return index;
     }
 
-    private int writeException(byte[] buffer, int index, Throwable exception) {
+    private int writeTags(byte[] buffer, int index,
+                          Throwable exception, LogThreadInfo threadInfo,
+                          LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
+                          Map<String, LogTag> tags,
+                          LogEventCallback callback) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         if (exception != null) {
             index = writeTag(buffer, index, "exception.class", exception.getClass().getCanonicalName());
@@ -106,6 +110,26 @@ final class LogEventBuffer {
                 index = writeTag(buffer, index, "exception.cause.message", cex.getMessage());
             }
         }
+        if (threadInfo != null) {
+        }
+        if (cpuUsage != null) {
+        }
+        if (memoryUsage != null) {
+        }
+        if (diskUsage != null) {
+        }
+        if (classUsage != null) {
+        }
+        if (threadUsage != null) {
+        }
+        if (descriptorUsage != null) {
+        }
+        if (gcUsage != null) {
+        }
+        if (tags != null) {
+        }
+        if (callback != null) {
+        }
         index = BufferWriter.writeBoolean(buffer, index, false);
         return index;
     }
@@ -123,7 +147,7 @@ final class LogEventBuffer {
         index = BufferWriter.writeInt(buffer, index, level);
         index = BufferWriter.writeString(buffer, index, levelName);
         index = BufferWriter.writeByte(buffer, index, type.id);
-        index = writeException(buffer, index, exception);
+        index = writeTags(buffer, index, exception, threadInfo, cpuUsage, memoryUsage, diskUsage, classUsage, threadUsage, descriptorUsage, gcUsage, tags, callback);
         index = BufferWriter.writeString(buffer, index, message);
         return index;
     }

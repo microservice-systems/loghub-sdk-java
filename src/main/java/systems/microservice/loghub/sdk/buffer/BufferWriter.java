@@ -520,6 +520,168 @@ public final class BufferWriter {
         return index;
     }
 
+    public static int writeBooleanRef(byte[] buffer, int index, Boolean value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBoolean(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeByteRef(byte[] buffer, int index, Byte value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeByte(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeCharacterRef(byte[] buffer, int index, Character value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeChar(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeShortRef(byte[] buffer, int index, Short value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeShort(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeIntegerRef(byte[] buffer, int index, Integer value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeInt(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeLongRef(byte[] buffer, int index, Long value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeLong(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeFloatRef(byte[] buffer, int index, Float value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeFloat(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeDoubleRef(byte[] buffer, int index, Double value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeDouble(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeUUIDRef(byte[] buffer, int index, UUID value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeUUID(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeDateRef(byte[] buffer, int index, Date value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeDate(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringRef(byte[] buffer, int index, String value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeString(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringRef(byte[] buffer, int index, String value, String param1) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeString(buffer, index, value, param1);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringRef(byte[] buffer, int index, String value, String param1, String param2) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeString(buffer, index, value, param1, param2);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringRef(byte[] buffer, int index, String value, String param1, String param2, String param3) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeString(buffer, index, value, param1, param2, param3);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringRef(byte[] buffer, int index, String value, String param1, String param2, String param3, String param4) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeString(buffer, index, value, param1, param2, param3, param4);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringRef(byte[] buffer, int index, String value, String param1, String param2, String param3, String param4, String param5) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeString(buffer, index, value, param1, param2, param3, param4, param5);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeURLRef(byte[] buffer, int index, URL value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeURL(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBufferableRef(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBufferable(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
     public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Object value) {
         Argument.notNull("value", value);
 
@@ -566,5 +728,14 @@ public final class BufferWriter {
             index = writeObject(buffer, index, context, en.getValue());
         }
         return index;
+    }
+
+    public static int writeObjectRef(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeObject(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
     }
 }

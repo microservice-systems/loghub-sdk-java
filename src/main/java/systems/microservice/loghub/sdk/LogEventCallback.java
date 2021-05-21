@@ -24,7 +24,7 @@ import java.util.Map;
  * @since 1.0
  */
 public interface LogEventCallback {
-    public int writeTags(byte[] buffer, int index, Map<String, Object> context);
-    public int writeImages(byte[] buffer, int index, Map<String, Object> context);
-    public int writeBlobs(byte[] buffer, int index, Map<String, Object> context);
+    public int writeTags(byte[] buffer, int index, Map<String, Object> context, LogTagWriter tagWriter);
+    public int writeImages(byte[] buffer, int index, Map<String, Object> context, LogImageWriter imageWriter);
+    public int writeBlobs(byte[] buffer, int index, Map<String, Object> context, LogBlobWriter blobWriter);
 }

@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
+import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
@@ -77,6 +78,9 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeTag(byte[] buffer, int index, String key, Object value, String unit) {
+        Argument.notNull("key", key);
+        Argument.notNull("value", value);
+
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         short sid = strings.getStringID(key);
@@ -100,7 +104,24 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeImage(byte[] buffer, int index, String key, String contentType, byte[] content) {
-        return 0;
+        Argument.notNull("key", key);
+        Argument.notNull("contentType", contentType);
+        Argument.notNull("content", content);
+
+        index = BufferWriter.writeBoolean(buffer, index, true);
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
+        short sid = strings.getStringID(key);
+        index = BufferWriter.writeShort(buffer, index, sid);
+        if (sid == LogEventStringMap.NOT_EXIST_ID) {
+            index = BufferWriter.writeString(buffer, index, key);
+        }
+        sid = strings.getStringID(contentType);
+        index = BufferWriter.writeShort(buffer, index, sid);
+        if (sid == LogEventStringMap.NOT_EXIST_ID) {
+            index = BufferWriter.writeString(buffer, index, contentType);
+        }
+        index = BufferWriter.writeByteArray(buffer, index, content);
+        return index;
     }
 
     @Override

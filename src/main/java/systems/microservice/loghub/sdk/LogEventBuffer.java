@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-final class LogEventBuffer {
+final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWriter {
     private final ThreadSection section;
     private final AtomicInteger count;
     private final AtomicInteger size;
@@ -75,7 +75,8 @@ final class LogEventBuffer {
         return bufferSize;
     }
 
-    private int writeTag(byte[] buffer, int index, String key, Object value) {
+    @Override
+    public int writeTag(byte[] buffer, int index, String key, Object value, String unit) {
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         short sid = strings.getStringID(key);
@@ -84,7 +85,27 @@ final class LogEventBuffer {
             index = BufferWriter.writeString(buffer, index, key);
         }
         index = BufferWriter.writeObject(buffer, index, null, value);
+        if (unit != null) {
+            index = BufferWriter.writeByte(buffer, index, (byte) 1);
+            sid = strings.getStringID(unit);
+            index = BufferWriter.writeShort(buffer, index, sid);
+            if (sid == LogEventStringMap.NOT_EXIST_ID) {
+                index = BufferWriter.writeString(buffer, index, unit);
+            }
+        } else {
+            index = BufferWriter.writeByte(buffer, index, (byte) 0);
+        }
         return index;
+    }
+
+    @Override
+    public int writeImage(byte[] buffer, int index, String key, String contentType, byte[] content) {
+        return 0;
+    }
+
+    @Override
+    public int writeBlob(byte[] buffer, int index, String key, String contentType, byte[] content) {
+        return 0;
     }
 
     private int writeTags(byte[] buffer, int index,
@@ -94,20 +115,20 @@ final class LogEventBuffer {
                           LogEventCallback callback) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         if (exception != null) {
-            index = writeTag(buffer, index, "exception.class", exception.getClass().getCanonicalName());
-            index = writeTag(buffer, index, "exception.message", exception.getMessage());
+            index = writeTag(buffer, index, "exception.class", exception.getClass().getCanonicalName(), null);
+            index = writeTag(buffer, index, "exception.message", exception.getMessage(), null);
             try (StringBuilderWriter sbw = new StringBuilderWriter(4096)) {
                 exception.printStackTrace(new PrintWriter(sbw, false));
-                index = writeTag(buffer, index, "exception.stacktrace", sbw.toString());
+                index = writeTag(buffer, index, "exception.stacktrace", sbw.toString(), null);
             }
             Throwable[] sex = exception.getSuppressed();
             if (sex != null) {
-                index = writeTag(buffer, index, "exception.suppressed.count", sex.length);
+                index = writeTag(buffer, index, "exception.suppressed.count", sex.length, null);
             }
             Throwable cex = exception.getCause();
             if (cex != null) {
-                index = writeTag(buffer, index, "exception.cause.class", cex.getClass().getCanonicalName());
-                index = writeTag(buffer, index, "exception.cause.message", cex.getMessage());
+                index = writeTag(buffer, index, "exception.cause.class", cex.getClass().getCanonicalName(), null);
+                index = writeTag(buffer, index, "exception.cause.message", cex.getMessage(), null);
             }
         }
         if (threadInfo != null) {

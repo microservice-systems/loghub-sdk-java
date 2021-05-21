@@ -31,7 +31,7 @@ import java.util.UUID;
 public final class LogThreadInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final String uuid;
+    public final UUID uuid;
     public final long id;
     public final String name;
     public final int priority;
@@ -41,7 +41,7 @@ public final class LogThreadInfo implements Serializable {
     public LogThreadInfo() {
         Thread t = Thread.currentThread();
 
-        this.uuid = UUID.randomUUID().toString();
+        this.uuid = UUID.randomUUID();
         this.id = t.getId();
         this.name = t.getName();
         this.priority = t.getPriority();

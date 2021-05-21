@@ -126,7 +126,24 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeBlob(byte[] buffer, int index, String key, String contentType, byte[] content) {
-        return 0;
+        Argument.notNull("key", key);
+        Argument.notNull("contentType", contentType);
+        Argument.notNull("content", content);
+
+        index = BufferWriter.writeBoolean(buffer, index, true);
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
+        short sid = strings.getStringID(key);
+        index = BufferWriter.writeShort(buffer, index, sid);
+        if (sid == LogEventStringMap.NOT_EXIST_ID) {
+            index = BufferWriter.writeString(buffer, index, key);
+        }
+        sid = strings.getStringID(contentType);
+        index = BufferWriter.writeShort(buffer, index, sid);
+        if (sid == LogEventStringMap.NOT_EXIST_ID) {
+            index = BufferWriter.writeString(buffer, index, contentType);
+        }
+        index = BufferWriter.writeByteArray(buffer, index, content);
+        return index;
     }
 
     private int writeTags(byte[] buffer, int index,

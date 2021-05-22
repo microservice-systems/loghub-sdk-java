@@ -23,6 +23,7 @@ import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -170,22 +171,63 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             }
         }
         if (threadInfo != null) {
+            index = writeTag(buffer, index, "thread.uuid", threadInfo.uuid, null);
+            index = writeTag(buffer, index, "thread.id", threadInfo.id, null);
+            index = writeTag(buffer, index, "thread.name", threadInfo.name, null);
+            index = writeTag(buffer, index, "thread.priority", threadInfo.priority, null);
+            index = writeTag(buffer, index, "thread.depth", threadInfo.depth, null);
+            for (ArrayList<LogTag> ts : threadInfo.tags.values()) {
+                LogTag t = ts.get(ts.size() - 1);
+                index = writeTag(buffer, index, t.key, t.value, t.unit);
+            }
         }
         if (cpuUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (memoryUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (diskUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (classUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (threadUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (descriptorUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (gcUsage != null) {
+            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (tags != null) {
+            index = writeTag(buffer, index, "", xxx, null);
         }
         if (callback != null) {
         }

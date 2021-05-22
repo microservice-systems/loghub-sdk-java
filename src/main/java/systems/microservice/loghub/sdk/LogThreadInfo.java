@@ -35,8 +35,8 @@ public final class LogThreadInfo implements Serializable {
     public final long id;
     public final String name;
     public final int priority;
-    public final LinkedHashMap<String, ArrayList<LogTag>> tags;
     public int depth;
+    public final LinkedHashMap<String, ArrayList<LogTag>> tags;
 
     public LogThreadInfo() {
         Thread t = Thread.currentThread();
@@ -45,8 +45,8 @@ public final class LogThreadInfo implements Serializable {
         this.id = t.getId();
         this.name = t.getName();
         this.priority = t.getPriority();
-        this.tags = new LinkedHashMap<>(32);
         this.depth = 0;
+        this.tags = new LinkedHashMap<>(32);
     }
 
     public LogTag getTag(String key) {

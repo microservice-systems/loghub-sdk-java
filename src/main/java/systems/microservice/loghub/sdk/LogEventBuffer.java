@@ -190,17 +190,17 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             index = writeTag(buffer, index, "usage.cpu.entity.total", cpuUsage.entityTotal, null);
         }
         if (memoryUsage != null) {
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "usage.memory.physical.total", memoryUsage.physicalTotal, "MB");
+            index = writeTag(buffer, index, "usage.memory.physical.free", memoryUsage.physicalFree, "MB");
+            index = writeTag(buffer, index, "usage.memory.heap.init", memoryUsage.heapInit, "MB");
+            index = writeTag(buffer, index, "usage.memory.heap.used", memoryUsage.heapUsed, "MB");
+            index = writeTag(buffer, index, "usage.memory.heap.committed", memoryUsage.heapCommitted, "MB");
+            index = writeTag(buffer, index, "usage.memory.heap.max", memoryUsage.heapMax, "MB");
+            index = writeTag(buffer, index, "usage.memory.nonheap.init", memoryUsage.nonheapInit, "MB");
+            index = writeTag(buffer, index, "usage.memory.nonheap.used", memoryUsage.nonheapUsed, "MB");
+            index = writeTag(buffer, index, "usage.memory.nonheap.committed", memoryUsage.nonheapCommitted, "MB");
+            index = writeTag(buffer, index, "usage.memory.nonheap.max", memoryUsage.nonheapMax, "MB");
+            index = writeTag(buffer, index, "usage.memory.object.pending.finalization", memoryUsage.objectPendingFinalization, null);
         }
         if (diskUsage != null) {
             index = writeTag(buffer, index, "", xxx, null);

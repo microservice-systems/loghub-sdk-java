@@ -27,11 +27,11 @@ import java.io.Serializable;
  */
 public final class LogCPUUsage implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final Runtime RUNTIME = Runtime.getRuntime();
 
-    public static final int COUNT = Runtime.getRuntime().availableProcessors();
-
-    public final float m1;
-    public final float m5;
+    public final int count;
+    public final float m01;
+    public final float m05;
     public final float m15;
     public final int entityActive;
     public final int entityTotal;
@@ -41,8 +41,9 @@ public final class LogCPUUsage implements Serializable {
         String[] avgs = avg.split(" ");
         String[] ents = avgs[3].split("/");
 
-        this.m1 = Float.parseFloat(avgs[0]);
-        this.m5 = Float.parseFloat(avgs[1]);
+        this.count = RUNTIME.availableProcessors();
+        this.m01 = Float.parseFloat(avgs[0]);
+        this.m05 = Float.parseFloat(avgs[1]);
         this.m15 = Float.parseFloat(avgs[2]);
         this.entityActive = Integer.parseInt(ents[0]);
         this.entityTotal = Integer.parseInt(ents[1]);

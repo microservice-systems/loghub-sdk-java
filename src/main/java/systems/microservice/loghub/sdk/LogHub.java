@@ -279,7 +279,7 @@ public final class LogHub {
     }
 
     private static int createCPUCount() {
-        return ManagementFactory.getOperatingSystemMXBean().getAvailableProcessors();
+        return Runtime.getRuntime().availableProcessors();
     }
 
     private static String createOSArch() {
@@ -713,10 +713,10 @@ public final class LogHub {
                         try {
                             LogCPUUsage cu = new LogCPUUsage();
                             cpuUsage.set(cu);
-                            logMetric("usage.cpu.count", LogCPUUsage.COUNT, 0);
-                            logMetric("usage.cpu.m1", (long) (cu.m1 * 100.0f), 0, "%");
-                            logMetric("usage.cpu.m5", (long) (cu.m5 * 100.0f), 0, "%");
-                            logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 0, "%");
+                            logMetric("usage.cpu.count", cu.count, 0);
+                            logMetric("usage.cpu.m01", (long) (cu.m01 * 100.0f), 2);
+                            logMetric("usage.cpu.m05", (long) (cu.m05 * 100.0f), 2);
+                            logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 2);
                             logMetric("usage.cpu.entity.active", cu.entityActive, 0);
                             logMetric("usage.cpu.entity.total", cu.entityTotal, 0);
                             LogDiskUsage du = new LogDiskUsage();

@@ -182,12 +182,12 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             }
         }
         if (cpuUsage != null) {
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "usage.cpu.count", cpuUsage.count, null);
+            index = writeTag(buffer, index, "usage.cpu.m01", cpuUsage.m01, null);
+            index = writeTag(buffer, index, "usage.cpu.m05", cpuUsage.m05, null);
+            index = writeTag(buffer, index, "usage.cpu.m15", cpuUsage.m15, null);
+            index = writeTag(buffer, index, "usage.cpu.entity.active", cpuUsage.entityActive, null);
+            index = writeTag(buffer, index, "usage.cpu.entity.total", cpuUsage.entityTotal, null);
         }
         if (memoryUsage != null) {
             index = writeTag(buffer, index, "", xxx, null);

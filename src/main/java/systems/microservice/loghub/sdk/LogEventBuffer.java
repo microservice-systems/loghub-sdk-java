@@ -219,8 +219,8 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             index = writeTag(buffer, index, "usage.thread.total", threadUsage.total, null);
         }
         if (descriptorUsage != null) {
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "usage.descriptor.file.max", descriptorUsage.fileMax, null);
+            index = writeTag(buffer, index, "usage.descriptor.file.open", descriptorUsage.fileOpen, null);
         }
         if (gcUsage != null) {
             index = writeTag(buffer, index, "", xxx, null);

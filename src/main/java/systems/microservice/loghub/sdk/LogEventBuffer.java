@@ -208,9 +208,9 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             index = writeTag(buffer, index, "usage.disk.usable", diskUsage.usable, "MB");
         }
         if (classUsage != null) {
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
-            index = writeTag(buffer, index, "", xxx, null);
+            index = writeTag(buffer, index, "usage.class.active", classUsage.active, null);
+            index = writeTag(buffer, index, "usage.class.loaded", classUsage.loaded, null);
+            index = writeTag(buffer, index, "usage.class.unloaded", classUsage.unloaded, null);
         }
         if (threadUsage != null) {
             index = writeTag(buffer, index, "", xxx, null);

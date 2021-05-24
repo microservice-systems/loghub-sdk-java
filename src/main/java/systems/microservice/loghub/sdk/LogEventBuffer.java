@@ -232,6 +232,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             }
         }
         if (callback != null) {
+            index = callback.writeTags(buffer, index, this);
         }
         index = BufferWriter.writeBoolean(buffer, index, false);
         return index;

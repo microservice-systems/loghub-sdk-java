@@ -728,7 +728,7 @@ public final class LogHub {
                             LogGCUsage gcu = new LogGCUsage();
                             gcUsage.set(gcu);
                             logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
-                            logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 3, "s");
+                            logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 0, "ms");
                             try {
                                 Thread.sleep(10000L);
                             } catch (InterruptedException ex) {

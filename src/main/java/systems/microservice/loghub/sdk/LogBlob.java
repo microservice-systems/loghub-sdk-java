@@ -28,22 +28,14 @@ import java.io.Serializable;
 public final class LogBlob implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String contentType;
-    private final byte[] content;
+    public final byte[] content;
+    public final String contentType;
 
-    public LogBlob(String contentType, byte[] content) {
-        Argument.notNull("contentType", contentType);
+    public LogBlob(byte[] content, String contentType) {
         Argument.notNull("content", content);
+        Argument.notNull("contentType", contentType);
 
-        this.contentType = contentType;
         this.content = content;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public byte[] getContent() {
-        return content;
+        this.contentType = contentType;
     }
 }

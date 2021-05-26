@@ -36,23 +36,15 @@ import java.io.Serializable;
 public final class LogImage implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String contentType;
-    private final byte[] content;
+    public final byte[] content;
+    public final String contentType;
 
-    public LogImage(String contentType, byte[] content) {
-        Argument.notNull("contentType", contentType);
+    public LogImage(byte[] content, String contentType) {
         Argument.notNull("content", content);
+        Argument.notNull("contentType", contentType);
 
-        this.contentType = contentType;
         this.content = content;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public byte[] getContent() {
-        return content;
+        this.contentType = contentType;
     }
 
     public static String getContentType(String format) {
@@ -83,7 +75,7 @@ public final class LogImage implements Serializable {
             BufferedImage bi = new Robot().createScreenCapture(r);
             try (ByteArrayOutputStream out = new ByteArrayOutputStream(131072)) {
                 if (ImageIO.write(bi, format, out)) {
-                    return new LogImage(getContentType(format), out.toByteArray());
+                    return new LogImage(out.toByteArray(), getContentType(format));
                 } else {
                     throw new IllegalArgumentException(String.format("Image IO format '%s' is not found", format));
                 }

@@ -104,10 +104,10 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
     }
 
     @Override
-    public int writeImage(byte[] buffer, int index, String key, String contentType, byte[] content) {
+    public int writeImage(byte[] buffer, int index, String key, byte[] content, String contentType) {
         Argument.notNull("key", key);
-        Argument.notNull("contentType", contentType);
         Argument.notNull("content", content);
+        Argument.notNull("contentType", contentType);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -116,20 +116,20 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
         if (sid == LogEventStringMap.NOT_EXIST_ID) {
             index = BufferWriter.writeString(buffer, index, key);
         }
+        index = BufferWriter.writeByteArray(buffer, index, content);
         sid = strings.getStringID(contentType);
         index = BufferWriter.writeShort(buffer, index, sid);
         if (sid == LogEventStringMap.NOT_EXIST_ID) {
             index = BufferWriter.writeString(buffer, index, contentType);
         }
-        index = BufferWriter.writeByteArray(buffer, index, content);
         return index;
     }
 
     @Override
-    public int writeBlob(byte[] buffer, int index, String key, String contentType, byte[] content) {
+    public int writeBlob(byte[] buffer, int index, String key, byte[] content, String contentType) {
         Argument.notNull("key", key);
-        Argument.notNull("contentType", contentType);
         Argument.notNull("content", content);
+        Argument.notNull("contentType", contentType);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -138,12 +138,12 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
         if (sid == LogEventStringMap.NOT_EXIST_ID) {
             index = BufferWriter.writeString(buffer, index, key);
         }
+        index = BufferWriter.writeByteArray(buffer, index, content);
         sid = strings.getStringID(contentType);
         index = BufferWriter.writeShort(buffer, index, sid);
         if (sid == LogEventStringMap.NOT_EXIST_ID) {
             index = BufferWriter.writeString(buffer, index, contentType);
         }
-        index = BufferWriter.writeByteArray(buffer, index, content);
         return index;
     }
 

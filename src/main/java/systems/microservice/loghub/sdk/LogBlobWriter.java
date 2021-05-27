@@ -22,5 +22,5 @@ package systems.microservice.loghub.sdk;
  * @since 1.0
  */
 public interface LogBlobWriter {
-    public int writeBlob(byte[] buffer, int index, String key, String contentType, byte[] content);
+    public int writeBlob(byte[] buffer, int index, String key, byte[] content, String contentType);
 }

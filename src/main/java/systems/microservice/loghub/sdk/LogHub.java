@@ -87,6 +87,7 @@ public final class LogHub {
     private static final String filePath = createFilePath(properties, persistencePathFull, processStart);
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
+    private static final Map<String, String> tags = createTags(properties);
     private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
     private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
     private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
@@ -615,6 +616,49 @@ public final class LogHub {
         return Boolean.parseBoolean(d);
     }
 
+    private static Map<String, String> createTags(Map<String, String> properties) {
+        Properties sps = System.getProperties();
+        Map<String, String> evs = System.getenv();
+        LinkedHashMap<String, String> lts = new LinkedHashMap<>(properties.size() + sps.size() + evs.size());
+        String prefixP = "logtag.";
+        for (Map.Entry<String, String> e : properties.entrySet()) {
+            String k = e.getKey();
+            String v = e.getValue();
+            if ((k != null) && (v != null)) {
+                k = k.trim();
+                if ((k.length() > prefixP.length()) && k.startsWith(prefixP)) {
+                    lts.put(k.substring(prefixP.length()).replace('_', '.').toLowerCase(), v);
+                }
+            }
+        }
+        String prefixSP = "logtag.";
+        for (Map.Entry<Object, Object> e : sps.entrySet()) {
+            Object k = e.getKey();
+            Object v = e.getValue();
+            if ((k != null) && (v != null)) {
+                if ((k instanceof String) && (v instanceof String)) {
+                    String ks = ((String) k).trim();
+                    String vs = (String) v;
+                    if ((ks.length() > prefixSP.length()) && ks.startsWith(prefixSP)) {
+                        lts.put(ks.substring(prefixSP.length()).replace('_', '.').toLowerCase(), vs);
+                    }
+                }
+            }
+        }
+        String prefixEV = "LOGTAG_";
+        for (Map.Entry<String, String> e : evs.entrySet()) {
+            String k = e.getKey();
+            String v = e.getValue();
+            if ((k != null) && (v != null)) {
+                k = k.trim();
+                if ((k.length() > prefixEV.length()) && k.startsWith(prefixEV)) {
+                    lts.put(k.substring(prefixEV.length()).replace('_', '.').toLowerCase(), v);
+                }
+            }
+        }
+        return Collections.unmodifiableMap(lts);
+    }
+
     private static Lock createOutLock(boolean enabled, boolean systemOut, boolean fileOut) {
         if (enabled && (systemOut || fileOut)) {
             return new ReentrantLock(false);
@@ -989,6 +1033,10 @@ public final class LogHub {
 
     public static boolean isDebug() {
         return debug;
+    }
+
+    public static Map<String, String> getTags() {
+        return tags;
     }
 
     public static LogThreadInfo getThreadInfo() {

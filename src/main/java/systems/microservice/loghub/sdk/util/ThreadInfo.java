@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.util;
 
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -28,23 +29,20 @@ import java.util.UUID;
  */
 public final class ThreadInfo implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final ThreadLocal<ThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new ThreadInfo());
 
+    public final Thread thread;
+    public final SecureRandom random;
     public final UUID uuid;
-    public final long id;
-    public final String name;
-    public final int priority;
-    public int depth;
     public final LinkedHashMap<String, ArrayList<Tag>> tags;
+    public int depth;
 
-    public ThreadInfo() {
-        Thread t = Thread.currentThread();
-
-        this.uuid = UUID.randomUUID();
-        this.id = t.getId();
-        this.name = t.getName();
-        this.priority = t.getPriority();
-        this.depth = 0;
+    private ThreadInfo() {
+        this.thread = Thread.currentThread();
+        this.random = new SecureRandom();
+        this.uuid = new UUID(System.currentTimeMillis(), this.random.nextLong());
         this.tags = new LinkedHashMap<>(32);
+        this.depth = 0;
     }
 
     public Tag getTag(String key) {
@@ -91,5 +89,9 @@ public final class ThreadInfo implements Serializable {
         } else {
             return null;
         }
+    }
+
+    public static ThreadInfo getThreadInfo() {
+        return threadInfo.get();
     }
 }

@@ -175,10 +175,10 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             }
         }
         if (threadInfo != null) {
+            index = writeTag(buffer, index, "thread.id", threadInfo.thread.getId(), null);
+            index = writeTag(buffer, index, "thread.name", threadInfo.thread.getName(), null);
+            index = writeTag(buffer, index, "thread.priority", threadInfo.thread.getPriority(), null);
             index = writeTag(buffer, index, "thread.uuid", threadInfo.uuid, null);
-            index = writeTag(buffer, index, "thread.id", threadInfo.id, null);
-            index = writeTag(buffer, index, "thread.name", threadInfo.name, null);
-            index = writeTag(buffer, index, "thread.priority", threadInfo.priority, null);
             index = writeTag(buffer, index, "thread.depth", threadInfo.depth, null);
             for (ArrayList<Tag> ts : threadInfo.tags.values()) {
                 Tag t = ts.get(ts.size() - 1);

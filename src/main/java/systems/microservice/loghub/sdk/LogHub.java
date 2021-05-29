@@ -92,7 +92,6 @@ public final class LogHub {
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
     private static final Map<String, String> tags = createTags(properties);
-    private static final ThreadLocal<ThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new ThreadInfo());
     private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
     private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
     private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
@@ -1041,10 +1040,6 @@ public final class LogHub {
 
     public static Map<String, String> getTags() {
         return tags;
-    }
-
-    public static ThreadInfo getThreadInfo() {
-        return threadInfo.get();
     }
 
     public static LogCPUUsage getCPUUsage() {

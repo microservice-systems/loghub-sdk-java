@@ -17,8 +17,6 @@
 
 package systems.microservice.loghub.sdk;
 
-import java.util.Map;
-
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0

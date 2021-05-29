@@ -15,10 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
-
-import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
+package systems.microservice.loghub.sdk.util;
 
 import javax.imageio.ImageIO;
 import java.awt.AWTException;

@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.Tag;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
@@ -26,10 +28,10 @@ public class LogBlock implements AutoCloseable {
 
     public final String logger;
     public final String name;
-    public final LogTag[] tags;
+    public final Tag[] tags;
     public final long begin;
 
-    public LogBlock(String logger, String name, LogTag... tags) {
+    public LogBlock(String logger, String name, Tag... tags) {
         this.logger = logger;
         this.name = name;
         this.tags = tags;

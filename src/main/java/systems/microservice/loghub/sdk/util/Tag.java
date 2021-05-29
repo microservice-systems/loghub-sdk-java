@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
-
-import systems.microservice.loghub.sdk.util.Argument;
+package systems.microservice.loghub.sdk.util;
 
 import java.io.Serializable;
 

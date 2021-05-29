@@ -17,6 +17,10 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.util.Blob;
+import systems.microservice.loghub.sdk.util.Image;
+import systems.microservice.loghub.sdk.util.Tag;
+
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
@@ -41,6 +45,6 @@ final class LogEventWriter {
         return config.get();
     }
 
-    public void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, LogEventCallback callback, String message) {
+    public void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
     }
 }

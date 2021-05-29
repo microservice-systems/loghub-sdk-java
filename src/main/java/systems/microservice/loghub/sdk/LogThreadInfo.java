@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.Tag;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public final class LogThreadInfo implements Serializable {
     public final String name;
     public final int priority;
     public int depth;
-    public final LinkedHashMap<String, ArrayList<LogTag>> tags;
+    public final LinkedHashMap<String, ArrayList<Tag>> tags;
 
     public LogThreadInfo() {
         Thread t = Thread.currentThread();
@@ -49,10 +50,10 @@ public final class LogThreadInfo implements Serializable {
         this.tags = new LinkedHashMap<>(32);
     }
 
-    public LogTag getTag(String key) {
+    public Tag getTag(String key) {
         Argument.notNull("key", key);
 
-        ArrayList<LogTag> ts = tags.get(key);
+        ArrayList<Tag> ts = tags.get(key);
         if (ts != null) {
             return ts.get(ts.size() - 1);
         } else {
@@ -60,10 +61,10 @@ public final class LogThreadInfo implements Serializable {
         }
     }
 
-    public LogTag addTag(LogTag tag) {
+    public Tag addTag(Tag tag) {
         Argument.notNull("tag", tag);
 
-        ArrayList<LogTag> ts = tags.get(tag.key);
+        ArrayList<Tag> ts = tags.get(tag.key);
         if (ts == null) {
             ts = new ArrayList<>(4);
             tags.put(tag.key, ts);
@@ -72,20 +73,20 @@ public final class LogThreadInfo implements Serializable {
         return tag;
     }
 
-    public LogTag addTag(String key, Object value) {
-        return addTag(new LogTag(key, value));
+    public Tag addTag(String key, Object value) {
+        return addTag(new Tag(key, value));
     }
 
-    public LogTag addTag(String key, Object value, String unit) {
-        return addTag(new LogTag(key, value, unit));
+    public Tag addTag(String key, Object value, String unit) {
+        return addTag(new Tag(key, value, unit));
     }
 
-    public LogTag removeTag(String key) {
+    public Tag removeTag(String key) {
         Argument.notNull("key", key);
 
-        ArrayList<LogTag> ts = tags.get(key);
+        ArrayList<Tag> ts = tags.get(key);
         if (ts != null) {
-            LogTag t = ts.remove(ts.size() - 1);
+            Tag t = ts.remove(ts.size() - 1);
             if (ts.isEmpty()) {
                 tags.remove(key);
             }

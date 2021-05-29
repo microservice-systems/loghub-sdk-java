@@ -18,8 +18,11 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.Blob;
+import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
+import systems.microservice.loghub.sdk.util.Tag;
 import systems.microservice.loghub.sdk.util.TimeUtil;
 
 import java.io.FileNotFoundException;
@@ -1120,11 +1123,11 @@ public final class LogHub {
     private static void logEvent(boolean start, long time, String logger, int level, String levelName, String message) {
     }
 
-    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
+    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, String message) {
         logEvent(time, logger, level, levelName, exception, tags, images, blobs, null, message);
     }
 
-    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, LogEventCallback callback, String message) {
+    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
         if (eventWriter != null) {
             eventWriter.logEvent(time, logger, level, levelName, exception, tags, images, blobs, callback, message);
         }

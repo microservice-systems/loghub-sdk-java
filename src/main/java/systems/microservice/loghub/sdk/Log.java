@@ -18,6 +18,9 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.Blob;
+import systems.microservice.loghub.sdk.util.Image;
+import systems.microservice.loghub.sdk.util.Tag;
 
 import java.util.Map;
 
@@ -44,15 +47,15 @@ public class Log {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, null, null, null, message);
     }
 
-    protected void logEvent(int level, String levelName, Map<String, LogTag> tags, String message) {
+    protected void logEvent(int level, String levelName, Map<String, Tag> tags, String message) {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, tags, null, null, message);
     }
 
-    protected void logEvent(int level, String levelName, Map<String, LogTag> tags, Map<String, LogImage> images, String message) {
+    protected void logEvent(int level, String levelName, Map<String, Tag> tags, Map<String, Image> images, String message) {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, tags, images, null, message);
     }
 
-    protected void logEvent(int level, String levelName, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
+    protected void logEvent(int level, String levelName, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, String message) {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, null, tags, images, blobs, message);
     }
 
@@ -60,15 +63,15 @@ public class Log {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, null, null, null, message);
     }
 
-    protected void logEvent(int level, String levelName, Throwable exception, Map<String, LogTag> tags, String message) {
+    protected void logEvent(int level, String levelName, Throwable exception, Map<String, Tag> tags, String message) {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, tags, null, null, message);
     }
 
-    protected void logEvent(int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, String message) {
+    protected void logEvent(int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, String message) {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, tags, images, null, message);
     }
 
-    protected void logEvent(int level, String levelName, Throwable exception, Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs, String message) {
+    protected void logEvent(int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, String message) {
         LogHub.logEvent(System.currentTimeMillis(), logger, level, levelName, exception, tags, images, blobs, message);
     }
 }

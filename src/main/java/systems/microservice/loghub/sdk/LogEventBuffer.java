@@ -19,7 +19,10 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.Blob;
+import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
+import systems.microservice.loghub.sdk.util.Tag;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
 import java.io.PrintWriter;
@@ -150,7 +153,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
     private int writeTags(byte[] buffer, int index,
                           Throwable exception, LogThreadInfo threadInfo,
                           LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
-                          Map<String, LogTag> tags,
+                          Map<String, Tag> tags,
                           LogEventCallback callback) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         if (exception != null) {
@@ -176,8 +179,8 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             index = writeTag(buffer, index, "thread.name", threadInfo.name, null);
             index = writeTag(buffer, index, "thread.priority", threadInfo.priority, null);
             index = writeTag(buffer, index, "thread.depth", threadInfo.depth, null);
-            for (ArrayList<LogTag> ts : threadInfo.tags.values()) {
-                LogTag t = ts.get(ts.size() - 1);
+            for (ArrayList<Tag> ts : threadInfo.tags.values()) {
+                Tag t = ts.get(ts.size() - 1);
                 index = writeTag(buffer, index, t.key, t.value, t.unit);
             }
         }
@@ -227,7 +230,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
             index = writeTag(buffer, index, "usage.gc.collection.time", gcUsage.collectionTime, "ms");
         }
         if (tags != null) {
-            for (LogTag t : tags.values()) {
+            for (Tag t : tags.values()) {
                 index = writeTag(buffer, index, t.key, t.value, t.unit);
             }
         }
@@ -242,7 +245,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
                            long time, String logger, int level, String levelName, LogType type,
                            Throwable exception, LogThreadInfo threadInfo,
                            LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
-                           Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,
+                           Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs,
                            LogEventCallback callback,
                            String message) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -260,7 +263,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
                             long time, String logger, int level, String levelName, LogType type,
                             Throwable exception, LogThreadInfo threadInfo,
                             LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
-                            Map<String, LogTag> tags, Map<String, LogImage> images, Map<String, LogBlob> blobs,
+                            Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs,
                             LogEventCallback callback,
                             String message) {
         return false;

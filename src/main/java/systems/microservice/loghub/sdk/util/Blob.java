@@ -25,13 +25,13 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogBlob implements Serializable {
+public final class Blob implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final byte[] content;
     public final String contentType;
 
-    public LogBlob(byte[] content, String contentType) {
+    public Blob(byte[] content, String contentType) {
         Argument.notNull("content", content);
         Argument.notNull("contentType", contentType);
 

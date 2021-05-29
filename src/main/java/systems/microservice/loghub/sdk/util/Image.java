@@ -33,13 +33,13 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogImage implements Serializable {
+public final class Image implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final byte[] content;
     public final String contentType;
 
-    public LogImage(byte[] content, String contentType) {
+    public Image(byte[] content, String contentType) {
         Argument.notNull("content", content);
         Argument.notNull("contentType", contentType);
 
@@ -67,7 +67,7 @@ public final class LogImage implements Serializable {
         }
     }
 
-    public static LogImage takeScreenshot(String format) {
+    public static Image takeScreenshot(String format) {
         Argument.notNull("format", format);
 
         try {
@@ -75,7 +75,7 @@ public final class LogImage implements Serializable {
             BufferedImage bi = new Robot().createScreenCapture(r);
             try (ByteArrayOutputStream out = new ByteArrayOutputStream(131072)) {
                 if (ImageIO.write(bi, format, out)) {
-                    return new LogImage(out.toByteArray(), getContentType(format));
+                    return new Image(out.toByteArray(), getContentType(format));
                 } else {
                     throw new IllegalArgumentException(String.format("Image IO format '%s' is not found", format));
                 }

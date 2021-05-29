@@ -25,18 +25,18 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogTag implements Serializable {
+public final class Tag implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final String key;
     public final Object value;
     public final String unit;
 
-    public LogTag(String key, Object value) {
+    public Tag(String key, Object value) {
         this(key, value, null);
     }
 
-    public LogTag(String key, Object value, String unit) {
+    public Tag(String key, Object value, String unit) {
         Argument.notNull("key", key);
         Argument.notNull("value", value);
 

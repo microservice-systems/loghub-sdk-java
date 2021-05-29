@@ -18,10 +18,78 @@
 package systems.microservice.loghub.sdk.util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.UUID;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
 public final class ThreadInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public final UUID uuid;
+    public final long id;
+    public final String name;
+    public final int priority;
+    public int depth;
+    public final LinkedHashMap<String, ArrayList<Tag>> tags;
+
+    public ThreadInfo() {
+        Thread t = Thread.currentThread();
+
+        this.uuid = UUID.randomUUID();
+        this.id = t.getId();
+        this.name = t.getName();
+        this.priority = t.getPriority();
+        this.depth = 0;
+        this.tags = new LinkedHashMap<>(32);
+    }
+
+    public Tag getTag(String key) {
+        Argument.notNull("key", key);
+
+        ArrayList<Tag> ts = tags.get(key);
+        if (ts != null) {
+            return ts.get(ts.size() - 1);
+        } else {
+            return null;
+        }
+    }
+
+    public Tag addTag(Tag tag) {
+        Argument.notNull("tag", tag);
+
+        ArrayList<Tag> ts = tags.get(tag.key);
+        if (ts == null) {
+            ts = new ArrayList<>(4);
+            tags.put(tag.key, ts);
+        }
+        ts.add(tag);
+        return tag;
+    }
+
+    public Tag addTag(String key, Object value) {
+        return addTag(new Tag(key, value));
+    }
+
+    public Tag addTag(String key, Object value, String unit) {
+        return addTag(new Tag(key, value, unit));
+    }
+
+    public Tag removeTag(String key) {
+        Argument.notNull("key", key);
+
+        ArrayList<Tag> ts = tags.get(key);
+        if (ts != null) {
+            Tag t = ts.remove(ts.size() - 1);
+            if (ts.isEmpty()) {
+                tags.remove(key);
+            }
+            return t;
+        } else {
+            return null;
+        }
+    }
 }

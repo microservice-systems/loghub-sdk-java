@@ -23,6 +23,7 @@ import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 import systems.microservice.loghub.sdk.util.Tag;
+import systems.microservice.loghub.sdk.util.ThreadInfo;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
 import java.io.PrintWriter;
@@ -151,7 +152,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
     }
 
     private int writeTags(byte[] buffer, int index,
-                          Throwable exception, LogThreadInfo threadInfo,
+                          Throwable exception, ThreadInfo threadInfo,
                           LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
                           Map<String, Tag> tags,
                           LogEventCallback callback) {
@@ -243,7 +244,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     private int writeEvent(byte[] buffer, int index,
                            long time, String logger, int level, String levelName, LogType type,
-                           Throwable exception, LogThreadInfo threadInfo,
+                           Throwable exception, ThreadInfo threadInfo,
                            LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
                            Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs,
                            LogEventCallback callback,
@@ -261,7 +262,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     public boolean logEvent(byte[] buffer, int index,
                             long time, String logger, int level, String levelName, LogType type,
-                            Throwable exception, LogThreadInfo threadInfo,
+                            Throwable exception, ThreadInfo threadInfo,
                             LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
                             Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs,
                             LogEventCallback callback,

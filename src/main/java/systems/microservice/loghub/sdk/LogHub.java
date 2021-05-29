@@ -23,6 +23,7 @@ import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
 import systems.microservice.loghub.sdk.util.Tag;
+import systems.microservice.loghub.sdk.util.ThreadInfo;
 import systems.microservice.loghub.sdk.util.TimeUtil;
 
 import java.io.FileNotFoundException;
@@ -91,7 +92,7 @@ public final class LogHub {
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
     private static final Map<String, String> tags = createTags(properties);
-    private static final ThreadLocal<LogThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new LogThreadInfo());
+    private static final ThreadLocal<ThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new ThreadInfo());
     private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
     private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
     private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
@@ -1042,7 +1043,7 @@ public final class LogHub {
         return tags;
     }
 
-    public static LogThreadInfo getThreadInfo() {
+    public static ThreadInfo getThreadInfo() {
         return threadInfo.get();
     }
 

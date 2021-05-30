@@ -19,11 +19,17 @@ package systems.microservice.loghub.sdk.util;
 
 import systems.microservice.loghub.sdk.util.Tag;
 
+import java.io.Serializable;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class CodeBlock implements AutoCloseable {
+public class CodeBlock implements AutoCloseable, Serializable {
+    private static final long serialVersionUID = 1L;
+    private static final ConcurrentHashMap<String, ConcurrentHashMap<String, Info>> infos = new ConcurrentHashMap<>(1024);
+
     public final String logger;
     public final String name;
     public final Tag[] tags;
@@ -38,5 +44,37 @@ public class CodeBlock implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
+    }
+
+    private static Info createInfo(String module, String name) {
+        return new Info(String.format("[BEGIN]: %s", name), String.format("[END]: %s", name), String.format("loghub.block.%s.%s.span", module, name));
+    }
+
+    private static Info getInfo(String module, String name) {
+        ConcurrentHashMap<String, Info> infs = infos.get(module);
+        if (infs == null) {
+            infs = new ConcurrentHashMap<>(32);
+            infs.put(name, createInfo(module, name));
+            infs = MapUtil.putIfAbsent(infos, module, infs);
+        }
+        Info inf = infs.get(name);
+        if (inf == null) {
+            inf = MapUtil.putIfAbsent(infs, name, createInfo(module, name));
+        }
+        return inf;
+    }
+
+    private static final class Info implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        public final String beginMessage;
+        public final String endMessage;
+        public final String metric;
+
+        public Info(String beginMessage, String endMessage, String metric) {
+            this.beginMessage = beginMessage;
+            this.endMessage = endMessage;
+            this.metric = metric;
+        }
     }
 }

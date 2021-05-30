@@ -26,9 +26,11 @@ import java.util.HashMap;
 public enum LogType {
     START((byte) 1),
     FINISH((byte) 2),
-    DEFAULT((byte) 3),
-    EXCEPTION((byte) 4),
-    THREADS((byte) 5);
+    BEGIN((byte) 3),
+    END((byte) 4),
+    DEFAULT((byte) 5),
+    EXCEPTION((byte) 6),
+    THREADS((byte) 7);
 
     private static final HashMap<Byte, LogType> types = createTypes();
 
@@ -39,9 +41,11 @@ public enum LogType {
     }
 
     private static HashMap<Byte, LogType> createTypes() {
-        HashMap<Byte, LogType> ts = new HashMap<>(16);
+        HashMap<Byte, LogType> ts = new HashMap<>(32);
         ts.put(START.id, START);
         ts.put(FINISH.id, FINISH);
+        ts.put(BEGIN.id, BEGIN);
+        ts.put(END.id, END);
         ts.put(DEFAULT.id, DEFAULT);
         ts.put(EXCEPTION.id, EXCEPTION);
         ts.put(THREADS.id, THREADS);

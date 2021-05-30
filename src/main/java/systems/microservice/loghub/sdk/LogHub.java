@@ -23,7 +23,6 @@ import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
 import systems.microservice.loghub.sdk.util.Tag;
-import systems.microservice.loghub.sdk.util.ThreadInfo;
 import systems.microservice.loghub.sdk.util.TimeUtil;
 
 import java.io.FileNotFoundException;
@@ -1117,6 +1116,12 @@ public final class LogHub {
     }
 
     private static void logEvent(boolean start, long time, String logger, int level, String levelName, String message) {
+    }
+
+    public static void logEventBegin(long time, String logger, int level, String levelName, String message) {
+    }
+
+    public static void logEventEnd(long time, String logger, int level, String levelName, String message) {
     }
 
     public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, String message) {

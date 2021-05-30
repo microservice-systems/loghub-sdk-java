@@ -17,7 +17,9 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.sdk.util.Tag;
+import systems.microservice.loghub.sdk.Log;
+import systems.microservice.loghub.sdk.LogHub;
+import systems.microservice.loghub.sdk.LogLevel;
 
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,17 +37,47 @@ public class Code implements AutoCloseable, Serializable {
     public final String logger;
     public final String name;
     public final Tag[] tags;
+    public final Info info;
     public final long begin;
+    public long end;
+
+    public Code(Log log, String name, Tag... tags) {
+        this(Argument.notNull("log", log).getLogger(), name, tags);
+    }
+
+    public Code(Class logger, String name, Tag... tags) {
+        this(Argument.notNull("logger", logger).getCanonicalName(), name, tags);
+    }
 
     public Code(String logger, String name, Tag... tags) {
+        Argument.notNull("logger", logger);
+        Argument.notNull("name", name);
+
         this.logger = logger;
         this.name = name;
         this.tags = tags;
+        this.info = getInfo(logger, name);
         this.begin = System.currentTimeMillis();
+        this.end = -1L;
+
+        ThreadInfo ti = ThreadInfo.getThreadInfo();
+        for (Tag t : tags) {
+            ti.addTag(t);
+        }
+        LogHub.logEventBegin(this.begin, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), this.info.beginMessage);
+        ti.depth++;
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
+        end = System.currentTimeMillis();
+        LogHub.logMetric(info.metric, end - begin, 0, "ms");
+        ThreadInfo ti = ThreadInfo.getThreadInfo();
+        ti.depth--;
+        LogHub.logEventEnd(end, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), info.endMessage);
+        for (Tag t : tags) {
+            ti.removeTag(t.key);
+        }
     }
 
     private static Info getInfo(String logger, String name) {
@@ -66,7 +98,7 @@ public class Code implements AutoCloseable, Serializable {
         return inf;
     }
 
-    private static final class Info implements Serializable {
+    public static final class Info implements Serializable {
         private static final long serialVersionUID = 1L;
 
         public final String beginMessage;

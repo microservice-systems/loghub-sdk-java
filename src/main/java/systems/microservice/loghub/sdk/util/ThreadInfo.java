@@ -34,15 +34,15 @@ public final class ThreadInfo implements Serializable {
     public final Thread thread;
     public final SecureRandom random;
     public final UUID uuid;
-    public final LinkedHashMap<String, ArrayList<Tag>> tags;
     public int depth;
+    public final LinkedHashMap<String, ArrayList<Tag>> tags;
 
     private ThreadInfo() {
         this.thread = Thread.currentThread();
         this.random = new SecureRandom();
         this.uuid = new UUID(System.currentTimeMillis(), this.random.nextLong());
-        this.tags = new LinkedHashMap<>(32);
         this.depth = 0;
+        this.tags = new LinkedHashMap<>(32);
     }
 
     public Tag getTag(String key) {

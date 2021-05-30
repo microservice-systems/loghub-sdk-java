@@ -23,15 +23,13 @@ import systems.microservice.loghub.sdk.util.Tag;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class LogBlock implements AutoCloseable {
-    private static final ThreadLocal<ThreadInfo> threadInfo = createThreadInfo();
-
+public class CodeBlock implements AutoCloseable {
     public final String logger;
     public final String name;
     public final Tag[] tags;
     public final long begin;
 
-    public LogBlock(String logger, String name, Tag... tags) {
+    public CodeBlock(String logger, String name, Tag... tags) {
         this.logger = logger;
         this.name = name;
         this.tags = tags;
@@ -40,21 +38,5 @@ public class LogBlock implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-    }
-
-    private static ThreadLocal<ThreadInfo> createThreadInfo() {
-        return new ThreadLocal<ThreadInfo>() {
-            @Override
-            protected ThreadInfo initialValue() {
-                return new ThreadInfo();
-            }
-        };
-    }
-
-    private static final class ThreadInfo {
-        public int shift = 0;
-
-        public ThreadInfo() {
-        }
     }
 }

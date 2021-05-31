@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public final class ThreadInfo implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final ThreadLocal<ThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new ThreadInfo());
+    private static final ThreadLocal<ThreadInfo> instance = ThreadLocal.withInitial(() -> new ThreadInfo());
 
     public final Thread thread;
     public final SecureRandom random;
@@ -91,7 +91,7 @@ public final class ThreadInfo implements Serializable {
         }
     }
 
-    public static ThreadInfo getThreadInfo() {
-        return threadInfo.get();
+    public static ThreadInfo getInstance() {
+        return instance.get();
     }
 }

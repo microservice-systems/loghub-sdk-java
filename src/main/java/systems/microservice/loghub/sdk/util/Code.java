@@ -40,8 +40,8 @@ public class Code implements AutoCloseable, Serializable {
     public final long begin;
     public long end;
 
-    public Code(Log log, String name, Tag... tags) {
-        this(Argument.notNull("log", log).getLogger(), name, tags);
+    public Code(Log logger, String name, Tag... tags) {
+        this(Argument.notNull("logger", logger).getLogger(), name, tags);
     }
 
     public Code(Class logger, String name, Tag... tags) {
@@ -59,7 +59,7 @@ public class Code implements AutoCloseable, Serializable {
         this.begin = System.currentTimeMillis();
         this.end = -1L;
 
-        ThreadInfo ti = ThreadInfo.getThreadInfo();
+        ThreadInfo ti = ThreadInfo.getInstance();
         for (Tag t : tags) {
             ti.addTag(t);
         }
@@ -71,7 +71,7 @@ public class Code implements AutoCloseable, Serializable {
     public void close() {
         end = System.currentTimeMillis();
         LogHub.logMetric(info.metric, end - begin, 0, "ms");
-        ThreadInfo ti = ThreadInfo.getThreadInfo();
+        ThreadInfo ti = ThreadInfo.getInstance();
         ti.depth--;
         LogHub.logEventEnd(end, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), info.endMessage);
         for (Tag t : tags) {
@@ -107,7 +107,7 @@ public class Code implements AutoCloseable, Serializable {
         public Info(String logger, String name) {
             this.beginMessage = String.format("[BEGIN]: %s", name);
             this.endMessage = String.format("[END]: %s", name);
-            this.metric = String.format("code.%s.%s.exec.time", logger, name);
+            this.metric = String.format("code.%s.%s.execution.time", logger, name);
         }
     }
 }

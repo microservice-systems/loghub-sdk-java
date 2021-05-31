@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.Blob;
-import systems.microservice.loghub.sdk.util.Image;
-import systems.microservice.loghub.sdk.util.Tag;
+import systems.microservice.loghub.sdk.LogHub;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class Log {
+public class Log implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     protected final String logger;
 
     public Log(Class logger) {

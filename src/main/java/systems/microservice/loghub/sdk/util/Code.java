@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.sdk.Log;
 import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.LogLevel;
 

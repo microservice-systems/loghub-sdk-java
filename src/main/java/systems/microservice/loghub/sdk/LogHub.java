@@ -20,6 +20,7 @@ package systems.microservice.loghub.sdk;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
+import systems.microservice.loghub.sdk.util.PropertiesUtil;
 import systems.microservice.loghub.sdk.util.ResourceUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
 import systems.microservice.loghub.sdk.util.Tag;
@@ -151,23 +152,7 @@ public final class LogHub {
     }
 
     private static Map<String, String> createProperties() {
-        Map<String, String> ps = new LinkedHashMap<>(64);
-        try {
-            Properties p = ResourceUtil.getProperties(LogHub.class, "/loghub.properties", null);
-            for (Map.Entry<Object, Object> e : p.entrySet()) {
-                Object k = e.getKey();
-                if (k instanceof String) {
-                    Object v = e.getValue();
-                    if (v instanceof String) {
-                        String ks = (String) k;
-                        String vs = (String) v;
-                        ps.put(ks, vs);
-                    }
-                }
-            }
-        } catch (Exception e) {
-        }
-        return Collections.unmodifiableMap(ps);
+        return Collections.unmodifiableMap(PropertiesUtil.toMap(ResourceUtil.findProperties(LogHub.class, "/loghub.properties", null)));
     }
 
     private static String createAccount(Map<String, String> properties) {

@@ -18,13 +18,14 @@
 package systems.microservice.loghub.sdk.util;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -54,6 +55,24 @@ public final class PropertiesUtil {
         return props;
     }
 
+    public static Map<String, String> toMap(Properties properties) {
+        Map<String, String> ps = new LinkedHashMap<>(64);
+        if (properties != null) {
+            for (Map.Entry<Object, Object> e : properties.entrySet()) {
+                Object k = e.getKey();
+                if (k instanceof String) {
+                    Object v = e.getValue();
+                    if (v instanceof String) {
+                        String ks = (String) k;
+                        String vs = (String) v;
+                        ps.put(ks, vs);
+                    }
+                }
+            }
+        }
+        return ps;
+    }
+
     public static byte[] serialize(Properties properties, String comment, boolean xml) {
         try {
             ByteArrayOutputStream d = new ByteArrayOutputStream(16384);
@@ -75,16 +94,14 @@ public final class PropertiesUtil {
     }
 
     public static Properties deserialize(byte[] data, Properties defaults) {
-        try {
-            Properties p = new Properties(defaults);
-            try (java.io.ByteArrayInputStream d = new ByteArrayInputStream(data)) {
-                try (Reader r = new InputStreamReader(d, StandardCharsets.UTF_8)) {
-                    p.load(r);
-                }
+        Properties ps = new Properties(defaults);
+        try (ByteArrayInputStream d = new ByteArrayInputStream(data)) {
+            try (Reader r = new InputStreamReader(d, StandardCharsets.UTF_8)) {
+                ps.load(r);
             }
-            return p;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return ps;
     }
 }

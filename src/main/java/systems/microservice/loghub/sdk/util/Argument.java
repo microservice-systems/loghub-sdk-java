@@ -131,33 +131,7 @@ public final class Argument {
         }
     }
 
-    public static UUID inRangeUUID(String argument, UUID value, UUID min, UUID max) {
-        Argument.notNull("argument", argument);
-        Argument.notNull("value", value);
-        Argument.notNull("min", min);
-        Argument.notNull("max", max);
-
-        if ((value.compareTo(min) >= 0) && (value.compareTo(max) < 0)) {
-            return value;
-        } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %s not in range [%s, %s)", argument, value.toString(), min.toString(), max.toString()));
-        }
-    }
-
-    public static BigInteger inRangeBigInteger(String argument, BigInteger value, BigInteger min, BigInteger max) {
-        Argument.notNull("argument", argument);
-        Argument.notNull("value", value);
-        Argument.notNull("min", min);
-        Argument.notNull("max", max);
-
-        if ((value.compareTo(min) >= 0) && (value.compareTo(max) < 0)) {
-            return value;
-        } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %s not in range [%s, %s)", argument, value.toString(), min.toString(), max.toString()));
-        }
-    }
-
-    public static BigDecimal inRangeBigDecimal(String argument, BigDecimal value, BigDecimal min, BigDecimal max) {
+    public static <T extends Comparable<T>> T inRange(String argument, T value, T min, T max) {
         Argument.notNull("argument", argument);
         Argument.notNull("value", value);
         Argument.notNull("min", min);

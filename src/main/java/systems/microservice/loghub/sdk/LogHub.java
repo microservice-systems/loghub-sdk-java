@@ -1134,7 +1134,7 @@ public final class LogHub {
     public static void logMetric(String name, long count, long value, int point, String unit) {
         Argument.notNull("name", name);
         Argument.inRangeLong("count", count, 0L, Long.MAX_VALUE);
-        Argument.inRangeInt("point", point, 0, 15);
+        Argument.inRangeInt("point", point, 0, 14);
         Argument.notNull("unit", unit);
 
         metricWriter.log(name, count, value, point, unit);

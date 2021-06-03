@@ -695,6 +695,15 @@ public final class BufferWriter {
         }
     }
 
+    public static int writeObjectRef(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeObject(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
     public static int writeObjectArray(byte[] buffer, int index, Map<String, Object> context, Object[] value) {
         Argument.notNull("value", value);
 
@@ -706,6 +715,15 @@ public final class BufferWriter {
         return index;
     }
 
+    public static int writeObjectArrayRef(byte[] buffer, int index, Map<String, Object> context, Object[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeObjectArray(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
     public static int writeObjectCollection(byte[] buffer, int index, Map<String, Object> context, Collection value) {
         Argument.notNull("value", value);
 
@@ -715,6 +733,15 @@ public final class BufferWriter {
             index = writeObject(buffer, index, context, e);
         }
         return index;
+    }
+
+    public static int writeObjectCollectionRef(byte[] buffer, int index, Map<String, Object> context, Collection value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeObjectCollection(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
     }
 
     public static int writeObjectMap(byte[] buffer, int index, Map<String, Object> context, Map value) {
@@ -730,10 +757,10 @@ public final class BufferWriter {
         return index;
     }
 
-    public static int writeObjectRef(byte[] buffer, int index, Map<String, Object> context, Object value) {
+    public static int writeObjectMapRef(byte[] buffer, int index, Map<String, Object> context, Map value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeObject(buffer, index, context, value);
+            return writeObjectMap(buffer, index, context, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }

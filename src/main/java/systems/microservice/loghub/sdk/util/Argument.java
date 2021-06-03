@@ -64,70 +64,70 @@ public final class Argument {
     public static byte inRangeByte(String argument, byte value, byte min, byte max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d)", argument, value, min, max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d]", argument, value, min, max));
         }
     }
 
     public static char inRangeChar(String argument, char value, char min, char max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d)", argument, (int) value, (int) min, (int) max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d]", argument, (int) value, (int) min, (int) max));
         }
     }
 
     public static short inRangeShort(String argument, short value, short min, short max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d)", argument, value, min, max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d]", argument, value, min, max));
         }
     }
 
     public static int inRangeInt(String argument, int value, int min, int max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d)", argument, value, min, max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d]", argument, value, min, max));
         }
     }
 
     public static long inRangeLong(String argument, long value, long min, long max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d)", argument, value, min, max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %d not in range [%d, %d]", argument, value, min, max));
         }
     }
 
     public static float inRangeFloat(String argument, float value, float min, float max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %f not in range [%f, %f)", argument, value, min, max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %f not in range [%f, %f]", argument, value, min, max));
         }
     }
 
     public static double inRangeDouble(String argument, double value, double min, double max) {
         Argument.notNull("argument", argument);
 
-        if ((value >= min) && (value < max)) {
+        if ((value >= min) && (value <= max)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %f not in range [%f, %f)", argument, value, min, max));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %f not in range [%f, %f]", argument, value, min, max));
         }
     }
 
@@ -137,10 +137,10 @@ public final class Argument {
         Argument.notNull("min", min);
         Argument.notNull("max", max);
 
-        if ((value.compareTo(min) >= 0) && (value.compareTo(max) < 0)) {
+        if ((value.compareTo(min) >= 0) && (value.compareTo(max) <= 0)) {
             return value;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is %s not in range [%s, %s)", argument, value.toString(), min.toString(), max.toString()));
+            throw new IllegalArgumentException(String.format("Argument '%s' is %s not in range [%s, %s]", argument, value.toString(), min.toString(), max.toString()));
         }
     }
 

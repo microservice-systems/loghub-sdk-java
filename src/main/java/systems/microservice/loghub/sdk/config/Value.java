@@ -62,15 +62,15 @@ public final class Value implements Comparable<Value>, Bufferable, Serializable 
     }
 
     @SuppressWarnings("unchecked")
-    public <I, O> O get(Class<O> clazz, Extractor<I, O> extractor) {
-        Argument.notNull("clazz", clazz);
+    public <I, O> O get(Class<O> outputClass, Extractor<I, O> extractor) {
+        Argument.notNull("outputClass", outputClass);
         Argument.notNull("extractor", extractor);
 
         if (object != null) {
-            Object o = objects.get(clazz);
+            Object o = objects.get(outputClass);
             if (o == null) {
-                o = extractor.extract((I) object, clazz);
-                o = MapUtil.putIfAbsent(objects, clazz, o);
+                o = extractor.extract((I) object, outputClass);
+                o = MapUtil.putIfAbsent(objects, outputClass, o);
             }
             return (O) o;
         } else {

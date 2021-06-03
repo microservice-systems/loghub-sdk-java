@@ -34,7 +34,7 @@ public class LogMetric implements Serializable {
 
     public LogMetric(String name, int point, String unit) {
         Argument.notNull("name", name);
-        Argument.inRangeInt("point", point, 0, 15);
+        Argument.inRangeInt("point", point, 0, 14);
         Argument.notNull("unit", unit);
 
         this.name = name;

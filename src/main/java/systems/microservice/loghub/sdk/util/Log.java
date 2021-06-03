@@ -31,6 +31,7 @@ public class Log implements Serializable {
 
     protected final String logger;
 
+    @SuppressWarnings("rawtypes")
     public Log(Class logger) {
         this(Argument.notNull("logger", logger).getCanonicalName());
     }

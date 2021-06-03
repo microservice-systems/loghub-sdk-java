@@ -35,7 +35,7 @@ public final class BufferReader {
 
     public BufferReader(byte[] buffer, int index) {
         Argument.notNull("buffer", buffer);
-        Argument.inRangeInt("index", index, 0, buffer.length);
+        Argument.inRangeInt("index", index, 0, buffer.length - 1);
 
         this.buffer = buffer;
         this.index = index;
@@ -58,13 +58,13 @@ public final class BufferReader {
     }
 
     public void setIndex(int index) {
-        Argument.inRangeInt("index", index, 0, buffer.length);
+        Argument.inRangeInt("index", index, 0, buffer.length - 1);
 
         this.index = index;
     }
 
     public void skip(int count) {
-        Argument.inRangeInt("count", count, -index, buffer.length - index);
+        Argument.inRangeInt("count", count, -index, buffer.length - index - 1);
 
         this.index += count;
     }

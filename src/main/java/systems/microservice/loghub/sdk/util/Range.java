@@ -41,10 +41,22 @@ public final class Range<T extends Comparable<T>> implements Bufferable, Seriali
         this.max = max;
     }
 
-    public boolean inRange(T value) {
+    public boolean isLeft(T value) {
         Argument.notNull("value", value);
 
-        return (value.compareTo(min) >= 0) && (value.compareTo(max) < 0);
+        return value.compareTo(min) < 0;
+    }
+
+    public boolean isIn(T value) {
+        Argument.notNull("value", value);
+
+        return (value.compareTo(min) >= 0) && (value.compareTo(max) <= 0);
+    }
+
+    public boolean isRight(T value) {
+        Argument.notNull("value", value);
+
+        return value.compareTo(max) > 0;
     }
 
     @Override

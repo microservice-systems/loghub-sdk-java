@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Dmitry Kotlyarov
@@ -50,6 +51,8 @@ public final class Property implements Bufferable, Serializable {
     public final String user;
     public final String commit;
     public final long time;
+    public final AtomicReference<Property> oldProperty;
+    public final AtomicReference<Property> invalidProperty;
 
     public Property(String group,
                     String key,
@@ -86,6 +89,8 @@ public final class Property implements Bufferable, Serializable {
         this.user = user;
         this.commit = commit;
         this.time = System.currentTimeMillis();
+        this.oldProperty = new AtomicReference<>(null);
+        this.invalidProperty = new AtomicReference<>(null);
     }
 
     @Override
@@ -105,6 +110,8 @@ public final class Property implements Bufferable, Serializable {
         index = BufferWriter.writeStringRef(buffer, index, user);
         index = BufferWriter.writeStringRef(buffer, index, commit);
         index = BufferWriter.writeLong(buffer, index, time);
+        index = BufferWriter.writeBufferableRef(buffer, index, context, oldProperty.get());
+        index = BufferWriter.writeBufferableRef(buffer, index, context, invalidProperty.get());
         return index;
     }
 }

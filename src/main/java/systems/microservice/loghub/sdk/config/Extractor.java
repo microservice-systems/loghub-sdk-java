@@ -21,6 +21,7 @@ package systems.microservice.loghub.sdk.config;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
+@FunctionalInterface
 public interface Extractor<I, O> {
     public O extract(I input, Class<O> outputClass);
 }

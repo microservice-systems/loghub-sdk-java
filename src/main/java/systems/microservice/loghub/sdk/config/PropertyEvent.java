@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class PropertyChangeEvent implements Serializable {
+public class PropertyEvent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final String key;
@@ -33,7 +33,7 @@ public class PropertyChangeEvent implements Serializable {
     public final Property newProperty;
     public final long time;
 
-    public PropertyChangeEvent(Property oldProperty, Property newProperty) {
+    public PropertyEvent(Property oldProperty, Property newProperty) {
         Argument.notNull("newProperty", newProperty);
         if (oldProperty != null) {
             if (!newProperty.key.equals(oldProperty.key)) {

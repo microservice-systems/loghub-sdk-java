@@ -17,23 +17,25 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.extractors.ValueOfExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.MapUtil;
-import systems.microservice.loghub.sdk.util.PropertiesUtil;
 import systems.microservice.loghub.sdk.util.Range;
-import systems.microservice.loghub.sdk.util.ResourceUtil;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Dmitry Kotlyarov
@@ -41,7 +43,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class Config implements Bufferable, Serializable {
     private static final long serialVersionUID = 1L;
+    private static final ReentrantLock lock = new ReentrantLock(false);
+    private static final AtomicReference<Config> currentConfig = new AtomicReference<>(new Config());
     private static final ConcurrentHashMap<String, Property> currentProperties = new ConcurrentHashMap<>(4096, 0.75f, 64);
+    private static final ConcurrentHashMap<String, Set<PropertyListener>> propertyListeners = new ConcurrentHashMap<>(256, 0.75f, 1);
 
     public final UUID uuid;
     public final Map<String, Property> properties;
@@ -50,6 +55,14 @@ public final class Config implements Bufferable, Serializable {
     public final String user;
     public final String commit;
     public final long time;
+
+    public Config() {
+        this(Collections.emptyList());
+    }
+
+    public Config(Iterable<Property> properties) {
+        this(properties, null, null, null, null);
+    }
 
     public Config(Iterable<Property> properties, String comment, URL url, String user, String commit) {
         Argument.notNull("properties", properties);
@@ -118,5 +131,60 @@ public final class Config implements Bufferable, Serializable {
 
     public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, Extractor<I, O> extractor) {
         return null;
+    }
+
+    public static List<PropertyEvent> applyConfig(Config config) {
+        Argument.notNull("config", config);
+
+        lock.lock();
+        try {
+            boolean v = true;
+            Collection<Property> nps = config.properties.values();
+            ArrayList<PropertyEvent> pes = new ArrayList<>(nps.size());
+            for (Property np : nps) {
+                Property op = currentProperties.get(np.key);
+                if (op != null) {
+                    if (!np.uuid.equals(op.uuid)) {
+                        pes.add(new PropertyEvent(op, np));
+                    }
+                } else {
+                    pes.add(new PropertyEvent(null, np));
+                }
+            }
+            for (PropertyEvent pe : pes) {
+                Set<PropertyListener> pls = propertyListeners.get(pe.key);
+                if (pls != null) {
+                    for (PropertyListener pl : pls) {
+                        try {
+                            if (!pl.onPropertyValidate(pe)) {
+                                v = false;
+                                pe.oldProperty.invalidProperty.set(pe.newProperty);
+                            }
+                        } catch (Throwable ex) {
+                        }
+                    }
+                }
+            }
+            if (v) {
+                for (PropertyEvent pe : pes) {
+                    pe.newProperty.oldProperty.set(pe.oldProperty);
+                    currentProperties.put(pe.newProperty.key, pe.newProperty);
+                }
+                for (PropertyEvent pe : pes) {
+                    Set<PropertyListener> pls = propertyListeners.get(pe.key);
+                    if (pls != null) {
+                        for (PropertyListener pl : pls) {
+                            try {
+                                pl.onPropertyChange(pe);
+                            } catch (Throwable ex) {
+                            }
+                        }
+                    }
+                }
+            }
+            return pes;
+        } finally {
+            lock.unlock();
+        }
     }
 }

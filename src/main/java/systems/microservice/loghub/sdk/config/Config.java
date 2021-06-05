@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +45,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class Config implements Bufferable, Serializable {
     private static final long serialVersionUID = 1L;
     private static final ReentrantLock lock = new ReentrantLock(false);
-    private static final AtomicReference<Config> currentConfig = new AtomicReference<>(new Config());
+    private static final AtomicReference<Config> config = new AtomicReference<>(new Config());
     private static final ConcurrentHashMap<String, Property> currentProperties = new ConcurrentHashMap<>(4096, 0.75f, 64);
     private static final ConcurrentHashMap<String, Set<PropertyListener>> propertyListeners = new ConcurrentHashMap<>(256, 0.75f, 1);
 
@@ -60,11 +61,11 @@ public final class Config implements Bufferable, Serializable {
         this(Collections.emptyList());
     }
 
-    public Config(Iterable<Property> properties) {
+    public Config(Collection<Property> properties) {
         this(properties, null, null, null, null);
     }
 
-    public Config(Iterable<Property> properties, String comment, URL url, String user, String commit) {
+    public Config(Collection<Property> properties, String comment, URL url, String user, String commit) {
         Argument.notNull("properties", properties);
 
         this.uuid = UUID.randomUUID();
@@ -81,8 +82,8 @@ public final class Config implements Bufferable, Serializable {
         return 0;
     }
 
-    private static Map<String, Property> createProperties(Iterable<Property> properties) {
-        TreeMap<String, Property> ps = new TreeMap<>();
+    private static Map<String, Property> createProperties(Collection<Property> properties) {
+        LinkedHashMap<String, Property> ps = new LinkedHashMap<>(properties.size());
         for (Property p : properties) {
             ps.put(p.key, p);
         }

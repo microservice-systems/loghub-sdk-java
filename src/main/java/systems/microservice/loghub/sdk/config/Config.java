@@ -20,7 +20,6 @@ package systems.microservice.loghub.sdk.config;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.extractors.ValueOfExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.MapUtil;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.Serializable;
@@ -32,7 +31,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -46,7 +44,7 @@ public final class Config implements Bufferable, Serializable {
     private static final long serialVersionUID = 1L;
     private static final ReentrantLock lock = new ReentrantLock(false);
     private static final AtomicReference<Config> config = new AtomicReference<>(new Config());
-    private static final ConcurrentHashMap<String, Property> currentProperties = new ConcurrentHashMap<>(4096, 0.75f, 64);
+    private static final ThreadLocal<ThreadConfig> threadConfig = ThreadLocal.withInitial(() -> new ThreadConfig());
     private static final ConcurrentHashMap<String, Set<PropertyListener>> propertyListeners = new ConcurrentHashMap<>(256, 0.75f, 1);
 
     public final UUID uuid;
@@ -66,10 +64,18 @@ public final class Config implements Bufferable, Serializable {
     }
 
     public Config(Collection<Property> properties, String comment, URL url, String user, String commit) {
+        this(properties, null, null, null, null, null);
+    }
+
+    public Config(Collection<Property> properties, Property property) {
+        this(properties, property, null, null, null, null);
+    }
+
+    public Config(Collection<Property> properties, Property property, String comment, URL url, String user, String commit) {
         Argument.notNull("properties", properties);
 
         this.uuid = UUID.randomUUID();
-        this.properties = createProperties(properties);
+        this.properties = createProperties(properties, property);
         this.comment = comment;
         this.url = url;
         this.user = user;
@@ -82,56 +88,67 @@ public final class Config implements Bufferable, Serializable {
         return 0;
     }
 
-    private static Map<String, Property> createProperties(Collection<Property> properties) {
-        LinkedHashMap<String, Property> ps = new LinkedHashMap<>(properties.size());
+    private static Map<String, Property> createProperties(Collection<Property> properties, Property property) {
+        LinkedHashMap<String, Property> ps = new LinkedHashMap<>(properties.size() + ((property != null) ? 1 : 0));
         for (Property p : properties) {
             ps.put(p.key, p);
+        }
+        if (property != null) {
+            ps.put(property.key, property);
         }
         return Collections.unmodifiableMap(ps);
     }
 
-    public static <T> T getProperty(String key, Class<T> clazz) {
-        return getProperty(key, clazz, null, null, false, null);
+    public static Config getConfig() {
+        Config cfg = threadConfig.get().config;
+        return (cfg != null) ? cfg : Config.config.get();
     }
 
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue) {
-        return getProperty(key, clazz, defaultValue, null, false, null);
-    }
+    private static Config setConfig(Config config) {
+        Argument.notNull("config", config);
 
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit) {
-        return getProperty(key, clazz, defaultValue, unit, false, null);
-    }
-
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, null);
-    }
-
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, T[] possibleValues) {
-        Property p = currentProperties.get(key);
-        if (p == null) {
-            p = MapUtil.putIfAbsent(currentProperties, key, new Property(null, null, null, null, null, null, null, null, null, null, null, null));
+        ThreadConfig tc = threadConfig.get();
+        if (tc.config != null) {
+            Config cfg = tc.config;
+            tc.config = config;
+            Config.config.set(config);
+            return cfg;
+        } else {
+            Config cfg = Config.config.get();
+            Config.config.set(config);
+            return cfg;
         }
-        return p.value.get(clazz);
     }
 
-    public static <I, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, possibleValues, outputClass, ValueOfExtractor.getInstance());
+    public static Config acquireConfig() {
+        ThreadConfig tc = threadConfig.get();
+        long c = tc.count;
+        if (c == 0L) {
+            tc.config = Config.config.get();
+            tc.count++;
+        } else if (c > 0L) {
+            tc.count++;
+        } else {
+            throw new Error("This should not happen");
+        }
+        return tc.config;
     }
 
-    public static <I, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass, Extractor<I, O> extractor) {
-        return null;
-    }
-
-    public static <T extends Comparable<T>> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, Range<T> rangeValues) {
-        return null;
-    }
-
-    public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, rangeValues, outputClass, ValueOfExtractor.getInstance());
-    }
-
-    public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, Extractor<I, O> extractor) {
-        return null;
+    public static Config releaseConfig() {
+        ThreadConfig tc = threadConfig.get();
+        Config cfg = tc.config;
+        long c = tc.count;
+        if (c == 0L) {
+            throw new RuntimeException("Config is not acquired");
+        } else if (c == 1L) {
+            tc.config = null;
+            tc.count--;
+        } else if (c > 1L) {
+            tc.count--;
+        } else {
+            throw new Error("This should not happen");
+        }
+        return cfg;
     }
 
     public static List<PropertyEvent> applyConfig(Config config) {
@@ -143,7 +160,7 @@ public final class Config implements Bufferable, Serializable {
             Collection<Property> nps = config.properties.values();
             ArrayList<PropertyEvent> pes = new ArrayList<>(nps.size());
             for (Property np : nps) {
-                Property op = currentProperties.get(np.key);
+                Property op = getConfig().properties.get(np.key);
                 if (op != null) {
                     if (!np.uuid.equals(op.uuid)) {
                         pes.add(new PropertyEvent(op, np));
@@ -169,8 +186,8 @@ public final class Config implements Bufferable, Serializable {
             if (v) {
                 for (PropertyEvent pe : pes) {
                     pe.newProperty.oldProperty.set(pe.oldProperty);
-                    currentProperties.put(pe.newProperty.key, pe.newProperty);
                 }
+                setConfig(config);
                 for (PropertyEvent pe : pes) {
                     Set<PropertyListener> pls = propertyListeners.get(pe.key);
                     if (pls != null) {
@@ -186,6 +203,61 @@ public final class Config implements Bufferable, Serializable {
             return pes;
         } finally {
             lock.unlock();
+        }
+    }
+
+    public static <T> T getProperty(String key, Class<T> clazz) {
+        return getProperty(key, clazz, null, null, false, null);
+    }
+
+    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue) {
+        return getProperty(key, clazz, defaultValue, null, false, null);
+    }
+
+    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit) {
+        return getProperty(key, clazz, defaultValue, unit, false, null);
+    }
+
+    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable) {
+        return getProperty(key, clazz, defaultValue, unit, nullable, null);
+    }
+
+    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, T[] possibleValues) {
+        Config cfg = getConfig();
+        Property p = cfg.properties.get(key);
+        if (p == null) {
+            setConfig(new Config(cfg.properties.values(), new Property(null, key, null, null, null, null, null, null, null, null, null, null)));
+        }
+        return p.value.get(clazz);
+    }
+
+    public static <I, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass) {
+        return getProperty(key, clazz, defaultValue, unit, nullable, possibleValues, outputClass, ValueOfExtractor.getInstance());
+    }
+
+    public static <I, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass, Extractor<I, O> extractor) {
+        return null;
+    }
+
+    public static <T extends Comparable<T>> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, Range<T> rangeValues) {
+        return null;
+    }
+
+    public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass) {
+        return getProperty(key, clazz, defaultValue, unit, nullable, rangeValues, outputClass, ValueOfExtractor.getInstance());
+    }
+
+    public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, Extractor<I, O> extractor) {
+        return null;
+    }
+
+    private static final class ThreadConfig {
+        public Config config;
+        public long count;
+
+        public ThreadConfig() {
+            this.config = null;
+            this.count = 0L;
         }
     }
 }

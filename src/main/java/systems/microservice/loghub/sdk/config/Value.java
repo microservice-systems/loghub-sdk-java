@@ -19,7 +19,6 @@ package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
-import systems.microservice.loghub.sdk.event.Event;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
@@ -28,9 +27,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Dmitry Kotlyarov

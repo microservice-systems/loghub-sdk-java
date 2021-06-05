@@ -21,7 +21,6 @@ import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
-import systems.microservice.loghub.sdk.util.ResourceUtil;
 
 import java.io.Serializable;
 import java.net.URL;

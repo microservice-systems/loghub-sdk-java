@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class Range<T extends Comparable<T>> implements Bufferable, Serializable {
+public final class Range<T extends Comparable<T>> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final T min;
@@ -57,13 +57,5 @@ public final class Range<T extends Comparable<T>> implements Bufferable, Seriali
         Argument.notNull("value", value);
 
         return value.compareTo(max) > 0;
-    }
-
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
-        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
-        index = BufferWriter.writeObject(buffer, index, context, min);
-        index = BufferWriter.writeObject(buffer, index, context, max);
-        return index;
     }
 }

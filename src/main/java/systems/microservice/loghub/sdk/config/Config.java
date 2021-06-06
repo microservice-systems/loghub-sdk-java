@@ -19,8 +19,8 @@ package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.extractors.ValueOfExtractor;
-import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.Range;
+import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Range;
 
 import java.io.Serializable;
 import java.net.URL;

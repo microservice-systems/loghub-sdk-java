@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.util;
+package systems.microservice.loghub.sdk.utils;
 
 import java.util.LinkedList;
 import java.util.List;

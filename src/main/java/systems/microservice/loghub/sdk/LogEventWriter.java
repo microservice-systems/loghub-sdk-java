@@ -17,9 +17,9 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.util.Blob;
-import systems.microservice.loghub.sdk.util.Image;
-import systems.microservice.loghub.sdk.util.Tag;
+import systems.microservice.loghub.sdk.utils.Blob;
+import systems.microservice.loghub.sdk.utils.Image;
+import systems.microservice.loghub.sdk.utils.Tag;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;

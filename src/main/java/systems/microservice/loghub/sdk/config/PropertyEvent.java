@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.utils.Argument;
 
 import java.io.Serializable;
 

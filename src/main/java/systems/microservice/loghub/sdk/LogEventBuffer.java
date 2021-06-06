@@ -18,13 +18,13 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.Blob;
-import systems.microservice.loghub.sdk.util.Image;
-import systems.microservice.loghub.sdk.util.StringBuilderWriter;
-import systems.microservice.loghub.sdk.util.Tag;
-import systems.microservice.loghub.sdk.util.ThreadInfo;
-import systems.microservice.loghub.sdk.util.ThreadSection;
+import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Blob;
+import systems.microservice.loghub.sdk.utils.Image;
+import systems.microservice.loghub.sdk.utils.StringBuilderWriter;
+import systems.microservice.loghub.sdk.utils.Tag;
+import systems.microservice.loghub.sdk.utils.ThreadInfo;
+import systems.microservice.loghub.sdk.utils.ThreadSection;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;

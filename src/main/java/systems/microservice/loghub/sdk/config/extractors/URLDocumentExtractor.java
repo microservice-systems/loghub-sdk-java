@@ -21,7 +21,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import systems.microservice.loghub.sdk.config.Extractor;
-import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
+import systems.microservice.loghub.sdk.utils.ByteArrayOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

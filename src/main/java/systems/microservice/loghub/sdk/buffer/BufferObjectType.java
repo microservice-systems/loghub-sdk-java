@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.buffer;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.utils.Argument;
 
 import java.net.URL;
 import java.util.Date;

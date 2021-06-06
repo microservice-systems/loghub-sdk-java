@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.util.StringUtil;
+import systems.microservice.loghub.sdk.utils.StringUtil;
 
 import java.io.Serializable;
 

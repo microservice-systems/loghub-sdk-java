@@ -17,14 +17,14 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.Blob;
-import systems.microservice.loghub.sdk.util.Image;
-import systems.microservice.loghub.sdk.util.PropertiesUtil;
-import systems.microservice.loghub.sdk.util.ResourceUtil;
-import systems.microservice.loghub.sdk.util.StringUtil;
-import systems.microservice.loghub.sdk.util.Tag;
-import systems.microservice.loghub.sdk.util.TimeUtil;
+import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Blob;
+import systems.microservice.loghub.sdk.utils.Image;
+import systems.microservice.loghub.sdk.utils.PropertiesUtil;
+import systems.microservice.loghub.sdk.utils.ResourceUtil;
+import systems.microservice.loghub.sdk.utils.StringUtil;
+import systems.microservice.loghub.sdk.utils.Tag;
+import systems.microservice.loghub.sdk.utils.TimeUtil;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

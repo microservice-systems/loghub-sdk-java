@@ -32,6 +32,11 @@ public final class Color implements Serializable {
     public final short a;
 
     public Color(short r, short g, short b, short a) {
+        Argument.inRangeShort("r", r, (short) 0, (short) 255);
+        Argument.inRangeShort("g", g, (short) 0, (short) 255);
+        Argument.inRangeShort("b", b, (short) 0, (short) 255);
+        Argument.inRangeShort("a", a, (short) 0, (short) 255);
+
         this.r = r;
         this.g = g;
         this.b = b;

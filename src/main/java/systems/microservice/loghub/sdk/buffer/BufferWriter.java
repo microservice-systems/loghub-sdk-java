@@ -18,12 +18,18 @@
 package systems.microservice.loghub.sdk.buffer;
 
 import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Color;
+import systems.microservice.loghub.sdk.utils.Range;
+import systems.microservice.loghub.sdk.utils.Tag;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * @author Dmitry Kotlyarov
@@ -113,10 +119,31 @@ public final class BufferWriter {
         return writeLong(buffer, index, value.getLeastSignificantBits());
     }
 
+    public static int writeBigInteger(byte[] buffer, int index, BigInteger value) {
+        Argument.notNull("value", value);
+
+        return writeByteArray(buffer, index, value.toByteArray());
+    }
+
+    public static int writeBigDecimal(byte[] buffer, int index, BigDecimal value) {
+        Argument.notNull("value", value);
+
+        return writeString(buffer, index, value.toString());
+    }
+
     public static int writeDate(byte[] buffer, int index, Date value) {
         Argument.notNull("value", value);
 
         return writeLong(buffer, index, value.getTime());
+    }
+
+    public static int writeColor(byte[] buffer, int index, Color value) {
+        Argument.notNull("value", value);
+
+        index = writeByte(buffer, index, (byte) (value.r - ((short) 128)));
+        index = writeByte(buffer, index, (byte) (value.g - ((short) 128)));
+        index = writeByte(buffer, index, (byte) (value.b - ((short) 128)));
+        return writeByte(buffer, index, (byte) (value.a - ((short) 128)));
     }
 
     public static int writeString(byte[] buffer, int index, String value) {
@@ -365,10 +392,31 @@ public final class BufferWriter {
         return index;
     }
 
+    public static int writePattern(byte[] buffer, int index, Pattern value) {
+        Argument.notNull("value", value);
+
+        return writeString(buffer, index, value.pattern());
+    }
+
     public static int writeURL(byte[] buffer, int index, URL value) {
         Argument.notNull("value", value);
 
         return writeString(buffer, index, value.toExternalForm());
+    }
+
+    public static <T extends Comparable<T>> int writeRange(byte[] buffer, int index, Map<String, Object> context, Range<T> value) {
+        Argument.notNull("value", value);
+
+        index = BufferWriter.writeObject(buffer, index, context, value.min);
+        return BufferWriter.writeObject(buffer, index, context, value.max);
+    }
+
+    public static int writeTag(byte[] buffer, int index, Tag value) {
+        Argument.notNull("value", value);
+
+        index = BufferWriter.writeString(buffer, index, value.key);
+        index = BufferWriter.writeObject(buffer, index, null, value.value);
+        return BufferWriter.writeStringRef(buffer, index, value.unit);
     }
 
     public static int writeBufferable(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {

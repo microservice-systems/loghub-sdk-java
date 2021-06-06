@@ -102,7 +102,7 @@ public final class Property implements Bufferable, Serializable {
         index = BufferWriter.writeBufferable(buffer, index, context, value);
         index = BufferWriter.writeBufferable(buffer, index, context, defaultValue);
         index = BufferWriter.writeObjectCollectionRef(buffer, index, context, possibleValues);
-        index = BufferWriter.writeBufferableRef(buffer, index, context, rangeValues);
+        index = BufferWriter.writeRange(buffer, index, context, rangeValues);
         index = BufferWriter.writeString(buffer, index, unit);
         index = BufferWriter.writeString(buffer, index, description);
         index = BufferWriter.writeURL(buffer, index, url);

@@ -567,6 +567,30 @@ public final class BufferWriter {
         return index;
     }
 
+    public static int writeBigIntegerArray(byte[] buffer, int index, BigInteger[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeBigInteger(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeBigDecimalArray(byte[] buffer, int index, BigDecimal[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeBigDecimal(buffer, index, value[i]);
+        }
+        return index;
+    }
+
     public static int writeDateArray(byte[] buffer, int index, Date[] value) {
         Argument.notNull("value", value);
 
@@ -575,6 +599,18 @@ public final class BufferWriter {
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
             index = writeDate(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeColorArray(byte[] buffer, int index, Color[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeColor(buffer, index, value[i]);
         }
         return index;
     }
@@ -591,6 +627,18 @@ public final class BufferWriter {
         return index;
     }
 
+    public static int writePatternArray(byte[] buffer, int index, Pattern[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writePattern(buffer, index, value[i]);
+        }
+        return index;
+    }
+
     public static int writeURLArray(byte[] buffer, int index, URL[] value) {
         Argument.notNull("value", value);
 
@@ -599,6 +647,55 @@ public final class BufferWriter {
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
             index = writeURL(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static int writeRangeArray(byte[] buffer, int index, Map<String, Object> context, Range[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeRange(buffer, index, context, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeTagArray(byte[] buffer, int index, Tag[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeTag(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeImageArray(byte[] buffer, int index, Image[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeImage(buffer, index, value[i]);
+        }
+        return index;
+    }
+
+    public static int writeBlobArray(byte[] buffer, int index, Blob[] value) {
+        Argument.notNull("value", value);
+
+        index = writeVersion(buffer, index, (byte) 1);
+        int l = value.length;
+        index = writeLength(buffer, index, l);
+        for (int i = 0; i < l; ++i) {
+            index = writeBlob(buffer, index, value[i]);
         }
         return index;
     }

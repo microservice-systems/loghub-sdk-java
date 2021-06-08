@@ -793,10 +793,37 @@ public final class BufferWriter {
         }
     }
 
+    public static int writeBigIntegerRef(byte[] buffer, int index, BigInteger value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBigInteger(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBigDecimalRef(byte[] buffer, int index, BigDecimal value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBigDecimal(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
     public static int writeDateRef(byte[] buffer, int index, Date value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
             return writeDate(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeColorRef(byte[] buffer, int index, Color value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeColor(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
@@ -856,10 +883,55 @@ public final class BufferWriter {
         }
     }
 
+    public static int writePatternRef(byte[] buffer, int index, Pattern value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writePattern(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
     public static int writeURLRef(byte[] buffer, int index, URL value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
             return writeURL(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static <T extends Comparable<T>> int writeRangeRef(byte[] buffer, int index, Map<String, Object> context, Range<T> value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeRange(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeTagRef(byte[] buffer, int index, Tag value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeTag(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeImageRef(byte[] buffer, int index, Image value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeImage(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBlobRef(byte[] buffer, int index, Blob value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBlob(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }

@@ -129,14 +129,14 @@ public final class LogHub {
             flushEventsThread.start();
             flushMetricsThread.start();
             Runtime.getRuntime().addShutdownHook(shutdownThread);
-            logEvent(true, System.currentTimeMillis(), LogHub.class.getCanonicalName(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), "Hello World!");
+            log(true, System.currentTimeMillis(), LogHub.class.getCanonicalName(), LogLevel.LIFECYCLE.id, LogLevel.LIFECYCLE.name(), "Hello World!");
             if (uncaughtExceptionHandler) {
                 try {
                     Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
                         @Override
                         public void uncaughtException(Thread t, Throwable e) {
                             try {
-                                logEvent(System.currentTimeMillis(), LogHub.class.getCanonicalName(), LogLevel.ERROR.id, LogLevel.ERROR.name(), e, null, null, null, "Uncaught exception: " + e.getClass().getCanonicalName());
+                                log(System.currentTimeMillis(), LogHub.class.getCanonicalName(), LogLevel.ERROR.id, LogLevel.ERROR.name(), e, null, null, null, "Uncaught exception: " + e.getClass().getCanonicalName());
                             } catch (Throwable ex) {
                                 info(LogHub.class, ex.toString());
                             }
@@ -1082,7 +1082,7 @@ public final class LogHub {
         }
     }
 
-    private static void logEventOut(long time, String logger, int level, String levelName, Throwable exception, String message) {
+    private static void logOut(long time, String logger, int level, String levelName, Throwable exception, String message) {
         if (outLock != null) {
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", time);
             String s = String.format("%s [%s] [%s] %s - %s", t, Thread.currentThread().getName(), logger, levelName, message);
@@ -1100,20 +1100,20 @@ public final class LogHub {
         }
     }
 
-    private static void logEvent(boolean start, long time, String logger, int level, String levelName, String message) {
+    private static void log(boolean start, long time, String logger, int level, String levelName, String message) {
     }
 
-    public static void logEventBegin(long time, String logger, int level, String levelName, String message) {
+    public static void logBegin(long time, String logger, int level, String levelName, String message) {
     }
 
-    public static void logEventEnd(long time, String logger, int level, String levelName, String message) {
+    public static void logEnd(long time, String logger, int level, String levelName, String message) {
     }
 
-    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, String message) {
-        logEvent(time, logger, level, levelName, exception, tags, images, blobs, null, message);
+    public static void log(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, String message) {
+        log(time, logger, level, levelName, exception, tags, images, blobs, null, message);
     }
 
-    public static void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
+    public static void log(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
         if (eventWriter != null) {
             eventWriter.logEvent(time, logger, level, levelName, exception, tags, images, blobs, callback, message);
         }

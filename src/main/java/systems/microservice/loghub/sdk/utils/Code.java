@@ -63,7 +63,7 @@ public class Code implements AutoCloseable, Serializable {
         for (Tag t : tags) {
             ti.addTag(t);
         }
-        LogHub.logEventBegin(this.begin, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), this.info.beginMessage);
+        LogHub.logBegin(this.begin, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), this.info.beginMessage);
         ti.depth++;
     }
 
@@ -73,7 +73,7 @@ public class Code implements AutoCloseable, Serializable {
         LogHub.logMetric(info.metric, end - begin, 0, "ms");
         ThreadInfo ti = ThreadInfo.getInstance();
         ti.depth--;
-        LogHub.logEventEnd(end, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), info.endMessage);
+        LogHub.logEnd(end, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), info.endMessage);
         for (Tag t : tags) {
             ti.removeTag(t.key);
         }

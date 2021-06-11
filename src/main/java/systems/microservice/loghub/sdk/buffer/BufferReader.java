@@ -18,8 +18,21 @@
 package systems.microservice.loghub.sdk.buffer;
 
 import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Blob;
+import systems.microservice.loghub.sdk.utils.Color;
+import systems.microservice.loghub.sdk.utils.Image;
+import systems.microservice.loghub.sdk.utils.Range;
+import systems.microservice.loghub.sdk.utils.Tag;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * @author Dmitry Kotlyarov
@@ -143,5 +156,289 @@ public final class BufferReader {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new BufferException(e);
         }
+    }
+
+    public byte readVersion() {
+    }
+
+    public int readLength() {
+    }
+
+    public boolean readBoolean() {
+    }
+
+    public byte readByte() {
+    }
+
+    public char readChar() {
+    }
+
+    public short readShort() {
+    }
+
+    public int readInt() {
+    }
+
+    public long readLong() {
+    }
+
+    public float readFloat() {
+    }
+
+    public double readDouble() {
+    }
+
+    public UUID readUUID() {
+    }
+
+    public BigInteger readBigInteger() {
+    }
+
+    public BigDecimal readBigDecimal() {
+    }
+
+    public Date readDate() {
+    }
+
+    public Color readColor() {
+    }
+
+    public String readString() {
+    }
+
+    public Pattern readPattern() {
+    }
+
+    public URL readURL() {
+    }
+
+    public <T extends Comparable<T>> Range<T> readRange(Class<T> clazz) {
+    }
+
+    public Tag readTag() {
+    }
+
+    public Image readImage() {
+    }
+
+    public Blob readBlob() {
+    }
+
+    public <T extends Bufferable> T readBufferable(Class<T> clazz) {
+    }
+
+    public boolean[] readBooleanArray() {
+    }
+
+    public byte[] readByteArray() {
+    }
+
+    public char[] readCharArray() {
+    }
+
+    public short[] readShortArray() {
+    }
+
+    public int[] readIntArray() {
+    }
+
+    public long[] readLongArray() {
+    }
+
+    public float[] readFloatArray() {
+    }
+
+    public double[] readDoubleArray() {
+    }
+
+    public UUID[] readUUIDArray() {
+    }
+
+    public BigInteger[] readBigIntegerArray() {
+    }
+
+    public BigDecimal[] readBigDecimalArray() {
+    }
+
+    public Date[] readDateArray() {
+    }
+
+    public Color[] readColorArray() {
+    }
+
+    public String[] readStringArray() {
+    }
+
+    public Pattern[] readPatternArray() {
+    }
+
+    public URL[] readURLArray() {
+    }
+
+    @SuppressWarnings("rawtypes")
+    public <T extends Comparable<T>> Range[] readRangeArray(Class<T> clazz) {
+    }
+
+    public Tag[] readTagArray() {
+    }
+
+    public Image[] readImageArray() {
+    }
+
+    public Blob[] readBlobArray() {
+    }
+
+    public <T extends Bufferable> T[] readBufferableArray(Class<T> clazz) {
+    }
+
+    public Boolean readBooleanRef() {
+    }
+
+    public Byte readByteRef() {
+    }
+
+    public Character readCharacterRef() {
+    }
+
+    public Short readShortRef() {
+    }
+
+    public Integer readIntegerRef() {
+    }
+
+    public Long readLongRef() {
+    }
+
+    public Float readFloatRef() {
+    }
+
+    public Double readDoubleRef() {
+    }
+
+    public UUID readUUIDRef() {
+    }
+
+    public BigInteger readBigIntegerRef() {
+    }
+
+    public BigDecimal readBigDecimalRef() {
+    }
+
+    public Date readDateRef() {
+    }
+
+    public Color readColorRef() {
+    }
+
+    public String readStringRef() {
+    }
+
+    public Pattern readPatternRef() {
+    }
+
+    public URL readURLRef() {
+    }
+
+    public <T extends Comparable<T>> Range<T> readRangeRef(Class<T> clazz) {
+    }
+
+    public Tag readTagRef() {
+    }
+
+    public Image readImageRef() {
+    }
+
+    public Blob readBlobRef() {
+    }
+
+    public <T extends Bufferable> T readBufferableRef(Class<T> clazz) {
+    }
+
+    public boolean[] readBooleanArrayRef() {
+    }
+
+    public byte[] readByteArrayRef() {
+    }
+
+    public char[] readCharArrayRef() {
+    }
+
+    public short[] readShortArrayRef() {
+    }
+
+    public int[] readIntArrayRef() {
+    }
+
+    public long[] readLongArrayRef() {
+    }
+
+    public float[] readFloatArrayRef() {
+    }
+
+    public double[] readDoubleArrayRef() {
+    }
+
+    public UUID[] readUUIDArrayRef() {
+    }
+
+    public BigInteger[] readBigIntegerArrayRef() {
+    }
+
+    public BigDecimal[] readBigDecimalArrayRef() {
+    }
+
+    public Date[] readDateArrayRef() {
+    }
+
+    public Color[] readColorArrayRef() {
+    }
+
+    public String[] readStringArrayRef() {
+    }
+
+    public Pattern[] readPatternArrayRef() {
+    }
+
+    public URL[] readURLArrayRef() {
+    }
+
+    @SuppressWarnings("rawtypes")
+    public <T extends Comparable<T>> Range[] readRangeArrayRef(Class<T> clazz) {
+    }
+
+    public Tag[] readTagArrayRef() {
+    }
+
+    public Image[] readImageArrayRef() {
+    }
+
+    public Blob[] readBlobArrayRef() {
+    }
+
+    public <T extends Bufferable> T[] readBufferableArrayRef(Class<T> clazz) {
+    }
+
+    public <T> T readObject(Class<T> clazz) {
+    }
+
+    public <T> T readObjectRef(Class<T> clazz) {
+    }
+
+    public <T> T[] readObjectArray(Class<T> clazz) {
+    }
+
+    public <T> T[] readObjectArrayRef(Class<T> clazz) {
+    }
+
+    public <C extends Collection<T>, T> C readObjectCollection(C collection, Class<T> clazz) {
+    }
+
+    public <C extends Collection<T>, T> C readObjectCollectionRef(C collection, Class<T> clazz) {
+    }
+
+    public <M extends Map<K, V>, K, V> M readObjectMap(M map, Class<K> keyClass, Class<V> valueClass) {
+    }
+
+    public <M extends Map<K, V>, K, V> M readObjectMapRef(M map, Class<K> keyClass, Class<V> valueClass) {
     }
 }

@@ -946,6 +946,197 @@ public final class BufferWriter {
         }
     }
 
+    public static int writeBooleanArrayRef(byte[] buffer, int index, boolean[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBooleanArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeByteArrayRef(byte[] buffer, int index, byte[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeByteArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeCharArrayRef(byte[] buffer, int index, char[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeCharArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeShortArrayRef(byte[] buffer, int index, short[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeShortArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeIntArrayRef(byte[] buffer, int index, int[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeIntArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeLongArrayRef(byte[] buffer, int index, long[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeLongArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeFloatArrayRef(byte[] buffer, int index, float[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeFloatArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeDoubleArrayRef(byte[] buffer, int index, double[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeDoubleArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeUUIDArrayRef(byte[] buffer, int index, UUID[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeUUIDArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBigIntegerArrayRef(byte[] buffer, int index, BigInteger[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBigIntegerArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBigDecimalArrayRef(byte[] buffer, int index, BigDecimal[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBigDecimalArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeDateArrayRef(byte[] buffer, int index, Date[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeDateArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeColorArrayRef(byte[] buffer, int index, Color[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeColorArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeStringArrayRef(byte[] buffer, int index, String[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeStringArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writePatternArrayRef(byte[] buffer, int index, Pattern[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writePatternArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeURLArrayRef(byte[] buffer, int index, URL[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeURLArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static int writeRangeArrayRef(byte[] buffer, int index, Map<String, Object> context, Range[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeRangeArray(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeTagArrayRef(byte[] buffer, int index, Tag[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeTagArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeImageArrayRef(byte[] buffer, int index, Image[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeImageArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBlobArrayRef(byte[] buffer, int index, Blob[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBlobArray(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    public static int writeBufferableArrayRef(byte[] buffer, int index, Map<String, Object> context, Bufferable[] value) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writeBufferableArray(buffer, index, context, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
     public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Object value) {
         Argument.notNull("value", value);
 
@@ -990,6 +1181,7 @@ public final class BufferWriter {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static int writeObjectCollection(byte[] buffer, int index, Map<String, Object> context, Collection value) {
         Argument.notNull("value", value);
 
@@ -1002,6 +1194,7 @@ public final class BufferWriter {
         return index;
     }
 
+    @SuppressWarnings("rawtypes")
     public static int writeObjectCollectionRef(byte[] buffer, int index, Map<String, Object> context, Collection value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
@@ -1011,6 +1204,7 @@ public final class BufferWriter {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static int writeObjectMap(byte[] buffer, int index, Map<String, Object> context, Map value) {
         Argument.notNull("value", value);
 
@@ -1025,6 +1219,7 @@ public final class BufferWriter {
         return index;
     }
 
+    @SuppressWarnings("rawtypes")
     public static int writeObjectMapRef(byte[] buffer, int index, Map<String, Object> context, Map value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);

@@ -156,9 +156,22 @@ public final class BufferReader {
     }
 
     public short readShort() {
+        byte b1 = readByte();
+        byte b0 = readByte();
+        int v = ((((int) b1 & 0xFF) << 8) |
+                 (((int) b0 & 0xFF)));
+        return (short) v;
     }
 
     public int readInt() {
+        byte b3 = readByte();
+        byte b2 = readByte();
+        byte b1 = readByte();
+        byte b0 = readByte();
+        return ((((int) b3 & 0xFF) << 24) |
+                (((int) b2 & 0xFF) << 16) |
+                (((int) b1 & 0xFF) <<  8) |
+                (((int) b0 & 0xFF)));
     }
 
     public long readLong() {
@@ -181,9 +194,11 @@ public final class BufferReader {
     }
 
     public float readFloat() {
+        return Float.intBitsToFloat(readInt());
     }
 
     public double readDouble() {
+        return Double.longBitsToDouble(readLong());
     }
 
     public UUID readUUID() {

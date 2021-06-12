@@ -113,22 +113,24 @@ public final class BufferReader {
     }
 
     public int readLength(int elementSize) {
+        int idx = index;
         int v = readInt();
         if ((v >= 0) && (v <= (buffer.length - index) / elementSize)) {
             return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal length %d for elements of size %d", buffer.length, index, v, elementSize));
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal length %d for elements of size %d", buffer.length, idx, v, elementSize));
         }
     }
 
     public boolean readBoolean() {
+        int idx = index;
         byte v = readByte();
         if (v == 1) {
             return true;
         } else if (v == 0) {
             return false;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal boolean byte value %d", buffer.length, index, v));
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal boolean value %d", buffer.length, idx, v));
         }
     }
 
@@ -139,12 +141,13 @@ public final class BufferReader {
     }
 
     public char readChar() {
+        int idx = index;
         int v = 0;
         int sh = 0;
         byte b = -1;
         for (; b < 0; sh += 7) {
             if (sh > 14) {
-                throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read char of length larger than 3 bytes", buffer.length, index));
+                throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read char of length larger than 3 bytes", buffer.length, idx));
             }
             b = readByte();
             int l = b;
@@ -202,6 +205,15 @@ public final class BufferReader {
     }
 
     public UUID readUUID() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            long msb = readLong();
+            long lsb = readLong();
+            return new UUID(msb, lsb);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public BigInteger readBigInteger() {

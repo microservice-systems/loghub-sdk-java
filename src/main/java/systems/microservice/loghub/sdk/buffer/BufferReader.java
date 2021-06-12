@@ -82,12 +82,6 @@ public final class BufferReader {
         this.index += count;
     }
 
-    public byte readByte() {
-        byte v = buffer[index];
-        index++;
-        return v;
-    }
-
     public byte[] readBytes() {
         int l = 1;
         if ((l >= 0) && (l <= buffer.length - index)) {
@@ -99,6 +93,49 @@ public final class BufferReader {
         } else {
             throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read bytes of length %d", buffer.length, index, l));
         }
+    }
+
+    public long[] readLongs() {
+        int l = 1;
+        if ((l >= 0) && (l <= buffer.length - index)) {
+            long[] v = new long[l];
+            for (int i = 0; i < l; ++i) {
+                v[i] = readLong();
+            }
+            return v;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read longs of length %d", buffer.length, index, l));
+        }
+    }
+
+    public byte readVersion() {
+        return readByte();
+    }
+
+    public int readLength(int elementSize) {
+        int v = readInt();
+        if ((v >= 0) && (v <= (buffer.length - index) / elementSize)) {
+            return v;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal length %d for elements of size %d", buffer.length, index, v, elementSize));
+        }
+    }
+
+    public boolean readBoolean() {
+        byte v = readByte();
+        if (v == 1) {
+            return true;
+        } else if (v == 0) {
+            return false;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal boolean byte value %d", buffer.length, index, v));
+        }
+    }
+
+    public byte readByte() {
+        byte v = buffer[index];
+        index++;
+        return v;
     }
 
     public char readChar() {
@@ -118,6 +155,12 @@ public final class BufferReader {
         return (char) v;
     }
 
+    public short readShort() {
+    }
+
+    public int readInt() {
+    }
+
     public long readLong() {
         byte b7 = readByte();
         byte b6 = readByte();
@@ -135,51 +178,6 @@ public final class BufferReader {
                 (((long) b2 & 0xFF) << 16) |
                 (((long) b1 & 0xFF) <<  8) |
                 (((long) b0 & 0xFF)));
-    }
-
-    public long[] readLongs() {
-        int l = 1;
-        if ((l >= 0) && (l <= buffer.length - index)) {
-            long[] v = new long[l];
-            for (int i = 0; i < l; ++i) {
-                v[i] = readLong();
-            }
-            return v;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read longs of length %d", buffer.length, index, l));
-        }
-    }
-
-    public <T extends Bufferable> T readBufferable(Class<T> clazz) {
-        try {
-            return clazz.getConstructor(BufferReader.class).newInstance(this);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new BufferException(e);
-        }
-    }
-
-    public byte readVersion() {
-    }
-
-    public int readLength() {
-    }
-
-    public boolean readBoolean() {
-    }
-
-    public byte readByte() {
-    }
-
-    public char readChar() {
-    }
-
-    public short readShort() {
-    }
-
-    public int readInt() {
-    }
-
-    public long readLong() {
     }
 
     public float readFloat() {
@@ -225,6 +223,11 @@ public final class BufferReader {
     }
 
     public <T extends Bufferable> T readBufferable(Class<T> clazz) {
+        try {
+            return clazz.getConstructor(BufferReader.class).newInstance(this);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new BufferException(e);
+        }
     }
 
     public boolean[] readBooleanArray() {

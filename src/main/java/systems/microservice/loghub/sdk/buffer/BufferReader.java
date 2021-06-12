@@ -27,6 +27,7 @@ import systems.microservice.loghub.sdk.utils.Tag;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Date;
@@ -217,36 +218,145 @@ public final class BufferReader {
     }
 
     public BigInteger readBigInteger() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            byte[] v = readByteArray();
+            return new BigInteger(v);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public BigDecimal readBigDecimal() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            String v = readString();
+            return new BigDecimal(v);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public Date readDate() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            long v = readLong();
+            return new Date(v);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public Color readColor() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            short r = readByte();
+            short g = readByte();
+            short b = readByte();
+            short a = readByte();
+            return new Color((short) (r + ((short) 128)), (short) (g + ((short) 128)), (short) (b + ((short) 128)), (short) (a + ((short) 128)));
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public String readString() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            int l = readLength(1);
+            char[] v = new char[Math.min(l, 65536)];
+            for (int i = 0; i < l; ++i) {
+                if (i >= v.length) {
+                    char[] nv = new char[v.length * 2];
+                    System.arraycopy(v, 0, nv, 0, v.length);
+                    v = nv;
+                }
+                v[i] = readChar();
+            }
+            return new String(v, 0, l);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public Pattern readPattern() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            String v = readString();
+            return Pattern.compile(v);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public URL readURL() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            String v = readString();
+            try {
+                return new URL(v);
+            } catch (MalformedURLException e) {
+                throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal url value '%s'", buffer.length, idx, v), e);
+            }
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public <T extends Comparable<T>> Range<T> readRange(Class<T> clazz) {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            T min = readObject(clazz);
+            T max = readObject(clazz);
+            return new Range<>(min, max);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public Tag readTag() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            String k = readString();
+            Object v = readObject(Object.class);
+            String u = readStringRef();
+            return new Tag(k, v, u);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public Image readImage() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            byte[] c = readByteArray();
+            String ct = readString();
+            return new Image(c, ct);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public Blob readBlob() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            byte[] c = readByteArray();
+            String ct = readString();
+            return new Blob(c, ct);
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public <T extends Bufferable> T readBufferable(Class<T> clazz) {

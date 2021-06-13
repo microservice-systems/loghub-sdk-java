@@ -526,6 +526,29 @@ public final class BufferReader {
     }
 
     public float[] readFloatArray() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            int l = readLength(1);
+            float[] v = new float[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+            for (int i = 0; i < l; ++i) {
+                if (i >= v.length) {
+                    float[] nv = new float[v.length * 2];
+                    System.arraycopy(v, 0, nv, 0, v.length);
+                    v = nv;
+                }
+                v[i] = readFloat();
+            }
+            if (l == v.length) {
+                return v;
+            } else {
+                float[] nv = new float[l];
+                System.arraycopy(v, 0, nv, 0, l);
+                return nv;
+            }
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public double[] readDoubleArray() {

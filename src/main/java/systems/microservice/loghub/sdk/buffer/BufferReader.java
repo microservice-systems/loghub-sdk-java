@@ -40,6 +40,8 @@ import java.util.regex.Pattern;
  * @since 1.0
  */
 public final class BufferReader {
+    public static final int ARRAY_READ_LENGTH_MAX = 65536;
+
     private final byte[] buffer;
     private int index;
 
@@ -269,7 +271,7 @@ public final class BufferReader {
         byte ver = readVersion();
         if (ver == 1) {
             int l = readLength(1);
-            char[] v = new char[Math.min(l, 65536)];
+            char[] v = new char[Math.min(l, ARRAY_READ_LENGTH_MAX)];
             for (int i = 0; i < l; ++i) {
                 if (i >= v.length) {
                     char[] nv = new char[v.length * 2];
@@ -372,7 +374,7 @@ public final class BufferReader {
         byte ver = readVersion();
         if (ver == 1) {
             int l = readLength(1);
-            boolean[] v = new boolean[Math.min(l, 65536)];
+            boolean[] v = new boolean[Math.min(l, ARRAY_READ_LENGTH_MAX)];
             for (int i = 0; i < l; ++i) {
                 if (i >= v.length) {
                     boolean[] nv = new boolean[v.length * 2];
@@ -394,6 +396,29 @@ public final class BufferReader {
     }
 
     public byte[] readByteArray() {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            int l = readLength(1);
+            byte[] v = new byte[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+            for (int i = 0; i < l; ++i) {
+                if (i >= v.length) {
+                    byte[] nv = new byte[v.length * 2];
+                    System.arraycopy(v, 0, nv, 0, v.length);
+                    v = nv;
+                }
+                v[i] = readByte();
+            }
+            if (l == v.length) {
+                return v;
+            } else {
+                byte[] nv = new byte[l];
+                System.arraycopy(v, 0, nv, 0, l);
+                return nv;
+            }
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public char[] readCharArray() {

@@ -17,11 +17,7 @@
 
 package systems.microservice.loghub.sdk.utils;
 
-import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
-
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov

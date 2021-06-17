@@ -919,153 +919,567 @@ public final class BufferReader {
     }
 
     public Boolean readBooleanRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Byte readByteRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readByte();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Character readCharacterRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readChar();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Short readShortRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readShort();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Integer readIntegerRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readInt();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Long readLongRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readLong();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Float readFloatRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readFloat();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Double readDoubleRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readDouble();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public UUID readUUIDRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readUUID();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public BigInteger readBigIntegerRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBigInteger();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public BigDecimal readBigDecimalRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBigDecimal();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Date readDateRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readDate();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Color readColorRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readColor();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public String readStringRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readString();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Pattern readPatternRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readPattern();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public URL readURLRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readURL();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <T extends Comparable<T>> Range<T> readRangeRef(Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readRange(clazz);
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Tag readTagRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readTag();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Image readImageRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readImage();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Blob readBlobRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBlob();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <T extends Bufferable> T readBufferableRef(Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBufferable(clazz);
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public boolean[] readBooleanArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public byte[] readByteArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public char[] readCharArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public short[] readShortArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public int[] readIntArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public long[] readLongArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public float[] readFloatArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public double[] readDoubleArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public UUID[] readUUIDArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public BigInteger[] readBigIntegerArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public BigDecimal[] readBigDecimalArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Date[] readDateArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Color[] readColorArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public String[] readStringArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Pattern[] readPatternArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public URL[] readURLArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     @SuppressWarnings("rawtypes")
     public <T extends Comparable<T>> Range[] readRangeArrayRef(Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Tag[] readTagArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Image[] readImageArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public Blob[] readBlobArrayRef() {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <T extends Bufferable> T[] readBufferableArrayRef(Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <T> T readObject(Class<T> clazz) {
     }
 
     public <T> T readObjectRef(Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <T> T[] readObjectArray(Class<T> clazz) {
     }
 
     public <T> T[] readObjectArrayRef(Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <C extends Collection<T>, T> C readObjectCollection(C collection, Class<T> clazz) {
     }
 
     public <C extends Collection<T>, T> C readObjectCollectionRef(C collection, Class<T> clazz) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 
     public <M extends Map<K, V>, K, V> M readObjectMap(M map, Class<K> keyClass, Class<V> valueClass) {
     }
 
     public <M extends Map<K, V>, K, V> M readObjectMapRef(M map, Class<K> keyClass, Class<V> valueClass) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return readBoolean();
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
     }
 }

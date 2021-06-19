@@ -1174,7 +1174,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readBooleanArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1186,7 +1186,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readByteArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1198,7 +1198,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readCharArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1210,7 +1210,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readShortArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1222,7 +1222,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readIntArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1234,7 +1234,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readLongArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1246,7 +1246,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readFloatArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1258,7 +1258,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readDoubleArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {

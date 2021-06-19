@@ -1270,7 +1270,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readUUIDArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1282,7 +1282,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readBigIntegerArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1294,7 +1294,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readBigDecimalArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1306,7 +1306,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readDateArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1318,7 +1318,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readColorArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1330,7 +1330,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readStringArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1342,7 +1342,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readPatternArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1354,7 +1354,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readURLArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1367,7 +1367,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readRangeArray(clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1379,7 +1379,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readTagArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1391,7 +1391,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readImageArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1403,7 +1403,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readBlobArray();
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1415,7 +1415,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readBufferableArray(clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1430,7 +1430,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readObject(clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1445,7 +1445,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readObjectArray(clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1460,7 +1460,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readObjectCollection(collection, clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1475,7 +1475,7 @@ public final class BufferReader {
         int idx = index;
         byte ref = readByte();
         if (ref == (byte) 1) {
-            return readBoolean();
+            return readObjectMap(map, keyClass, valueClass);
         } else if (ref == (byte) 0) {
             return null;
         } else {

@@ -1423,7 +1423,21 @@ public final class BufferReader {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T readObject(Class<T> clazz) {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            byte otid = readByte();
+            BufferObjectType ot = BufferObjectType.getObjectType(otid);
+            if (ot != null) {
+                return (T) ot.reader.read(this);
+            } else {
+                throw new BufferException(String.format("Class with id %d is not supported", otid));
+            }
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public <T> T readObjectRef(Class<T> clazz) {

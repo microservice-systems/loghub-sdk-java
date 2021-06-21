@@ -1452,7 +1452,31 @@ public final class BufferReader {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T[] readObjectArray(Class<T> clazz) {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            int l = readLength(1);
+            T[] v = (T[]) Array.newInstance(clazz, Math.min(l, ARRAY_READ_LENGTH_MAX));
+            for (int i = 0; i < l; ++i) {
+                if (i >= v.length) {
+                    T[] nv = (T[]) Array.newInstance(clazz, v.length * 2);
+                    System.arraycopy(v, 0, nv, 0, v.length);
+                    v = nv;
+                }
+                v[i] = readObject(clazz);
+            }
+            if (l == v.length) {
+                return v;
+            } else {
+                T[] nv = (T[]) Array.newInstance(clazz, l);
+                System.arraycopy(v, 0, nv, 0, l);
+                return nv;
+            }
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public <T> T[] readObjectArrayRef(Class<T> clazz) {

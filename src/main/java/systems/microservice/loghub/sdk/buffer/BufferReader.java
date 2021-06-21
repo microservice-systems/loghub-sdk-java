@@ -1492,6 +1492,17 @@ public final class BufferReader {
     }
 
     public <C extends Collection<T>, T> C readObjectCollection(C collection, Class<T> clazz) {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            int l = readLength(1);
+            for (int i = 0; i < l; ++i) {
+                collection.add(readObject(clazz));
+            }
+            return collection;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public <C extends Collection<T>, T> C readObjectCollectionRef(C collection, Class<T> clazz) {
@@ -1507,6 +1518,19 @@ public final class BufferReader {
     }
 
     public <M extends Map<K, V>, K, V> M readObjectMap(M map, Class<K> keyClass, Class<V> valueClass) {
+        int idx = index;
+        byte ver = readVersion();
+        if (ver == 1) {
+            int l = readLength(1);
+            for (int i = 0; i < l; ++i) {
+                K k = readObject(keyClass);
+                V v = readObject(valueClass);
+                map.put(k, v);
+            }
+            return map;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        }
     }
 
     public <M extends Map<K, V>, K, V> M readObjectMapRef(M map, Class<K> keyClass, Class<V> valueClass) {

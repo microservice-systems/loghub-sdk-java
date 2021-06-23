@@ -117,7 +117,6 @@ public final class BufferWriter {
     public static int writeUUID(byte[] buffer, int index, UUID value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         index = writeLong(buffer, index, value.getMostSignificantBits());
         return writeLong(buffer, index, value.getLeastSignificantBits());
     }
@@ -125,28 +124,24 @@ public final class BufferWriter {
     public static int writeBigInteger(byte[] buffer, int index, BigInteger value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         return writeByteArray(buffer, index, value.toByteArray());
     }
 
     public static int writeBigDecimal(byte[] buffer, int index, BigDecimal value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         return writeString(buffer, index, value.toString());
     }
 
     public static int writeDate(byte[] buffer, int index, Date value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         return writeLong(buffer, index, value.getTime());
     }
 
     public static int writeColor(byte[] buffer, int index, Color value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         index = writeByte(buffer, index, (byte) (value.r - ((short) 128)));
         index = writeByte(buffer, index, (byte) (value.g - ((short) 128)));
         index = writeByte(buffer, index, (byte) (value.b - ((short) 128)));
@@ -156,7 +151,6 @@ public final class BufferWriter {
     public static int writeString(byte[] buffer, int index, String value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int ci = value.length();
         index = writeLength(buffer, index, ci);
         for (int i = 0; i < ci; ++i) {
@@ -171,7 +165,6 @@ public final class BufferWriter {
             param1 = "null";
         }
 
-        index = writeVersion(buffer, index, (byte) 1);
         int idx = index;
         int l = 0;
         int ci = value.length();
@@ -210,7 +203,6 @@ public final class BufferWriter {
             param2 = "null";
         }
 
-        index = writeVersion(buffer, index, (byte) 1);
         int idx = index;
         int l = 0;
         int ci = value.length();
@@ -255,7 +247,6 @@ public final class BufferWriter {
             param3 = "null";
         }
 
-        index = writeVersion(buffer, index, (byte) 1);
         int idx = index;
         int l = 0;
         int ci = value.length();
@@ -306,7 +297,6 @@ public final class BufferWriter {
             param4 = "null";
         }
 
-        index = writeVersion(buffer, index, (byte) 1);
         int idx = index;
         int l = 0;
         int ci = value.length();
@@ -363,7 +353,6 @@ public final class BufferWriter {
             param5 = "null";
         }
 
-        index = writeVersion(buffer, index, (byte) 1);
         int idx = index;
         int l = 0;
         int ci = value.length();
@@ -408,21 +397,18 @@ public final class BufferWriter {
     public static int writePattern(byte[] buffer, int index, Pattern value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         return writeString(buffer, index, value.pattern());
     }
 
     public static int writeURL(byte[] buffer, int index, URL value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         return writeString(buffer, index, value.toExternalForm());
     }
 
     public static <T extends Comparable<T>> int writeRange(byte[] buffer, int index, Map<String, Object> context, Range<T> value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         index = writeObject(buffer, index, context, value.min);
         return writeObject(buffer, index, context, value.max);
     }
@@ -430,7 +416,6 @@ public final class BufferWriter {
     public static int writeTag(byte[] buffer, int index, Tag value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         index = writeString(buffer, index, value.key);
         index = writeObject(buffer, index, null, value.value);
         return writeStringRef(buffer, index, value.unit);
@@ -439,7 +424,6 @@ public final class BufferWriter {
     public static int writeImage(byte[] buffer, int index, Image value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         index = writeByteArray(buffer, index, value.content);
         return writeString(buffer, index, value.contentType);
     }
@@ -447,7 +431,6 @@ public final class BufferWriter {
     public static int writeBlob(byte[] buffer, int index, Blob value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         index = writeByteArray(buffer, index, value.content);
         return writeString(buffer, index, value.contentType);
     }
@@ -455,14 +438,12 @@ public final class BufferWriter {
     public static int writeBufferable(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         return value.write(buffer, index, context);
     }
 
     public static int writeBooleanArray(byte[] buffer, int index, boolean[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -474,7 +455,6 @@ public final class BufferWriter {
     public static int writeByteArray(byte[] buffer, int index, byte[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -486,7 +466,6 @@ public final class BufferWriter {
     public static int writeCharArray(byte[] buffer, int index, char[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -498,7 +477,6 @@ public final class BufferWriter {
     public static int writeShortArray(byte[] buffer, int index, short[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -510,7 +488,6 @@ public final class BufferWriter {
     public static int writeIntArray(byte[] buffer, int index, int[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -522,7 +499,6 @@ public final class BufferWriter {
     public static int writeLongArray(byte[] buffer, int index, long[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -534,7 +510,6 @@ public final class BufferWriter {
     public static int writeFloatArray(byte[] buffer, int index, float[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -546,7 +521,6 @@ public final class BufferWriter {
     public static int writeDoubleArray(byte[] buffer, int index, double[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -558,7 +532,6 @@ public final class BufferWriter {
     public static int writeUUIDArray(byte[] buffer, int index, UUID[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -570,7 +543,6 @@ public final class BufferWriter {
     public static int writeBigIntegerArray(byte[] buffer, int index, BigInteger[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -582,7 +554,6 @@ public final class BufferWriter {
     public static int writeBigDecimalArray(byte[] buffer, int index, BigDecimal[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -594,7 +565,6 @@ public final class BufferWriter {
     public static int writeDateArray(byte[] buffer, int index, Date[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -606,7 +576,6 @@ public final class BufferWriter {
     public static int writeColorArray(byte[] buffer, int index, Color[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -618,7 +587,6 @@ public final class BufferWriter {
     public static int writeStringArray(byte[] buffer, int index, String[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -630,7 +598,6 @@ public final class BufferWriter {
     public static int writePatternArray(byte[] buffer, int index, Pattern[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -642,7 +609,6 @@ public final class BufferWriter {
     public static int writeURLArray(byte[] buffer, int index, URL[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -655,7 +621,6 @@ public final class BufferWriter {
     public static int writeRangeArray(byte[] buffer, int index, Map<String, Object> context, Range[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -667,7 +632,6 @@ public final class BufferWriter {
     public static int writeTagArray(byte[] buffer, int index, Tag[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -679,7 +643,6 @@ public final class BufferWriter {
     public static int writeImageArray(byte[] buffer, int index, Image[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -691,7 +654,6 @@ public final class BufferWriter {
     public static int writeBlobArray(byte[] buffer, int index, Blob[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -703,7 +665,6 @@ public final class BufferWriter {
     public static int writeBufferableArray(byte[] buffer, int index, Map<String, Object> context, Bufferable[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -1140,7 +1101,6 @@ public final class BufferWriter {
     public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Object value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         Class c = value.getClass();
         BufferObjectType ot = BufferObjectType.getObjectType(c);
         if (ot != null) {
@@ -1163,7 +1123,6 @@ public final class BufferWriter {
     public static int writeObjectArray(byte[] buffer, int index, Map<String, Object> context, Object[] value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
@@ -1185,7 +1144,6 @@ public final class BufferWriter {
     public static int writeObjectCollection(byte[] buffer, int index, Map<String, Object> context, Collection value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.size();
         index = writeLength(buffer, index, l);
         for (Object e : value) {
@@ -1208,7 +1166,6 @@ public final class BufferWriter {
     public static int writeObjectMap(byte[] buffer, int index, Map<String, Object> context, Map value) {
         Argument.notNull("value", value);
 
-        index = writeVersion(buffer, index, (byte) 1);
         int l = value.size();
         index = writeLength(buffer, index, l);
         for (Object e : value.entrySet()) {

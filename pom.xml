@@ -28,7 +28,7 @@
     <description>Contains Java classes for integration with LogHub Platform</description>
     <url>https://loghub.net/sdk/java</url>
     <scm>
-        <url>https://gitlab.com/micsys/loghub/sdk/loghub-sdk-java.git</url>
+        <url>https://github.com/microservice-systems/loghub-sdk-java.git</url>
     </scm>
     <licenses>
         <license>

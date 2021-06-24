@@ -86,32 +86,6 @@ public final class BufferReader {
         this.index += count;
     }
 
-    public byte[] readBytes() {
-        int l = 1;
-        if ((l >= 0) && (l <= buffer.length - index)) {
-            byte[] v = new byte[l];
-            for (int i = 0; i < l; ++i) {
-                v[i] = readByte();
-            }
-            return v;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read bytes of length %d", buffer.length, index, l));
-        }
-    }
-
-    public long[] readLongs() {
-        int l = 1;
-        if ((l >= 0) && (l <= buffer.length - index)) {
-            long[] v = new long[l];
-            for (int i = 0; i < l; ++i) {
-                v[i] = readLong();
-            }
-            return v;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: read longs of length %d", buffer.length, index, l));
-        }
-    }
-
     public byte readVersion() {
         return readByte();
     }
@@ -209,157 +183,86 @@ public final class BufferReader {
     }
 
     public UUID readUUID() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            long msb = readLong();
-            long lsb = readLong();
-            return new UUID(msb, lsb);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        long msb = readLong();
+        long lsb = readLong();
+        return new UUID(msb, lsb);
     }
 
     public BigInteger readBigInteger() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            byte[] v = readByteArray();
-            return new BigInteger(v);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        byte[] v = readByteArray();
+        return new BigInteger(v);
     }
 
     public BigDecimal readBigDecimal() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            String v = readString();
-            return new BigDecimal(v);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        String v = readString();
+        return new BigDecimal(v);
     }
 
     public Date readDate() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            long v = readLong();
-            return new Date(v);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        long v = readLong();
+        return new Date(v);
     }
 
     public Color readColor() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            short r = readByte();
-            short g = readByte();
-            short b = readByte();
-            short a = readByte();
-            return new Color((short) (r + ((short) 128)), (short) (g + ((short) 128)), (short) (b + ((short) 128)), (short) (a + ((short) 128)));
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        short r = readByte();
+        short g = readByte();
+        short b = readByte();
+        short a = readByte();
+        return new Color((short) (r + ((short) 128)), (short) (g + ((short) 128)), (short) (b + ((short) 128)), (short) (a + ((short) 128)));
     }
 
     public String readString() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            char[] v = new char[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    char[] nv = new char[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readChar();
+        int l = readLength(1);
+        char[] v = new char[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                char[] nv = new char[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            return new String(v, 0, l);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            v[i] = readChar();
         }
+        return new String(v, 0, l);
     }
 
     public Pattern readPattern() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            String v = readString();
-            return Pattern.compile(v);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        String v = readString();
+        return Pattern.compile(v);
     }
 
     public URL readURL() {
         int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            String v = readString();
-            try {
-                return new URL(v);
-            } catch (MalformedURLException e) {
-                throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal url value '%s'", buffer.length, idx, v), e);
-            }
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        String v = readString();
+        try {
+            return new URL(v);
+        } catch (MalformedURLException e) {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal url value '%s'", buffer.length, idx, v), e);
         }
     }
 
     public <T extends Comparable<T>> Range<T> readRange(Class<T> clazz) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            T min = readObject(clazz);
-            T max = readObject(clazz);
-            return new Range<>(min, max);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        T min = readObject(clazz);
+        T max = readObject(clazz);
+        return new Range<>(min, max);
     }
 
     public Tag readTag() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            String k = readString();
-            Object v = readObject(Object.class);
-            String u = readStringRef();
-            return new Tag(k, v, u);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        String k = readString();
+        Object v = readObject(Object.class);
+        String u = readStringRef();
+        return new Tag(k, v, u);
     }
 
     public Image readImage() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            byte[] c = readByteArray();
-            String ct = readString();
-            return new Image(c, ct);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        byte[] c = readByteArray();
+        String ct = readString();
+        return new Image(c, ct);
     }
 
     public Blob readBlob() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            byte[] c = readByteArray();
-            String ct = readString();
-            return new Blob(c, ct);
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
-        }
+        byte[] c = readByteArray();
+        String ct = readString();
+        return new Blob(c, ct);
     }
 
     public <T extends Bufferable> T readBufferable(Class<T> clazz) {
@@ -371,550 +274,424 @@ public final class BufferReader {
     }
 
     public boolean[] readBooleanArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            boolean[] v = new boolean[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    boolean[] nv = new boolean[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readBoolean();
+        int l = readLength(1);
+        boolean[] v = new boolean[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                boolean[] nv = new boolean[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                boolean[] nv = new boolean[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readBoolean();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            boolean[] nv = new boolean[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public byte[] readByteArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            byte[] v = new byte[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    byte[] nv = new byte[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readByte();
+        int l = readLength(1);
+        byte[] v = new byte[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                byte[] nv = new byte[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                byte[] nv = new byte[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readByte();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            byte[] nv = new byte[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public char[] readCharArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            char[] v = new char[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    char[] nv = new char[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readChar();
+        int l = readLength(1);
+        char[] v = new char[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                char[] nv = new char[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                char[] nv = new char[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readChar();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            char[] nv = new char[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public short[] readShortArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            short[] v = new short[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    short[] nv = new short[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readShort();
+        int l = readLength(1);
+        short[] v = new short[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                short[] nv = new short[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                short[] nv = new short[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readShort();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            short[] nv = new short[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public int[] readIntArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            int[] v = new int[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    int[] nv = new int[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readInt();
+        int l = readLength(1);
+        int[] v = new int[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                int[] nv = new int[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                int[] nv = new int[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readInt();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            int[] nv = new int[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public long[] readLongArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            long[] v = new long[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    long[] nv = new long[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readLong();
+        int l = readLength(1);
+        long[] v = new long[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                long[] nv = new long[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                long[] nv = new long[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readLong();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            long[] nv = new long[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public float[] readFloatArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            float[] v = new float[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    float[] nv = new float[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readFloat();
+        int l = readLength(1);
+        float[] v = new float[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                float[] nv = new float[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                float[] nv = new float[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readFloat();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            float[] nv = new float[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public double[] readDoubleArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            double[] v = new double[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    double[] nv = new double[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readDouble();
+        int l = readLength(1);
+        double[] v = new double[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                double[] nv = new double[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                double[] nv = new double[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readDouble();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            double[] nv = new double[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public UUID[] readUUIDArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            UUID[] v = new UUID[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    UUID[] nv = new UUID[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readUUID();
+        int l = readLength(1);
+        UUID[] v = new UUID[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                UUID[] nv = new UUID[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                UUID[] nv = new UUID[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readUUID();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            UUID[] nv = new UUID[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public BigInteger[] readBigIntegerArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            BigInteger[] v = new BigInteger[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    BigInteger[] nv = new BigInteger[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readBigInteger();
+        int l = readLength(1);
+        BigInteger[] v = new BigInteger[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                BigInteger[] nv = new BigInteger[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                BigInteger[] nv = new BigInteger[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readBigInteger();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            BigInteger[] nv = new BigInteger[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public BigDecimal[] readBigDecimalArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            BigDecimal[] v = new BigDecimal[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    BigDecimal[] nv = new BigDecimal[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readBigDecimal();
+        int l = readLength(1);
+        BigDecimal[] v = new BigDecimal[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                BigDecimal[] nv = new BigDecimal[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                BigDecimal[] nv = new BigDecimal[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readBigDecimal();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            BigDecimal[] nv = new BigDecimal[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public Date[] readDateArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Date[] v = new Date[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Date[] nv = new Date[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readDate();
+        int l = readLength(1);
+        Date[] v = new Date[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Date[] nv = new Date[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Date[] nv = new Date[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readDate();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Date[] nv = new Date[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public Color[] readColorArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Color[] v = new Color[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Color[] nv = new Color[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readColor();
+        int l = readLength(1);
+        Color[] v = new Color[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Color[] nv = new Color[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Color[] nv = new Color[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readColor();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Color[] nv = new Color[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public String[] readStringArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            String[] v = new String[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    String[] nv = new String[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readString();
+        int l = readLength(1);
+        String[] v = new String[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                String[] nv = new String[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                String[] nv = new String[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readString();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            String[] nv = new String[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public Pattern[] readPatternArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Pattern[] v = new Pattern[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Pattern[] nv = new Pattern[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readPattern();
+        int l = readLength(1);
+        Pattern[] v = new Pattern[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Pattern[] nv = new Pattern[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Pattern[] nv = new Pattern[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readPattern();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Pattern[] nv = new Pattern[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public URL[] readURLArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            URL[] v = new URL[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    URL[] nv = new URL[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readURL();
+        int l = readLength(1);
+        URL[] v = new URL[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                URL[] nv = new URL[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                URL[] nv = new URL[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readURL();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            URL[] nv = new URL[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     @SuppressWarnings("rawtypes")
     public <T extends Comparable<T>> Range[] readRangeArray(Class<T> clazz) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Range[] v = new Range[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Range[] nv = new Range[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readRange(clazz);
+        int l = readLength(1);
+        Range[] v = new Range[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Range[] nv = new Range[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Range[] nv = new Range[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readRange(clazz);
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Range[] nv = new Range[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public Tag[] readTagArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Tag[] v = new Tag[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Tag[] nv = new Tag[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readTag();
+        int l = readLength(1);
+        Tag[] v = new Tag[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Tag[] nv = new Tag[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Tag[] nv = new Tag[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readTag();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Tag[] nv = new Tag[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public Image[] readImageArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Image[] v = new Image[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Image[] nv = new Image[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readImage();
+        int l = readLength(1);
+        Image[] v = new Image[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Image[] nv = new Image[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Image[] nv = new Image[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readImage();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Image[] nv = new Image[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     public Blob[] readBlobArray() {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            Blob[] v = new Blob[Math.min(l, ARRAY_READ_LENGTH_MAX)];
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    Blob[] nv = new Blob[v.length * 2];
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readBlob();
+        int l = readLength(1);
+        Blob[] v = new Blob[Math.min(l, ARRAY_READ_LENGTH_MAX)];
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                Blob[] nv = new Blob[v.length * 2];
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                Blob[] nv = new Blob[l];
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readBlob();
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            Blob[] nv = new Blob[l];
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
     @SuppressWarnings("unchecked")
     public <T extends Bufferable> T[] readBufferableArray(Class<T> clazz) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            T[] v = (T[]) Array.newInstance(clazz, Math.min(l, ARRAY_READ_LENGTH_MAX));
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    T[] nv = (T[]) Array.newInstance(clazz, v.length * 2);
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readBufferable(clazz);
+        int l = readLength(1);
+        T[] v = (T[]) Array.newInstance(clazz, Math.min(l, ARRAY_READ_LENGTH_MAX));
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                T[] nv = (T[]) Array.newInstance(clazz, v.length * 2);
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                T[] nv = (T[]) Array.newInstance(clazz, l);
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readBufferable(clazz);
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            T[] nv = (T[]) Array.newInstance(clazz, l);
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
@@ -1425,18 +1202,12 @@ public final class BufferReader {
 
     @SuppressWarnings("unchecked")
     public <T> T readObject(Class<T> clazz) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            byte otid = readByte();
-            BufferObjectType ot = BufferObjectType.getObjectType(otid);
-            if (ot != null) {
-                return (T) ot.reader.read(this);
-            } else {
-                throw new BufferException(String.format("Class with id %d is not supported", otid));
-            }
+        byte otid = readByte();
+        BufferObjectType ot = BufferObjectType.getObjectType(otid);
+        if (ot != null) {
+            return (T) ot.reader.read(this);
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            throw new BufferException(String.format("Class with id %d is not supported", otid));
         }
     }
 
@@ -1454,28 +1225,22 @@ public final class BufferReader {
 
     @SuppressWarnings("unchecked")
     public <T> T[] readObjectArray(Class<T> clazz) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            T[] v = (T[]) Array.newInstance(clazz, Math.min(l, ARRAY_READ_LENGTH_MAX));
-            for (int i = 0; i < l; ++i) {
-                if (i >= v.length) {
-                    T[] nv = (T[]) Array.newInstance(clazz, v.length * 2);
-                    System.arraycopy(v, 0, nv, 0, v.length);
-                    v = nv;
-                }
-                v[i] = readObject(clazz);
+        int l = readLength(1);
+        T[] v = (T[]) Array.newInstance(clazz, Math.min(l, ARRAY_READ_LENGTH_MAX));
+        for (int i = 0; i < l; ++i) {
+            if (i >= v.length) {
+                T[] nv = (T[]) Array.newInstance(clazz, v.length * 2);
+                System.arraycopy(v, 0, nv, 0, v.length);
+                v = nv;
             }
-            if (l == v.length) {
-                return v;
-            } else {
-                T[] nv = (T[]) Array.newInstance(clazz, l);
-                System.arraycopy(v, 0, nv, 0, l);
-                return nv;
-            }
+            v[i] = readObject(clazz);
+        }
+        if (l == v.length) {
+            return v;
         } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+            T[] nv = (T[]) Array.newInstance(clazz, l);
+            System.arraycopy(v, 0, nv, 0, l);
+            return nv;
         }
     }
 
@@ -1492,17 +1257,11 @@ public final class BufferReader {
     }
 
     public <C extends Collection<T>, T> C readObjectCollection(C collection, Class<T> clazz) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            for (int i = 0; i < l; ++i) {
-                collection.add(readObject(clazz));
-            }
-            return collection;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        int l = readLength(1);
+        for (int i = 0; i < l; ++i) {
+            collection.add(readObject(clazz));
         }
+        return collection;
     }
 
     public <C extends Collection<T>, T> C readObjectCollectionRef(C collection, Class<T> clazz) {
@@ -1518,19 +1277,13 @@ public final class BufferReader {
     }
 
     public <M extends Map<K, V>, K, V> M readObjectMap(M map, Class<K> keyClass, Class<V> valueClass) {
-        int idx = index;
-        byte ver = readVersion();
-        if (ver == 1) {
-            int l = readLength(1);
-            for (int i = 0; i < l; ++i) {
-                K k = readObject(keyClass);
-                V v = readObject(valueClass);
-                map.put(k, v);
-            }
-            return map;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal version value %d", buffer.length, idx, ver));
+        int l = readLength(1);
+        for (int i = 0; i < l; ++i) {
+            K k = readObject(keyClass);
+            V v = readObject(valueClass);
+            map.put(k, v);
         }
+        return map;
     }
 
     public <M extends Map<K, V>, K, V> M readObjectMapRef(M map, Class<K> keyClass, Class<V> valueClass) {

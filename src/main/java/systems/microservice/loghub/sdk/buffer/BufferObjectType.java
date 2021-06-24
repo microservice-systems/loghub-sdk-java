@@ -147,91 +147,91 @@ public enum BufferObjectType {
     private static final class BooleanReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readBoolean();
         }
     }
 
     private static final class ByteReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return new Byte(reader.readByte());
+            return reader.readByte();
         }
     }
 
     private static final class CharacterReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return new Character(reader.readChar());
+            return reader.readChar();
         }
     }
 
     private static final class ShortReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readShort();
         }
     }
 
     private static final class IntegerReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readInt();
         }
     }
 
     private static final class LongReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return new Long(reader.readLong());
+            return reader.readLong();
         }
     }
 
     private static final class FloatReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readFloat();
         }
     }
 
     private static final class DoubleReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readDouble();
         }
     }
 
     private static final class UUIDReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readUUID();
         }
     }
 
     private static final class DateReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readDate();
         }
     }
 
     private static final class StringReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readString();
         }
     }
 
     private static final class URLReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readURL();
         }
     }
 
     private static final class BufferableReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readBufferable(null);
         }
     }
 
@@ -245,7 +245,7 @@ public enum BufferObjectType {
     private static final class ByteArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return reader.readBytes();
+            return reader.readByteArray();
         }
     }
 
@@ -273,7 +273,7 @@ public enum BufferObjectType {
     private static final class LongArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return reader.readLongs();
+            return reader.readLongArray();
         }
     }
 

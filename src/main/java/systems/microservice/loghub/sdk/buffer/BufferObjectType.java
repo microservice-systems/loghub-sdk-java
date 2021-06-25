@@ -238,7 +238,7 @@ public enum BufferObjectType {
     private static final class BooleanArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readBooleanArray();
         }
     }
 
@@ -252,21 +252,21 @@ public enum BufferObjectType {
     private static final class CharArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readCharArray();
         }
     }
 
     private static final class ShortArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readShortArray();
         }
     }
 
     private static final class IntArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readIntArray();
         }
     }
 
@@ -280,49 +280,49 @@ public enum BufferObjectType {
     private static final class FloatArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readFloatArray();
         }
     }
 
     private static final class DoubleArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readDoubleArray();
         }
     }
 
     private static final class UUIDArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readUUIDArray();
         }
     }
 
     private static final class DateArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readDateArray();
         }
     }
 
     private static final class StringArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readStringArray();
         }
     }
 
     private static final class URLArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readURLArray();
         }
     }
 
     private static final class BufferableArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
-            return null;
+            return reader.readBufferableArray(null);
         }
     }
 

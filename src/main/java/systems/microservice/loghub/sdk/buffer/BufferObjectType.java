@@ -19,11 +19,14 @@ package systems.microservice.loghub.sdk.buffer;
 
 import systems.microservice.loghub.sdk.utils.Argument;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Dmitry Kotlyarov
@@ -39,9 +42,11 @@ public enum BufferObjectType {
     FLOAT((byte) 7, Float.class, new FloatReader(), new FloatWriter()),
     DOUBLE((byte) 8, Double.class, new DoubleReader(), new DoubleWriter()),
     UUID((byte) 9, java.util.UUID.class, new UUIDReader(), new UUIDWriter()),
-    DATE((byte) 10, Date.class, new DateReader(), new DateWriter()),
-    STRING((byte) 11, String.class, new StringReader(), new StringWriter()),
-    URL((byte) 12, java.net.URL.class, new URLReader(), new URLWriter()),
+    BIG_INTEGER((byte) 10, BigInteger.class, new BigIntegerReader(), new BigIntegerWriter()),
+    BIG_DECIMAL((byte) 11, BigDecimal.class, new BigDecimalReader(), new BigDecimalWriter()),
+    DATE((byte) 12, Date.class, new DateReader(), new DateWriter()),
+    STRING((byte) 13, String.class, new StringReader(), new StringWriter()),
+    URL((byte) 14, java.net.URL.class, new URLReader(), new URLWriter()),
     BUFFERABLE((byte) 49, Bufferable.class, new BufferableReader(), new BufferableWriter()),
     BOOLEAN_ARRAY((byte) 51, boolean[].class, new BooleanArrayReader(), new BooleanArrayWriter()),
     BYTE_ARRAY((byte) 52, byte[].class, new ByteArrayReader(), new ByteArrayWriter()),
@@ -59,6 +64,8 @@ public enum BufferObjectType {
 
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
     private static final HashMap<Class, BufferObjectType> classObjectTypes = createClassObjectTypes();
+    private static final ConcurrentHashMap<Integer, Class> bufferableClasses = new ConcurrentHashMap<>(16, 0.75f, 1);
+    private static final ConcurrentHashMap<Class, Integer> bufferableIds = new ConcurrentHashMap<>(16, 0.75f, 1);
 
     public final byte id;
     public final Class clazz;
@@ -83,6 +90,8 @@ public enum BufferObjectType {
         iots.put(FLOAT.id, FLOAT);
         iots.put(DOUBLE.id, DOUBLE);
         iots.put(UUID.id, UUID);
+        iots.put(BIG_INTEGER.id, BIG_INTEGER);
+        iots.put(BIG_DECIMAL.id, BIG_DECIMAL);
         iots.put(DATE.id, DATE);
         iots.put(STRING.id, STRING);
         iots.put(URL.id, URL);
@@ -114,6 +123,8 @@ public enum BufferObjectType {
         cots.put(FLOAT.clazz, FLOAT);
         cots.put(DOUBLE.clazz, DOUBLE);
         cots.put(UUID.clazz, UUID);
+        cots.put(BIG_INTEGER.clazz, BIG_INTEGER);
+        cots.put(BIG_DECIMAL.clazz, BIG_DECIMAL);
         cots.put(DATE.clazz, DATE);
         cots.put(STRING.clazz, STRING);
         cots.put(URL.clazz, URL);
@@ -204,6 +215,20 @@ public enum BufferObjectType {
         @Override
         public Object read(BufferReader reader) {
             return reader.readUUID();
+        }
+    }
+
+    private static final class BigIntegerReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readBigInteger();
+        }
+    }
+
+    private static final class BigDecimalReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readBigDecimal();
         }
     }
 
@@ -386,6 +411,20 @@ public enum BufferObjectType {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
             return BufferWriter.writeUUID(buffer, index, (java.util.UUID) value);
+        }
+    }
+
+    private static final class BigIntegerWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeBigInteger(buffer, index, (BigInteger) value);
+        }
+    }
+
+    private static final class BigDecimalWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeBigDecimal(buffer, index, (BigDecimal) value);
         }
     }
 

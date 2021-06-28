@@ -64,8 +64,8 @@ public enum BufferObjectType {
 
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
     private static final HashMap<Class, BufferObjectType> classObjectTypes = createClassObjectTypes();
-    private static final ConcurrentHashMap<Integer, Class> bufferableClasses = new ConcurrentHashMap<>(16, 0.75f, 1);
-    private static final ConcurrentHashMap<Class, Integer> bufferableIds = new ConcurrentHashMap<>(16, 0.75f, 1);
+    private static final ConcurrentHashMap<UUID, Class> bufferableClasses = new ConcurrentHashMap<>(16, 0.75f, 1);
+    private static final ConcurrentHashMap<Class, UUID> bufferableIds = new ConcurrentHashMap<>(16, 0.75f, 1);
 
     public final byte id;
     public final Class clazz;

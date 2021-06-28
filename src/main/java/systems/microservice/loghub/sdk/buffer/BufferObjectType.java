@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.buffer;
 
 import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Color;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -45,8 +46,9 @@ public enum BufferObjectType {
     BIG_INTEGER((byte) 10, BigInteger.class, new BigIntegerReader(), new BigIntegerWriter()),
     BIG_DECIMAL((byte) 11, BigDecimal.class, new BigDecimalReader(), new BigDecimalWriter()),
     DATE((byte) 12, Date.class, new DateReader(), new DateWriter()),
-    STRING((byte) 13, String.class, new StringReader(), new StringWriter()),
-    URL((byte) 14, java.net.URL.class, new URLReader(), new URLWriter()),
+    COLOR((byte) 13, Color.class, new ColorReader(), new ColorWriter()),
+    STRING((byte) 14, String.class, new StringReader(), new StringWriter()),
+    URL((byte) 15, java.net.URL.class, new URLReader(), new URLWriter()),
     BUFFERABLE((byte) 49, Bufferable.class, new BufferableReader(), new BufferableWriter()),
     BOOLEAN_ARRAY((byte) 51, boolean[].class, new BooleanArrayReader(), new BooleanArrayWriter()),
     BYTE_ARRAY((byte) 52, byte[].class, new ByteArrayReader(), new ByteArrayWriter()),
@@ -93,6 +95,7 @@ public enum BufferObjectType {
         iots.put(BIG_INTEGER.id, BIG_INTEGER);
         iots.put(BIG_DECIMAL.id, BIG_DECIMAL);
         iots.put(DATE.id, DATE);
+        iots.put(COLOR.id, COLOR);
         iots.put(STRING.id, STRING);
         iots.put(URL.id, URL);
         iots.put(BUFFERABLE.id, BUFFERABLE);
@@ -126,6 +129,7 @@ public enum BufferObjectType {
         cots.put(BIG_INTEGER.clazz, BIG_INTEGER);
         cots.put(BIG_DECIMAL.clazz, BIG_DECIMAL);
         cots.put(DATE.clazz, DATE);
+        cots.put(COLOR.clazz, COLOR);
         cots.put(STRING.clazz, STRING);
         cots.put(URL.clazz, URL);
         cots.put(BUFFERABLE.clazz, BUFFERABLE);
@@ -236,6 +240,13 @@ public enum BufferObjectType {
         @Override
         public Object read(BufferReader reader) {
             return reader.readDate();
+        }
+    }
+
+    private static final class ColorReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readColor();
         }
     }
 
@@ -432,6 +443,13 @@ public enum BufferObjectType {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
             return BufferWriter.writeDate(buffer, index, (Date) value);
+        }
+    }
+
+    private static final class ColorWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeColor(buffer, index, (Color) value);
         }
     }
 

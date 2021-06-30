@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * @author Dmitry Kotlyarov
@@ -48,7 +49,8 @@ public enum BufferObjectType {
     DATE((byte) 12, Date.class, new DateReader(), new DateWriter()),
     COLOR((byte) 13, Color.class, new ColorReader(), new ColorWriter()),
     STRING((byte) 14, String.class, new StringReader(), new StringWriter()),
-    URL((byte) 15, java.net.URL.class, new URLReader(), new URLWriter()),
+    PATTERN((byte) 15, Pattern.class, new PatternReader(), new PatternWriter()),
+    URL((byte) 16, java.net.URL.class, new URLReader(), new URLWriter()),
     BUFFERABLE((byte) 49, Bufferable.class, new BufferableReader(), new BufferableWriter()),
     BOOLEAN_ARRAY((byte) 51, boolean[].class, new BooleanArrayReader(), new BooleanArrayWriter()),
     BYTE_ARRAY((byte) 52, byte[].class, new ByteArrayReader(), new ByteArrayWriter()),
@@ -97,6 +99,7 @@ public enum BufferObjectType {
         iots.put(DATE.id, DATE);
         iots.put(COLOR.id, COLOR);
         iots.put(STRING.id, STRING);
+        iots.put(PATTERN.id, PATTERN);
         iots.put(URL.id, URL);
         iots.put(BUFFERABLE.id, BUFFERABLE);
         iots.put(BOOLEAN_ARRAY.id, BOOLEAN_ARRAY);
@@ -131,6 +134,7 @@ public enum BufferObjectType {
         cots.put(DATE.clazz, DATE);
         cots.put(COLOR.clazz, COLOR);
         cots.put(STRING.clazz, STRING);
+        cots.put(PATTERN.clazz, PATTERN);
         cots.put(URL.clazz, URL);
         cots.put(BUFFERABLE.clazz, BUFFERABLE);
         cots.put(BOOLEAN_ARRAY.clazz, BOOLEAN_ARRAY);
@@ -254,6 +258,13 @@ public enum BufferObjectType {
         @Override
         public Object read(BufferReader reader) {
             return reader.readString();
+        }
+    }
+
+    private static final class PatternReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readPattern();
         }
     }
 
@@ -457,6 +468,13 @@ public enum BufferObjectType {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
             return BufferWriter.writeString(buffer, index, (String) value);
+        }
+    }
+
+    private static final class PatternWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writePattern(buffer, index, (Pattern) value);
         }
     }
 

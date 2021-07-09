@@ -18,7 +18,11 @@
 package systems.microservice.loghub.sdk.buffer;
 
 import systems.microservice.loghub.sdk.utils.Argument;
+import systems.microservice.loghub.sdk.utils.Blob;
 import systems.microservice.loghub.sdk.utils.Color;
+import systems.microservice.loghub.sdk.utils.Image;
+import systems.microservice.loghub.sdk.utils.Range;
+import systems.microservice.loghub.sdk.utils.Tag;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -51,6 +55,10 @@ public enum BufferObjectType {
     STRING((byte) 14, String.class, new StringReader(), new StringWriter()),
     PATTERN((byte) 15, Pattern.class, new PatternReader(), new PatternWriter()),
     URL((byte) 16, java.net.URL.class, new URLReader(), new URLWriter()),
+    RANGE((byte) 17, Range.class, new RangeReader(), new RangeWriter()),
+    TAG((byte) 18, Tag.class, new TagReader(), new TagWriter()),
+    IMAGE((byte) 19, Image.class, new ImageReader(), new ImageWriter()),
+    BLOB((byte) 20, Blob.class, new BlobReader(), new BlobWriter()),
     BUFFERABLE((byte) 49, Bufferable.class, new BufferableReader(), new BufferableWriter()),
     BOOLEAN_ARRAY((byte) 51, boolean[].class, new BooleanArrayReader(), new BooleanArrayWriter()),
     BYTE_ARRAY((byte) 52, byte[].class, new ByteArrayReader(), new ByteArrayWriter()),
@@ -101,6 +109,10 @@ public enum BufferObjectType {
         iots.put(STRING.id, STRING);
         iots.put(PATTERN.id, PATTERN);
         iots.put(URL.id, URL);
+        iots.put(RANGE.id, RANGE);
+        iots.put(TAG.id, TAG);
+        iots.put(IMAGE.id, IMAGE);
+        iots.put(BLOB.id, BLOB);
         iots.put(BUFFERABLE.id, BUFFERABLE);
         iots.put(BOOLEAN_ARRAY.id, BOOLEAN_ARRAY);
         iots.put(BYTE_ARRAY.id, BYTE_ARRAY);
@@ -136,6 +148,10 @@ public enum BufferObjectType {
         cots.put(STRING.clazz, STRING);
         cots.put(PATTERN.clazz, PATTERN);
         cots.put(URL.clazz, URL);
+        cots.put(RANGE.clazz, RANGE);
+        cots.put(TAG.clazz, TAG);
+        cots.put(IMAGE.clazz, IMAGE);
+        cots.put(BLOB.clazz, BLOB);
         cots.put(BUFFERABLE.clazz, BUFFERABLE);
         cots.put(BOOLEAN_ARRAY.clazz, BOOLEAN_ARRAY);
         cots.put(BYTE_ARRAY.clazz, BYTE_ARRAY);
@@ -272,6 +288,35 @@ public enum BufferObjectType {
         @Override
         public Object read(BufferReader reader) {
             return reader.readURL();
+        }
+    }
+
+    private static final class RangeReader implements BufferObjectReader {
+        @SuppressWarnings("unchecked")
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readRange(Comparable.class);
+        }
+    }
+
+    private static final class TagReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readTag();
+        }
+    }
+
+    private static final class ImageReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readImage();
+        }
+    }
+
+    private static final class BlobReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readBlob();
         }
     }
 
@@ -482,6 +527,35 @@ public enum BufferObjectType {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
             return BufferWriter.writeURL(buffer, index, (java.net.URL) value);
+        }
+    }
+
+    private static final class RangeWriter implements BufferObjectWriter {
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeRange(buffer, index, context, (Range) value);
+        }
+    }
+
+    private static final class TagWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeTag(buffer, index, (Tag) value);
+        }
+    }
+
+    private static final class ImageWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeImage(buffer, index, (Image) value);
+        }
+    }
+
+    private static final class BlobWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeBlob(buffer, index, (Blob) value);
         }
     }
 

@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
+@SuppressWarnings("rawtypes")
 public enum BufferObjectType {
     BOOLEAN((byte) 1, Boolean.class, new BooleanReader(), new BooleanWriter()),
     BYTE((byte) 2, Byte.class, new ByteReader(), new ByteWriter()),
@@ -77,7 +78,7 @@ public enum BufferObjectType {
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
     private static final HashMap<Class, BufferObjectType> classObjectTypes = createClassObjectTypes();
     private static final ConcurrentHashMap<UUID, Class> bufferableClasses = new ConcurrentHashMap<>(16, 0.75f, 1);
-    private static final ConcurrentHashMap<Class, UUID> bufferableIds = new ConcurrentHashMap<>(16, 0.75f, 1);
+    private static final ConcurrentHashMap<Class, UUID> bufferableUUIDs = new ConcurrentHashMap<>(16, 0.75f, 1);
 
     public final byte id;
     public final Class clazz;
@@ -177,6 +178,14 @@ public enum BufferObjectType {
         Argument.notNull("clazz", clazz);
 
         return classObjectTypes.get(clazz);
+    }
+
+    public static <T extends Bufferable> void registerBufferableClass(UUID uuid, Class<T> clazz) {
+        Argument.notNull("uuid", uuid);
+        Argument.notNull("clazz", clazz);
+
+        bufferableClasses.put(uuid, clazz);
+        bufferableUUIDs.put(clazz, uuid);
     }
 
     private static final class BooleanReader implements BufferObjectReader {
@@ -321,9 +330,16 @@ public enum BufferObjectType {
     }
 
     private static final class BufferableReader implements BufferObjectReader {
+        @SuppressWarnings("unchecked")
         @Override
         public Object read(BufferReader reader) {
-            return reader.readBufferable(null);
+            UUID uuid = reader.readUUID();
+            Class c = bufferableClasses.get(uuid);
+            if (c != null) {
+                return reader.readBufferable(c);
+            } else {
+                throw new BufferException(String.format("Bufferable class with uuid '%s' is not registered", uuid));
+            }
         }
     }
 
@@ -562,7 +578,15 @@ public enum BufferObjectType {
     private static final class BufferableWriter implements BufferObjectWriter {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-            return BufferWriter.writeBufferable(buffer, index, context, (Bufferable) value);
+            Bufferable v = (Bufferable) value;
+            Class c = v.getClass();
+            UUID uuid = bufferableUUIDs.get(c);
+            if (uuid != null) {
+                index = BufferWriter.writeUUID(buffer, index, uuid);
+                return BufferWriter.writeBufferable(buffer, index, context, v);
+            } else {
+                throw new BufferException(String.format("Bufferable class '%s' is not registered", c.getCanonicalName()));
+            }
         }
     }
 

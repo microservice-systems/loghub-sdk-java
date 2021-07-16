@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.utils;
+package systems.microservice.loghub.sdk.util;
 
 import systems.microservice.loghub.sdk.buffer.BufferReader;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;

@@ -18,7 +18,7 @@
 package systems.microservice.loghub.sdk.config.extractors;
 
 import systems.microservice.loghub.sdk.config.Extractor;
-import systems.microservice.loghub.sdk.utils.ByteArrayOutputStream;
+import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

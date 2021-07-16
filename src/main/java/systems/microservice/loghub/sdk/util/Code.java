@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.utils;
+package systems.microservice.loghub.sdk.util;
 
 import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.LogLevel;

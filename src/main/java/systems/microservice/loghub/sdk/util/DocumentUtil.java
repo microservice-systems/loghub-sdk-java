@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.utils;
+package systems.microservice.loghub.sdk.util;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;

@@ -17,12 +17,12 @@
 
 package systems.microservice.loghub.sdk.buffer;
 
-import systems.microservice.loghub.sdk.utils.Argument;
-import systems.microservice.loghub.sdk.utils.Blob;
-import systems.microservice.loghub.sdk.utils.Color;
-import systems.microservice.loghub.sdk.utils.Image;
-import systems.microservice.loghub.sdk.utils.Range;
-import systems.microservice.loghub.sdk.utils.Tag;
+import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.Blob;
+import systems.microservice.loghub.sdk.util.Color;
+import systems.microservice.loghub.sdk.util.Image;
+import systems.microservice.loghub.sdk.util.Range;
+import systems.microservice.loghub.sdk.util.Tag;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;

@@ -19,7 +19,7 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
-import systems.microservice.loghub.sdk.utils.MapUtil;
+import systems.microservice.loghub.sdk.util.MapUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -19,8 +19,8 @@ package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
-import systems.microservice.loghub.sdk.utils.Argument;
-import systems.microservice.loghub.sdk.utils.MapUtil;
+import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.MapUtil;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

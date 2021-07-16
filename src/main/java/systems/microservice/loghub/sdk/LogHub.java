@@ -206,7 +206,7 @@ public final class LogHub {
             if (i == null) {
                 i = properties.get("loghub.instance");
                 if (i == null) {
-                    i = String.format("java-%s", getHostName());
+                    i = String.format("java-%s", getHostNamePrivate());
                     if (i == null) {
                         i = String.format("java-%s", getHostAddress());
                         if (i == null) {
@@ -235,7 +235,7 @@ public final class LogHub {
     }
 
     private static String createHostName() {
-        String hn = getHostName();
+        String hn = getHostNamePrivate();
         if (hn == null) {
             hn = "unknown";
         }
@@ -250,7 +250,7 @@ public final class LogHub {
         return hi;
     }
 
-    private static String getHostName() {
+    private static String getHostNamePrivate() {
         try {
             return InetAddress.getLocalHost().getHostName();
         } catch (UnknownHostException e) {
@@ -908,6 +908,10 @@ public final class LogHub {
 
     public static boolean isEnabled() {
         return enabled;
+    }
+
+    public static String getHostName() {
+        return hostName;
     }
 
     public static String getHostIP() {

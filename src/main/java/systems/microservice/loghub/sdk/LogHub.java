@@ -1114,9 +1114,6 @@ public final class LogHub {
     }
 
     public static void log(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
-        if (eventWriter != null) {
-            eventWriter.logEvent(time, logger, level, levelName, exception, tags, images, blobs, callback, message);
-        }
     }
 
     public static void logMetric(String name, long value, int point) {

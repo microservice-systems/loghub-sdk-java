@@ -30,21 +30,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * @since 1.0
  */
 final class LogEventWriter {
-    private final AtomicReference<LogEventConfig> config = new AtomicReference<>();
-    private final AtomicLong totalCount = new AtomicLong(0L);
-    private final AtomicLong totalSize = new AtomicLong(0L);
-    private final AtomicLong sentCount = new AtomicLong(0L);
-    private final AtomicLong sentSize = new AtomicLong(0L);
-    private final AtomicLong lostCount = new AtomicLong(0L);
-    private final AtomicLong lostSize = new AtomicLong(0L);
-
     public LogEventWriter() {
-    }
-
-    public LogEventConfig getConfig() {
-        return config.get();
-    }
-
-    public void logEvent(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
     }
 }

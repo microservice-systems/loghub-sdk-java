@@ -73,8 +73,9 @@ public enum BufferObjectType {
     BIG_INTEGER_ARRAY((byte) 60, BigInteger[].class, new BigIntegerArrayReader(), new BigIntegerArrayWriter()),
     BIG_DECIMAL_ARRAY((byte) 61, BigDecimal[].class, new BigDecimalArrayReader(), new BigDecimalArrayWriter()),
     DATE_ARRAY((byte) 62, Date[].class, new DateArrayReader(), new DateArrayWriter()),
-    STRING_ARRAY((byte) 63, String[].class, new StringArrayReader(), new StringArrayWriter()),
-    URL_ARRAY((byte) 64, URL[].class, new URLArrayReader(), new URLArrayWriter()),
+    COLOR_ARRAY((byte) 63, Color[].class, new ColorArrayReader(), new ColorArrayWriter()),
+    STRING_ARRAY((byte) 64, String[].class, new StringArrayReader(), new StringArrayWriter()),
+    URL_ARRAY((byte) 65, URL[].class, new URLArrayReader(), new URLArrayWriter()),
     BUFFERABLE_ARRAY((byte) 99, Bufferable[].class, new BufferableArrayReader(), new BufferableArrayWriter());
 
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
@@ -129,6 +130,7 @@ public enum BufferObjectType {
         iots.put(BIG_INTEGER_ARRAY.id, BIG_INTEGER_ARRAY);
         iots.put(BIG_DECIMAL_ARRAY.id, BIG_DECIMAL_ARRAY);
         iots.put(DATE_ARRAY.id, DATE_ARRAY);
+        iots.put(COLOR_ARRAY.id, COLOR_ARRAY);
         iots.put(STRING_ARRAY.id, STRING_ARRAY);
         iots.put(URL_ARRAY.id, URL_ARRAY);
         iots.put(BUFFERABLE_ARRAY.id, BUFFERABLE_ARRAY);
@@ -170,6 +172,7 @@ public enum BufferObjectType {
         cots.put(BIG_INTEGER_ARRAY.clazz, BIG_INTEGER_ARRAY);
         cots.put(BIG_DECIMAL_ARRAY.clazz, BIG_DECIMAL_ARRAY);
         cots.put(DATE_ARRAY.clazz, DATE_ARRAY);
+        cots.put(COLOR_ARRAY.clazz, COLOR_ARRAY);
         cots.put(STRING_ARRAY.clazz, STRING_ARRAY);
         cots.put(URL_ARRAY.clazz, URL_ARRAY);
         cots.put(BUFFERABLE_ARRAY.clazz, BUFFERABLE_ARRAY);
@@ -433,6 +436,13 @@ public enum BufferObjectType {
         }
     }
 
+    private static final class ColorArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readColorArray();
+        }
+    }
+
     private static final class StringArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
@@ -691,6 +701,13 @@ public enum BufferObjectType {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
             return BufferWriter.writeDateArray(buffer, index, (Date[]) value);
+        }
+    }
+
+    private static final class ColorArrayWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeColorArray(buffer, index, (Color[]) value);
         }
     }
 

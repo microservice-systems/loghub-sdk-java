@@ -45,6 +45,24 @@ public final class StringUtil {
         }
     }
 
+    public static int skipChars(String value, int index, char character) {
+        for (int ci = value.length(); index < ci; ++index) {
+            if (value.charAt(index) != character) {
+                return index;
+            }
+        }
+        return index;
+    }
+
+    public static int skipDigits(String value, int index) {
+        for (int ci = value.length(); index < ci; ++index) {
+            if (!Character.isDigit(value.charAt(index))) {
+                return index;
+            }
+        }
+        return index;
+    }
+
     public static String getCommonPrefix(String value1, String value2) {
         int minLength = Math.min(value1.length(), value2.length());
         for (int i = 0; i < minLength; ++i) {

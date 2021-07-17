@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.usage;
 
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
@@ -25,7 +25,7 @@ import java.lang.management.ThreadMXBean;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogThreadUsage implements Serializable {
+public final class ThreadUsage implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final ThreadMXBean THREAD_MX_BEAN = ManagementFactory.getThreadMXBean();
 
@@ -34,7 +34,7 @@ public final class LogThreadUsage implements Serializable {
     public final int peak;
     public final long total;
 
-    public LogThreadUsage() {
+    public ThreadUsage() {
         this.live = THREAD_MX_BEAN.getThreadCount();
         this.daemon = THREAD_MX_BEAN.getDaemonThreadCount();
         this.peak = THREAD_MX_BEAN.getPeakThreadCount();

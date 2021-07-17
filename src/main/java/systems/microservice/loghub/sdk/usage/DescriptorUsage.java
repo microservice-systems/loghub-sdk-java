@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.usage;
 
 import com.sun.management.UnixOperatingSystemMXBean;
 
@@ -26,14 +26,14 @@ import java.lang.management.ManagementFactory;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogDescriptorUsage implements Serializable {
+public final class DescriptorUsage implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final UnixOperatingSystemMXBean OS_MX_BEAN = createOperatingSystemMXBean();
 
     public final long fileMax;
     public final long fileOpen;
 
-    public LogDescriptorUsage() {
+    public DescriptorUsage() {
         this.fileMax = (OS_MX_BEAN != null) ? OS_MX_BEAN.getMaxFileDescriptorCount() : -1L;
         this.fileOpen = (OS_MX_BEAN != null) ? OS_MX_BEAN.getOpenFileDescriptorCount() : -1L;
     }

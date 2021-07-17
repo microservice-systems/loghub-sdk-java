@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.usage;
 
 import java.io.File;
 import java.io.Serializable;
@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogDiskUsage implements Serializable {
+public final class DiskUsage implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final File ROOT_DISK = new File("/");
 
@@ -32,7 +32,7 @@ public final class LogDiskUsage implements Serializable {
     public final long free;
     public final long usable;
 
-    public LogDiskUsage() {
+    public DiskUsage() {
         long mb = 1048576L;
 
         this.total = ROOT_DISK.getTotalSpace() / mb;

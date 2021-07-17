@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.usage;
 
 import systems.microservice.loghub.sdk.util.StringUtil;
 
@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogCPUUsage implements Serializable {
+public final class CPUUsage implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final Runtime RUNTIME = Runtime.getRuntime();
 
@@ -36,7 +36,7 @@ public final class LogCPUUsage implements Serializable {
     public final int entityActive;
     public final int entityTotal;
 
-    public LogCPUUsage() {
+    public CPUUsage() {
         String avg = StringUtil.load("/proc/loadavg", "0.0 0.0 0.0 0/0 0");
         String[] avgs = avg.split(" ");
         String[] ents = avgs[3].split("/");

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.usage;
 
 import java.io.Serializable;
 import java.lang.management.ClassLoadingMXBean;
@@ -25,7 +25,7 @@ import java.lang.management.ManagementFactory;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogClassUsage implements Serializable {
+public final class ClassUsage implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final ClassLoadingMXBean CLASS_LOADING_MX_BEAN = ManagementFactory.getClassLoadingMXBean();
 
@@ -33,7 +33,7 @@ public final class LogClassUsage implements Serializable {
     public final long loaded;
     public final long unloaded;
 
-    public LogClassUsage() {
+    public ClassUsage() {
         this.active = CLASS_LOADING_MX_BEAN.getLoadedClassCount();
         this.loaded = CLASS_LOADING_MX_BEAN.getTotalLoadedClassCount();
         this.unloaded = CLASS_LOADING_MX_BEAN.getUnloadedClassCount();

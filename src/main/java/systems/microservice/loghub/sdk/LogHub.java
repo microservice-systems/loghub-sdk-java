@@ -17,6 +17,13 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.usage.CPUUsage;
+import systems.microservice.loghub.sdk.usage.ClassUsage;
+import systems.microservice.loghub.sdk.usage.DescriptorUsage;
+import systems.microservice.loghub.sdk.usage.DiskUsage;
+import systems.microservice.loghub.sdk.usage.GCUsage;
+import systems.microservice.loghub.sdk.usage.MemoryUsage;
+import systems.microservice.loghub.sdk.usage.ThreadUsage;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
@@ -92,13 +99,13 @@ public final class LogHub {
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
     private static final Map<String, String> tags = createTags(properties);
-    private static final AtomicReference<LogCPUUsage> cpuUsage = new AtomicReference<>(new LogCPUUsage());
-    private static final AtomicReference<LogMemoryUsage> memoryUsage = new AtomicReference<>(new LogMemoryUsage());
-    private static final AtomicReference<LogDiskUsage> diskUsage = new AtomicReference<>(new LogDiskUsage());
-    private static final AtomicReference<LogClassUsage> classUsage = new AtomicReference<>(new LogClassUsage());
-    private static final AtomicReference<LogThreadUsage> threadUsage = new AtomicReference<>(new LogThreadUsage());
-    private static final AtomicReference<LogDescriptorUsage> descriptorUsage = new AtomicReference<>(new LogDescriptorUsage());
-    private static final AtomicReference<LogGCUsage> gcUsage = new AtomicReference<>(new LogGCUsage());
+    private static final AtomicReference<CPUUsage> cpuUsage = new AtomicReference<>(new CPUUsage());
+    private static final AtomicReference<MemoryUsage> memoryUsage = new AtomicReference<>(new MemoryUsage());
+    private static final AtomicReference<DiskUsage> diskUsage = new AtomicReference<>(new DiskUsage());
+    private static final AtomicReference<ClassUsage> classUsage = new AtomicReference<>(new ClassUsage());
+    private static final AtomicReference<ThreadUsage> threadUsage = new AtomicReference<>(new ThreadUsage());
+    private static final AtomicReference<DescriptorUsage> descriptorUsage = new AtomicReference<>(new DescriptorUsage());
+    private static final AtomicReference<GCUsage> gcUsage = new AtomicReference<>(new GCUsage());
     private static final AtomicBoolean active = new AtomicBoolean(enabled);
     private static final AtomicInteger finished = new AtomicInteger(2);
     private static final Lock outLock = createOutLock(enabled, systemOut, fileOut);
@@ -690,7 +697,7 @@ public final class LogHub {
                     final AtomicBoolean a = LogHub.active;
                     while (a.get()) {
                         try {
-                            LogMemoryUsage mu = new LogMemoryUsage();
+                            MemoryUsage mu = new MemoryUsage();
                             memoryUsage.set(mu);
                             logMetric("usage.memory.physical.total", mu.physicalTotal, 0, "MB");
                             logMetric("usage.memory.physical.free", mu.physicalFree, 0, "MB");
@@ -703,18 +710,18 @@ public final class LogHub {
                             logMetric("usage.memory.nonheap.committed", mu.nonheapCommitted, 0, "MB");
                             logMetric("usage.memory.nonheap.max", mu.nonheapMax, 0, "MB");
                             logMetric("usage.memory.object.pending.finalization", mu.objectPendingFinalization, 0);
-                            LogClassUsage cu = new LogClassUsage();
+                            ClassUsage cu = new ClassUsage();
                             classUsage.set(cu);
                             logMetric("usage.class.active", cu.active, 0);
                             logMetric("usage.class.loaded", cu.loaded, 0);
                             logMetric("usage.class.unloaded", cu.unloaded, 0);
-                            LogThreadUsage tu = new LogThreadUsage();
+                            ThreadUsage tu = new ThreadUsage();
                             threadUsage.set(tu);
                             logMetric("usage.thread.live", tu.live, 0);
                             logMetric("usage.thread.daemon", tu.daemon, 0);
                             logMetric("usage.thread.peak", tu.peak, 0);
                             logMetric("usage.thread.total", tu.total, 0);
-                            LogDescriptorUsage du = new LogDescriptorUsage();
+                            DescriptorUsage du = new DescriptorUsage();
                             descriptorUsage.set(du);
                             logMetric("usage.descriptor.file.max", du.fileMax, 0);
                             logMetric("usage.descriptor.file.open", du.fileOpen, 0);
@@ -742,7 +749,7 @@ public final class LogHub {
                     final AtomicBoolean a = LogHub.active;
                     while (a.get()) {
                         try {
-                            LogCPUUsage cu = new LogCPUUsage();
+                            CPUUsage cu = new CPUUsage();
                             cpuUsage.set(cu);
                             logMetric("usage.cpu.count", cu.count, 0);
                             logMetric("usage.cpu.m01", (long) (cu.m01 * 100.0f), 2);
@@ -750,13 +757,13 @@ public final class LogHub {
                             logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 2);
                             logMetric("usage.cpu.entity.active", cu.entityActive, 0);
                             logMetric("usage.cpu.entity.total", cu.entityTotal, 0);
-                            LogDiskUsage du = new LogDiskUsage();
+                            DiskUsage du = new DiskUsage();
                             diskUsage.set(du);
                             logMetric("usage.disk.total", du.total, 0, "MB");
                             logMetric("usage.disk.free", du.free, 0, "MB");
                             logMetric("usage.disk.usable", du.usable, 0, "MB");
-                            LogGCUsage gcuPrev = gcUsage.get();
-                            LogGCUsage gcu = new LogGCUsage();
+                            GCUsage gcuPrev = gcUsage.get();
+                            GCUsage gcu = new GCUsage();
                             gcUsage.set(gcu);
                             logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
                             logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 0, "ms");
@@ -1030,31 +1037,31 @@ public final class LogHub {
         return tags;
     }
 
-    public static LogCPUUsage getCPUUsage() {
+    public static CPUUsage getCPUUsage() {
         return cpuUsage.get();
     }
 
-    public static LogMemoryUsage getMemoryUsage() {
+    public static MemoryUsage getMemoryUsage() {
         return memoryUsage.get();
     }
 
-    public static LogDiskUsage getDiskUsage() {
+    public static DiskUsage getDiskUsage() {
         return diskUsage.get();
     }
 
-    public static LogClassUsage getClassUsage() {
+    public static ClassUsage getClassUsage() {
         return classUsage.get();
     }
 
-    public static LogThreadUsage getThreadUsage() {
+    public static ThreadUsage getThreadUsage() {
         return threadUsage.get();
     }
 
-    public static LogDescriptorUsage getDescriptorUsage() {
+    public static DescriptorUsage getDescriptorUsage() {
         return descriptorUsage.get();
     }
 
-    public static LogGCUsage getGCUsage() {
+    public static GCUsage getGCUsage() {
         return gcUsage.get();
     }
 

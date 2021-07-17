@@ -15,20 +15,19 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.usage;
 
 import com.sun.management.OperatingSystemMXBean;
 
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryUsage;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class LogMemoryUsage implements Serializable {
+public final class MemoryUsage implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final OperatingSystemMXBean OS_MX_BEAN = createOperatingSystemMXBean();
     private static final MemoryMXBean MEMORY_MX_BEAN = ManagementFactory.getMemoryMXBean();
@@ -45,10 +44,10 @@ public final class LogMemoryUsage implements Serializable {
     public final long nonheapMax;
     public final int objectPendingFinalization;
 
-    public LogMemoryUsage() {
+    public MemoryUsage() {
         long mb = 1048576L;
-        MemoryUsage hmu = MEMORY_MX_BEAN.getHeapMemoryUsage();
-        MemoryUsage nhmu = MEMORY_MX_BEAN.getNonHeapMemoryUsage();
+        java.lang.management.MemoryUsage hmu = MEMORY_MX_BEAN.getHeapMemoryUsage();
+        java.lang.management.MemoryUsage nhmu = MEMORY_MX_BEAN.getNonHeapMemoryUsage();
 
         this.physicalTotal = (OS_MX_BEAN != null) ? OS_MX_BEAN.getTotalPhysicalMemorySize() / mb : -1L;
         this.physicalFree = (OS_MX_BEAN != null) ? OS_MX_BEAN.getFreePhysicalMemorySize() / mb : -1L;

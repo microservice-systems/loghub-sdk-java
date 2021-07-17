@@ -18,6 +18,13 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
+import systems.microservice.loghub.sdk.usage.CPUUsage;
+import systems.microservice.loghub.sdk.usage.ClassUsage;
+import systems.microservice.loghub.sdk.usage.DescriptorUsage;
+import systems.microservice.loghub.sdk.usage.DiskUsage;
+import systems.microservice.loghub.sdk.usage.GCUsage;
+import systems.microservice.loghub.sdk.usage.MemoryUsage;
+import systems.microservice.loghub.sdk.usage.ThreadUsage;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
@@ -153,7 +160,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     private int writeTags(byte[] buffer, int index,
                           Throwable exception, ThreadInfo threadInfo,
-                          LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
+                          CPUUsage cpuUsage, MemoryUsage memoryUsage, DiskUsage diskUsage, ClassUsage classUsage, ThreadUsage threadUsage, DescriptorUsage descriptorUsage, GCUsage gcUsage,
                           Map<String, Tag> tags,
                           LogEventCallback callback) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -245,7 +252,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
     private int writeEvent(byte[] buffer, int index,
                            long time, String logger, int level, String levelName, LogType type,
                            Throwable exception, ThreadInfo threadInfo,
-                           LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
+                           CPUUsage cpuUsage, MemoryUsage memoryUsage, DiskUsage diskUsage, ClassUsage classUsage, ThreadUsage threadUsage, DescriptorUsage descriptorUsage, GCUsage gcUsage,
                            Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs,
                            LogEventCallback callback,
                            String message) {
@@ -263,7 +270,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
     public boolean logEvent(byte[] buffer, int index,
                             long time, String logger, int level, String levelName, LogType type,
                             Throwable exception, ThreadInfo threadInfo,
-                            LogCPUUsage cpuUsage, LogMemoryUsage memoryUsage, LogDiskUsage diskUsage, LogClassUsage classUsage, LogThreadUsage threadUsage, LogDescriptorUsage descriptorUsage, LogGCUsage gcUsage,
+                            CPUUsage cpuUsage, MemoryUsage memoryUsage, DiskUsage diskUsage, ClassUsage classUsage, ThreadUsage threadUsage, DescriptorUsage descriptorUsage, GCUsage gcUsage,
                             Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs,
                             LogEventCallback callback,
                             String message) {

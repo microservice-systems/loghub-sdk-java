@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.event;
 
 import systems.microservice.loghub.sdk.LogEventCallback;
+import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.Tag;
@@ -30,6 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 1.0
  */
 public final class EventLogger {
+    private static final boolean enabled = LogHub.isEnabled();
     private static final AtomicLong totalCount = new AtomicLong(0L);
     private static final AtomicLong totalSize = new AtomicLong(0L);
     private static final AtomicLong sentCount = new AtomicLong(0L);

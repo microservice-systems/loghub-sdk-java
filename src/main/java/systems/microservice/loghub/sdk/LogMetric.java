@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.metric.MetricCollector;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
@@ -55,10 +56,10 @@ public class LogMetric implements Serializable {
     }
 
     public void log(long value) {
-        LogHub.logMetric(name, value, point, unit);
+        MetricCollector.collect(name, value, point, unit);
     }
 
     public void log(long count, long value) {
-        LogHub.logMetric(name, count, value, point, unit);
+        MetricCollector.collect(name, count, value, point, unit);
     }
 }

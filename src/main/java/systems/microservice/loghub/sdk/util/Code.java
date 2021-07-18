@@ -19,6 +19,7 @@ package systems.microservice.loghub.sdk.util;
 
 import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.LogLevel;
+import systems.microservice.loghub.sdk.metric.MetricCollector;
 
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,7 +71,7 @@ public class Code implements AutoCloseable, Serializable {
     @Override
     public void close() {
         end = System.currentTimeMillis();
-        LogHub.logMetric(info.metric, end - begin, 0, "ms");
+        MetricCollector.collect(info.metric, end - begin, 0, "ms");
         ThreadInfo ti = ThreadInfo.getInstance();
         ti.depth--;
         LogHub.logEnd(end, logger, LogLevel.TRACE.id, LogLevel.TRACE.name(), info.endMessage);

@@ -17,13 +17,6 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.usage.CPUUsage;
-import systems.microservice.loghub.sdk.usage.ClassUsage;
-import systems.microservice.loghub.sdk.usage.DescriptorUsage;
-import systems.microservice.loghub.sdk.usage.DiskUsage;
-import systems.microservice.loghub.sdk.usage.GCUsage;
-import systems.microservice.loghub.sdk.usage.MemoryUsage;
-import systems.microservice.loghub.sdk.usage.ThreadUsage;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
@@ -53,7 +46,6 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -99,21 +91,11 @@ public final class LogHub {
     private static final boolean info = createInfo(properties);
     private static final boolean debug = createDebug(properties);
     private static final Map<String, String> tags = createTags(properties);
-    private static final AtomicReference<CPUUsage> cpuUsage = new AtomicReference<>(new CPUUsage());
-    private static final AtomicReference<MemoryUsage> memoryUsage = new AtomicReference<>(new MemoryUsage());
-    private static final AtomicReference<DiskUsage> diskUsage = new AtomicReference<>(new DiskUsage());
-    private static final AtomicReference<ClassUsage> classUsage = new AtomicReference<>(new ClassUsage());
-    private static final AtomicReference<ThreadUsage> threadUsage = new AtomicReference<>(new ThreadUsage());
-    private static final AtomicReference<DescriptorUsage> descriptorUsage = new AtomicReference<>(new DescriptorUsage());
-    private static final AtomicReference<GCUsage> gcUsage = new AtomicReference<>(new GCUsage());
     private static final AtomicBoolean active = new AtomicBoolean(enabled);
     private static final AtomicInteger finished = new AtomicInteger(2);
     private static final Lock outLock = createOutLock(enabled, systemOut, fileOut);
     private static final PrintStream fileOutStream = createFileOutStream(enabled, fileOut, filePath);
-    private static final LogEventWriter eventWriter = createEventWriter(enabled);
     private static final LogMetricWriter metricWriter = createMetricWriter(enabled);
-    private static final Thread monitor3Thread = createMonitor3Thread(enabled);
-    private static final Thread monitor10Thread = createMonitor10Thread(enabled);
     private static final Thread flushEventsThread = createFlushEventsThread(enabled);
     private static final Thread flushMetricsThread = createFlushMetricsThread(enabled);
     private static final Thread shutdownThread = createShutdownThread(enabled);
@@ -131,8 +113,6 @@ public final class LogHub {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            monitor3Thread.start();
-            monitor10Thread.start();
             flushEventsThread.start();
             flushMetricsThread.start();
             Runtime.getRuntime().addShutdownHook(shutdownThread);
@@ -689,100 +669,6 @@ public final class LogHub {
         }
     }
 
-    private static Thread createMonitor3Thread(boolean enabled) {
-        if (enabled) {
-            Thread t = new Thread("loghub-monitor-3") {
-                @Override
-                public void run() {
-                    final AtomicBoolean a = LogHub.active;
-                    while (a.get()) {
-                        try {
-                            MemoryUsage mu = new MemoryUsage();
-                            memoryUsage.set(mu);
-                            logMetric("usage.memory.physical.total", mu.physicalTotal, 0, "MB");
-                            logMetric("usage.memory.physical.free", mu.physicalFree, 0, "MB");
-                            logMetric("usage.memory.heap.init", mu.heapInit, 0, "MB");
-                            logMetric("usage.memory.heap.used", mu.heapUsed, 0, "MB");
-                            logMetric("usage.memory.heap.committed", mu.heapCommitted, 0, "MB");
-                            logMetric("usage.memory.heap.max", mu.heapMax, 0, "MB");
-                            logMetric("usage.memory.nonheap.init", mu.nonheapInit, 0, "MB");
-                            logMetric("usage.memory.nonheap.used", mu.nonheapUsed, 0, "MB");
-                            logMetric("usage.memory.nonheap.committed", mu.nonheapCommitted, 0, "MB");
-                            logMetric("usage.memory.nonheap.max", mu.nonheapMax, 0, "MB");
-                            logMetric("usage.memory.object.pending.finalization", mu.objectPendingFinalization, 0);
-                            ClassUsage cu = new ClassUsage();
-                            classUsage.set(cu);
-                            logMetric("usage.class.active", cu.active, 0);
-                            logMetric("usage.class.loaded", cu.loaded, 0);
-                            logMetric("usage.class.unloaded", cu.unloaded, 0);
-                            ThreadUsage tu = new ThreadUsage();
-                            threadUsage.set(tu);
-                            logMetric("usage.thread.live", tu.live, 0);
-                            logMetric("usage.thread.daemon", tu.daemon, 0);
-                            logMetric("usage.thread.peak", tu.peak, 0);
-                            logMetric("usage.thread.total", tu.total, 0);
-                            DescriptorUsage du = new DescriptorUsage();
-                            descriptorUsage.set(du);
-                            logMetric("usage.descriptor.file.max", du.fileMax, 0);
-                            logMetric("usage.descriptor.file.open", du.fileOpen, 0);
-                            try {
-                                Thread.sleep(3000L);
-                            } catch (InterruptedException ex) {
-                            }
-                        } catch (Throwable ex) {
-                        }
-                    }
-                }
-            };
-            t.setDaemon(true);
-            return t;
-        } else {
-            return null;
-        }
-    }
-
-    private static Thread createMonitor10Thread(boolean enabled) {
-        if (enabled) {
-            Thread t = new Thread("loghub-monitor-10") {
-                @Override
-                public void run() {
-                    final AtomicBoolean a = LogHub.active;
-                    while (a.get()) {
-                        try {
-                            CPUUsage cu = new CPUUsage();
-                            cpuUsage.set(cu);
-                            logMetric("usage.cpu.count", cu.count, 0);
-                            logMetric("usage.cpu.m01", (long) (cu.m01 * 100.0f), 2);
-                            logMetric("usage.cpu.m05", (long) (cu.m05 * 100.0f), 2);
-                            logMetric("usage.cpu.m15", (long) (cu.m15 * 100.0f), 2);
-                            logMetric("usage.cpu.entity.active", cu.entityActive, 0);
-                            logMetric("usage.cpu.entity.total", cu.entityTotal, 0);
-                            DiskUsage du = new DiskUsage();
-                            diskUsage.set(du);
-                            logMetric("usage.disk.total", du.total, 0, "MB");
-                            logMetric("usage.disk.free", du.free, 0, "MB");
-                            logMetric("usage.disk.usable", du.usable, 0, "MB");
-                            GCUsage gcuPrev = gcUsage.get();
-                            GCUsage gcu = new GCUsage();
-                            gcUsage.set(gcu);
-                            logMetric("usage.gc.collection.count", gcu.collectionCount - gcuPrev.collectionCount, 0);
-                            logMetric("usage.gc.collection.time", gcu.collectionTime - gcuPrev.collectionTime, 0, "ms");
-                            try {
-                                Thread.sleep(10000L);
-                            } catch (InterruptedException ex) {
-                            }
-                        } catch (Throwable ex) {
-                        }
-                    }
-                }
-            };
-            t.setDaemon(true);
-            return t;
-        } else {
-            return null;
-        }
-    }
-
     private static Thread createFlushEventsThread(boolean enabled) {
         if (enabled) {
             Thread t = new Thread("loghub-flush-events") {
@@ -792,7 +678,7 @@ public final class LogHub {
                     final AtomicInteger f = LogHub.finished;
                     final Lock ol = LogHub.outLock;
                     final PrintStream fos = LogHub.fileOutStream;
-                    final LogEventWriter ew = LogHub.eventWriter;
+                    final LogEventWriter ew = new LogEventWriter();
                     try {
                         while (a.get()) {
                             try {
@@ -1037,34 +923,6 @@ public final class LogHub {
         return tags;
     }
 
-    public static CPUUsage getCPUUsage() {
-        return cpuUsage.get();
-    }
-
-    public static MemoryUsage getMemoryUsage() {
-        return memoryUsage.get();
-    }
-
-    public static DiskUsage getDiskUsage() {
-        return diskUsage.get();
-    }
-
-    public static ClassUsage getClassUsage() {
-        return classUsage.get();
-    }
-
-    public static ThreadUsage getThreadUsage() {
-        return threadUsage.get();
-    }
-
-    public static DescriptorUsage getDescriptorUsage() {
-        return descriptorUsage.get();
-    }
-
-    public static GCUsage getGCUsage() {
-        return gcUsage.get();
-    }
-
     public static boolean isActive() {
         return active.get();
     }
@@ -1125,26 +983,5 @@ public final class LogHub {
     }
 
     public static void log(long time, String logger, int level, String levelName, Throwable exception, Map<String, Tag> tags, Map<String, Image> images, Map<String, Blob> blobs, LogEventCallback callback, String message) {
-    }
-
-    public static void logMetric(String name, long value, int point) {
-        logMetric(name, value, point, "");
-    }
-
-    public static void logMetric(String name, long value, int point, String unit) {
-        logMetric(name, 1L, value, point, unit);
-    }
-
-    public static void logMetric(String name, long count, long value, int point) {
-        logMetric(name, count, value, point, "");
-    }
-
-    public static void logMetric(String name, long count, long value, int point, String unit) {
-        Argument.notNull("name", name);
-        Argument.inRangeLong("count", count, 0L, Long.MAX_VALUE);
-        Argument.inRangeInt("point", point, 0, 14);
-        Argument.notNull("unit", unit);
-
-        metricWriter.log(name, count, value, point, unit);
     }
 }

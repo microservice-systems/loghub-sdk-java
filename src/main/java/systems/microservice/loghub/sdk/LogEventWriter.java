@@ -17,14 +17,6 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.util.Blob;
-import systems.microservice.loghub.sdk.util.Image;
-import systems.microservice.loghub.sdk.util.Tag;
-
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0

@@ -21,9 +21,8 @@ import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.StringUtil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -33,18 +32,18 @@ import java.util.Map;
 public final class NetworkUsage implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final List<Interface> interfaces;
+    public final Map<String, Interface> interfaces;
 
     public NetworkUsage() {
         this.interfaces = createInterfaces();
     }
 
-    private static List<Interface> createInterfaces() {
+    private static Map<String, Interface> createInterfaces() {
         try {
             String dev = StringUtil.load("/proc/self/net/dev", null);
             if (dev != null) {
                 String[] devs = dev.split("\n");
-                ArrayList<Interface> is = new ArrayList<>(devs.length);
+                LinkedHashMap<String, Interface> is = new LinkedHashMap<>(devs.length);
                 for (int i = 2, ci = devs.length; i < ci; ++i) {
                     String d = devs[i];
                     String n = null;
@@ -91,15 +90,15 @@ public final class NetworkUsage implements Serializable {
                         k = j;
                         j = StringUtil.skipDigits(d, j);
                         tps = Long.parseLong(d.substring(k, j));
-                        is.add(new Interface(n, new Interface.Receive(rbs, rps), new Interface.Transmit(tbs, tps)));
+                        is.put(n, new Interface(n, new Interface.Receive(rbs, rps), new Interface.Transmit(tbs, tps)));
                     }
                 }
-                return Collections.unmodifiableList(is);
+                return Collections.unmodifiableMap(is);
             } else {
-                return Collections.emptyList();
+                return Collections.emptyMap();
             }
         } catch (Exception e) {
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
     }
 

@@ -75,7 +75,12 @@ public enum BufferObjectType {
     DATE_ARRAY((byte) 62, Date[].class, new DateArrayReader(), new DateArrayWriter()),
     COLOR_ARRAY((byte) 63, Color[].class, new ColorArrayReader(), new ColorArrayWriter()),
     STRING_ARRAY((byte) 64, String[].class, new StringArrayReader(), new StringArrayWriter()),
-    URL_ARRAY((byte) 65, URL[].class, new URLArrayReader(), new URLArrayWriter()),
+    PATTERN_ARRAY((byte) 65, Pattern[].class, new PatternArrayReader(), new PatternArrayWriter()),
+    URL_ARRAY((byte) 66, URL[].class, new URLArrayReader(), new URLArrayWriter()),
+    RANGE_ARRAY((byte) 67, Range[].class, new RangeArrayReader(), new RangeArrayWriter()),
+    TAG_ARRAY((byte) 68, Tag[].class, new TagArrayReader(), new TagArrayWriter()),
+    IMAGE_ARRAY((byte) 69, Image[].class, new ImageArrayReader(), new ImageArrayWriter()),
+    BLOB_ARRAY((byte) 70, Blob[].class, new BlobArrayReader(), new BlobArrayWriter()),
     BUFFERABLE_ARRAY((byte) 99, Bufferable[].class, new BufferableArrayReader(), new BufferableArrayWriter());
 
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
@@ -132,7 +137,12 @@ public enum BufferObjectType {
         iots.put(DATE_ARRAY.id, DATE_ARRAY);
         iots.put(COLOR_ARRAY.id, COLOR_ARRAY);
         iots.put(STRING_ARRAY.id, STRING_ARRAY);
+        iots.put(PATTERN_ARRAY.id, PATTERN_ARRAY);
         iots.put(URL_ARRAY.id, URL_ARRAY);
+        iots.put(RANGE_ARRAY.id, RANGE_ARRAY);
+        iots.put(TAG_ARRAY.id, TAG_ARRAY);
+        iots.put(IMAGE_ARRAY.id, IMAGE_ARRAY);
+        iots.put(BLOB_ARRAY.id, BLOB_ARRAY);
         iots.put(BUFFERABLE_ARRAY.id, BUFFERABLE_ARRAY);
         return iots;
     }
@@ -174,7 +184,12 @@ public enum BufferObjectType {
         cots.put(DATE_ARRAY.clazz, DATE_ARRAY);
         cots.put(COLOR_ARRAY.clazz, COLOR_ARRAY);
         cots.put(STRING_ARRAY.clazz, STRING_ARRAY);
+        cots.put(PATTERN_ARRAY.clazz, PATTERN_ARRAY);
         cots.put(URL_ARRAY.clazz, URL_ARRAY);
+        cots.put(RANGE_ARRAY.clazz, RANGE_ARRAY);
+        cots.put(TAG_ARRAY.clazz, TAG_ARRAY);
+        cots.put(IMAGE_ARRAY.clazz, IMAGE_ARRAY);
+        cots.put(BLOB_ARRAY.clazz, BLOB_ARRAY);
         cots.put(BUFFERABLE_ARRAY.clazz, BUFFERABLE_ARRAY);
         return cots;
     }
@@ -450,10 +465,46 @@ public enum BufferObjectType {
         }
     }
 
+    private static final class PatternArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readPatternArray();
+        }
+    }
+
     private static final class URLArrayReader implements BufferObjectReader {
         @Override
         public Object read(BufferReader reader) {
             return reader.readURLArray();
+        }
+    }
+
+    private static final class RangeArrayReader implements BufferObjectReader {
+        @SuppressWarnings("unchecked")
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readRangeArray(Comparable.class);
+        }
+    }
+
+    private static final class TagArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readTagArray();
+        }
+    }
+
+    private static final class ImageArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readImageArray();
+        }
+    }
+
+    private static final class BlobArrayReader implements BufferObjectReader {
+        @Override
+        public Object read(BufferReader reader) {
+            return reader.readBlobArray();
         }
     }
 
@@ -718,10 +769,45 @@ public enum BufferObjectType {
         }
     }
 
+    private static final class PatternArrayWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writePatternArray(buffer, index, (Pattern[]) value);
+        }
+    }
+
     private static final class URLArrayWriter implements BufferObjectWriter {
         @Override
         public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
             return BufferWriter.writeURLArray(buffer, index, (URL[]) value);
+        }
+    }
+
+    private static final class RangeArrayWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeRangeArray(buffer, index, context, (Range[]) value);
+        }
+    }
+
+    private static final class TagArrayWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeTagArray(buffer, index, (Tag[]) value);
+        }
+    }
+
+    private static final class ImageArrayWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeImageArray(buffer, index, (Image[]) value);
+        }
+    }
+
+    private static final class BlobArrayWriter implements BufferObjectWriter {
+        @Override
+        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+            return BufferWriter.writeBlobArray(buffer, index, (Blob[]) value);
         }
     }
 

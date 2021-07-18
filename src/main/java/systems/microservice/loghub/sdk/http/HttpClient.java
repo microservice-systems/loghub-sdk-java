@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.http;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,11 +26,11 @@ import java.net.URL;
  * @since 1.0
  */
 public interface HttpClient {
-    public HttpURLConnection get(URL url, String contentType, String accept);
-    public HttpURLConnection put(URL url, String contentType, String accept);
-    public HttpURLConnection post(URL url, String contentType, String accept);
-    public HttpURLConnection delete(URL url, String contentType, String accept);
-    public HttpURLConnection head(URL url, String contentType, String accept);
-    public HttpURLConnection options(URL url, String contentType, String accept);
-    public HttpURLConnection trace(URL url, String contentType, String accept);
+    public HttpURLConnection get(URL url, String contentType, String accept) throws IOException;
+    public HttpURLConnection put(URL url, String contentType, String accept) throws IOException;
+    public HttpURLConnection post(URL url, String contentType, String accept) throws IOException;
+    public HttpURLConnection delete(URL url, String contentType, String accept) throws IOException;
+    public HttpURLConnection head(URL url, String contentType, String accept) throws IOException;
+    public HttpURLConnection options(URL url, String contentType, String accept) throws IOException;
+    public HttpURLConnection trace(URL url, String contentType, String accept) throws IOException;
 }

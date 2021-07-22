@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config.extractors;
 
-import systems.microservice.loghub.sdk.config.Extractor;
+import systems.microservice.loghub.sdk.config.ConfigExtractor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,10 +26,10 @@ import java.lang.reflect.Method;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class ValueOfExtractor<I, O> implements Extractor<I, O> {
-    private static final ValueOfExtractor<Object, Object> instance = new ValueOfExtractor<>();
+public final class ValueOfConfigExtractor<I, O> implements ConfigExtractor<I, O> {
+    private static final ValueOfConfigExtractor<Object, Object> instance = new ValueOfConfigExtractor<>();
 
-    private ValueOfExtractor() {
+    private ValueOfConfigExtractor() {
     }
 
     @SuppressWarnings("unchecked")
@@ -44,7 +44,7 @@ public final class ValueOfExtractor<I, O> implements Extractor<I, O> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <I, O> ValueOfExtractor<I, O> getInstance() {
-        return (ValueOfExtractor<I, O>) instance;
+    public static <I, O> ValueOfConfigExtractor<I, O> getInstance() {
+        return (ValueOfConfigExtractor<I, O>) instance;
     }
 }

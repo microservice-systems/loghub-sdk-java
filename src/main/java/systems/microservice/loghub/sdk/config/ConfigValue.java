@@ -59,7 +59,7 @@ public final class Value implements Comparable<Value>, Bufferable, Serializable 
     }
 
     @SuppressWarnings("unchecked")
-    public <I, O> O get(Class<O> outputClass, Extractor<I, O> extractor) {
+    public <I, O> O get(Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         Argument.notNull("outputClass", outputClass);
         Argument.notNull("extractor", extractor);
 

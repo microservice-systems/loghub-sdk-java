@@ -17,11 +17,14 @@
 
 package systems.microservice.loghub.sdk.config.extractors;
 
-import systems.microservice.loghub.sdk.config.Extractor;
+import systems.microservice.loghub.sdk.config.ConfigExtractor;
+import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 import systems.microservice.loghub.sdk.util.PropertiesUtil;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URL;
 import java.util.Map;
 import java.util.Properties;
 
@@ -29,16 +32,27 @@ import java.util.Properties;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class PropertiesExtractor implements Extractor<String, Map<String, String>> {
-    private static final PropertiesExtractor instance = new PropertiesExtractor();
+public final class URLPropertiesConfigExtractor implements ConfigExtractor<URL, Map<String, String>> {
+    private static final URLPropertiesConfigExtractor instance = new URLPropertiesConfigExtractor();
 
-    private PropertiesExtractor() {
+    private URLPropertiesConfigExtractor() {
     }
 
     @Override
-    public Map<String, String> extract(String input, Class<Map<String, String>> outputClass) {
+    public Map<String, String> extract(URL input, Class<Map<String, String>> outputClass) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream(65536);
+        try (ByteArrayOutputStream out1 = out) {
+            try (InputStream in = input.openStream()) {
+                byte[] b = new byte[65536];
+                for (int n = in.read(b); n > 0; n = in.read(b)) {
+                    out1.write(b, 0, n);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Properties ps = new Properties();
-        try (StringReader r = new StringReader(input)) {
+        try (StringReader r = new StringReader(out.toString())) {
             ps.load(r);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -46,7 +60,7 @@ public final class PropertiesExtractor implements Extractor<String, Map<String, 
         return PropertiesUtil.toMap(ps);
     }
 
-    public static PropertiesExtractor getInstance() {
+    public static URLPropertiesConfigExtractor getInstance() {
         return instance;
     }
 }

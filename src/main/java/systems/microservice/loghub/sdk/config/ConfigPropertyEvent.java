@@ -29,11 +29,11 @@ public class PropertyEvent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final String key;
-    public final Property oldProperty;
-    public final Property newProperty;
+    public final ConfigProperty oldProperty;
+    public final ConfigProperty newProperty;
     public final long time;
 
-    public PropertyEvent(Property oldProperty, Property newProperty) {
+    public PropertyEvent(ConfigProperty oldProperty, ConfigProperty newProperty) {
         Argument.notNull("newProperty", newProperty);
         if (oldProperty != null) {
             if (!newProperty.key.equals(oldProperty.key)) {

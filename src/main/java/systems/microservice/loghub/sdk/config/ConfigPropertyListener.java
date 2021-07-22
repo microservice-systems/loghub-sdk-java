@@ -21,14 +21,7 @@ package systems.microservice.loghub.sdk.config;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public enum Service {
-    LOGHUB,
-    ELASTICSEARCH,
-    PROMETHEUS_LOKI,
-    POSTGRES,
-    MYSQL,
-    MONGO,
-    ORACLE,
-    CLOUD_WATCH,
-    CLOUD_OPERATIONS
+public interface PropertyListener {
+    public boolean onPropertyValidate(ConfigPropertyEvent event);
+    public void onPropertyChange(ConfigPropertyEvent event);
 }

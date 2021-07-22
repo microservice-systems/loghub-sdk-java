@@ -20,42 +20,30 @@ package systems.microservice.loghub.sdk.config.extractors;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import systems.microservice.loghub.sdk.config.Extractor;
-import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
+import systems.microservice.loghub.sdk.config.ConfigExtractor;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.net.URL;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class URLDocumentExtractor implements Extractor<URL, Document> {
-    private static final URLDocumentExtractor instance = new URLDocumentExtractor();
+public final class DocumentConfigExtractor implements ConfigExtractor<String, Document> {
+    private static final DocumentConfigExtractor instance = new DocumentConfigExtractor();
 
-    private URLDocumentExtractor() {
+    private DocumentConfigExtractor() {
     }
 
     @Override
-    public Document extract(URL input, Class<Document> outputClass) {
+    public Document extract(String input, Class<Document> outputClass) {
         try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream(65536);
-            try (ByteArrayOutputStream out1 = out) {
-                try (InputStream in = input.openStream()) {
-                    byte[] b = new byte[65536];
-                    for (int n = in.read(b); n > 0; n = in.read(b)) {
-                        out1.write(b, 0, n);
-                    }
-                }
-            }
             DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
             DocumentBuilder b = f.newDocumentBuilder();
-            try (StringReader r = new StringReader(out.toString())) {
+            try (StringReader r = new StringReader(input)) {
                 InputSource is = new InputSource(r);
                 return b.parse(is);
             }
@@ -64,7 +52,7 @@ public final class URLDocumentExtractor implements Extractor<URL, Document> {
         }
     }
 
-    public static URLDocumentExtractor getInstance() {
+    public static DocumentConfigExtractor getInstance() {
         return instance;
     }
 }

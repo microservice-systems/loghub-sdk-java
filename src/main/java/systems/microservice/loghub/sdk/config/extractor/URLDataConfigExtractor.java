@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config.extractors;
 
-import systems.microservice.loghub.sdk.config.Extractor;
+import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 
 import java.io.IOException;
@@ -28,10 +28,10 @@ import java.net.URL;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class URLDataExtractor implements Extractor<URL, byte[]> {
-    private static final URLDataExtractor instance = new URLDataExtractor();
+public final class URLDataConfigExtractor implements ConfigExtractor<URL, byte[]> {
+    private static final URLDataConfigExtractor instance = new URLDataConfigExtractor();
 
-    private URLDataExtractor() {
+    private URLDataConfigExtractor() {
     }
 
     @Override
@@ -50,7 +50,7 @@ public final class URLDataExtractor implements Extractor<URL, byte[]> {
         return out.toByteArray();
     }
 
-    public static URLDataExtractor getInstance() {
+    public static URLDataConfigExtractor getInstance() {
         return instance;
     }
 }

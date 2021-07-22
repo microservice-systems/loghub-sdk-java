@@ -34,14 +34,14 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0
  */
 @SuppressWarnings("rawtypes")
-public final class Value implements Comparable<Value>, Bufferable, Serializable {
+public final class ConfigValue implements Comparable<ConfigValue>, Bufferable, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Class clazz;
     private final Object object;
     private final transient ConcurrentHashMap<Class, Object> objects;
 
-    public Value(Class clazz, Object object) {
+    public ConfigValue(Class clazz, Object object) {
         Argument.notNull("clazz", clazz);
 
         this.clazz = clazz;
@@ -81,7 +81,7 @@ public final class Value implements Comparable<Value>, Bufferable, Serializable 
 
     @SuppressWarnings("unchecked")
     @Override
-    public int compareTo(Value value) {
+    public int compareTo(ConfigValue value) {
         Comparable tc = (Comparable) object;
         Comparable oc = (Comparable) value.object;
         return tc.compareTo(oc);
@@ -97,7 +97,7 @@ public final class Value implements Comparable<Value>, Bufferable, Serializable 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         try {
-            Field objectsField = Value.class.getDeclaredField("objects");
+            Field objectsField = ConfigValue.class.getDeclaredField("objects");
             objectsField.setAccessible(true);
             objectsField.set(this, (object != null) ? new ConcurrentHashMap<>(0, 0.75f, 1) : null);
         } catch (NoSuchFieldException | IllegalAccessException e) {

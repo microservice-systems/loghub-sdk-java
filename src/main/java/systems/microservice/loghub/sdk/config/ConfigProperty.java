@@ -33,38 +33,38 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class Property implements Bufferable, Serializable {
+public final class ConfigProperty implements Bufferable, Serializable {
     private static final long serialVersionUID = 1L;
 
     public final UUID uuid;
     public final String group;
     public final String key;
-    public final PropertyType type;
-    public final Value value;
-    public final Value defaultValue;
-    public final List<Value> possibleValues;
-    public final Range<Value> rangeValues;
+    public final ConfigPropertyType type;
+    public final ConfigValue value;
+    public final ConfigValue defaultValue;
+    public final List<ConfigValue> possibleValues;
+    public final Range<ConfigValue> rangeValues;
     public final String unit;
     public final String description;
     public final URL url;
     public final String user;
     public final String commit;
     public final long time;
-    public final AtomicReference<Property> oldProperty;
-    public final AtomicReference<Property> invalidProperty;
+    public final AtomicReference<ConfigProperty> oldProperty;
+    public final AtomicReference<ConfigProperty> invalidProperty;
 
-    public Property(String group,
-                    String key,
-                    PropertyType type,
-                    Value value,
-                    Value defaultValue,
-                    List<Value> possibleValues,
-                    Range<Value> rangeValues,
-                    String unit,
-                    String description,
-                    URL url,
-                    String user,
-                    String commit) {
+    public ConfigProperty(String group,
+                          String key,
+                          ConfigPropertyType type,
+                          ConfigValue value,
+                          ConfigValue defaultValue,
+                          List<ConfigValue> possibleValues,
+                          Range<ConfigValue> rangeValues,
+                          String unit,
+                          String description,
+                          URL url,
+                          String user,
+                          String commit) {
         Argument.notNull("group", group);
         Argument.notNull("key", key);
         Argument.notNull("type", type);

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.config.extractors;
+package systems.microservice.loghub.sdk.config.extractor;
 
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 

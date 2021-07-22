@@ -22,6 +22,6 @@ package systems.microservice.loghub.sdk.config;
  * @since 1.0
  */
 @FunctionalInterface
-public interface Extractor<I, O> {
+public interface ConfigExtractor<I, O> {
     public O extract(I input, Class<O> outputClass);
 }

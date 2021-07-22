@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.config.extractors;
+package systems.microservice.loghub.sdk.config.extractor;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;

@@ -21,7 +21,7 @@ package systems.microservice.loghub.sdk.config;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public interface PropertyListener {
+public interface ConfigPropertyListener {
     public boolean onPropertyValidate(ConfigPropertyEvent event);
     public void onPropertyChange(ConfigPropertyEvent event);
 }

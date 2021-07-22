@@ -47,4 +47,28 @@ public final class MetricCollector {
         Argument.inRangeLong("count", count, 0L, Long.MAX_VALUE);
         Argument.inRangeInt("point", point, 0, 14);
     }
+
+    public static void collectInRange(String name, long value, long min, long max, int point) {
+        if ((value >= min) && (value <= max)) {
+            collect(name, value, point);
+        }
+    }
+
+    public static void collectInRange(String name, long value, long min, long max, int point, String unit) {
+        if ((value >= min) && (value <= max)) {
+            collect(name, value, point, unit);
+        }
+    }
+
+    public static void collectInRange(String name, long count, long value, long min, long max, int point) {
+        if ((value >= min) && (value <= max)) {
+            collect(name, count, value, point);
+        }
+    }
+
+    public static void collectInRange(String name, long count, long value, long min, long max, int point, String unit) {
+        if ((value >= min) && (value <= max)) {
+            collect(name, count, value, point, unit);
+        }
+    }
 }

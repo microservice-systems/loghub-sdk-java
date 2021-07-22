@@ -123,6 +123,24 @@ public final class Usage {
                             MetricCollector.collect("usage.disk.total", du.total, 0, "MB");
                             MetricCollector.collect("usage.disk.free", du.free, 0, "MB");
                             MetricCollector.collect("usage.disk.usable", du.usable, 0, "MB");
+                            NetworkUsage nuPrev = networkUsage.get();
+                            NetworkUsage nu = new NetworkUsage();
+                            networkUsage.set(nu);
+                            for (NetworkUsage.Interface i : nu.interfaces.values()) {
+                                String n = "usage.network.interface." + i.name;
+                                NetworkUsage.Interface iPrev = nuPrev.interfaces.get(i.name);
+                                if (iPrev != null) {
+                                    MetricCollector.collectInRange(n + ".receive.bytes", i.receive.bytes - iPrev.receive.bytes, 1L, Long.MAX_VALUE, 0, "B");
+                                    MetricCollector.collectInRange(n + ".receive.packets", i.receive.packets - iPrev.receive.packets, 1L, Long.MAX_VALUE, 0);
+                                    MetricCollector.collectInRange(n + ".transmit.bytes", i.transmit.bytes - iPrev.transmit.bytes, 1L, Long.MAX_VALUE, 0, "B");
+                                    MetricCollector.collectInRange(n + ".transmit.packets", i.transmit.packets - iPrev.transmit.packets, 1L, Long.MAX_VALUE, 0);
+                                } else {
+                                    MetricCollector.collectInRange(n + ".receive.bytes", i.receive.bytes, 1L, Long.MAX_VALUE, 0, "B");
+                                    MetricCollector.collectInRange(n + ".receive.packets", i.receive.packets, 1L, Long.MAX_VALUE, 0);
+                                    MetricCollector.collectInRange(n + ".transmit.bytes", i.transmit.bytes, 1L, Long.MAX_VALUE, 0, "B");
+                                    MetricCollector.collectInRange(n + ".transmit.packets", i.transmit.packets, 1L, Long.MAX_VALUE, 0);
+                                }
+                            }
                             GCUsage gcuPrev = gcUsage.get();
                             GCUsage gcu = new GCUsage();
                             gcUsage.set(gcu);

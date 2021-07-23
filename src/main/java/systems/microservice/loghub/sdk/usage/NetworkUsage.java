@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Dmitry Kotlyarov
@@ -151,7 +152,7 @@ public final class NetworkUsage implements Serializable {
     }
 
     public static void main(String[] args) {
-        NetworkUsage nu = new NetworkUsage();
-        nu = null;
+        UUID uuid = UUID.randomUUID();
+        System.out.println(uuid);
     }
 }

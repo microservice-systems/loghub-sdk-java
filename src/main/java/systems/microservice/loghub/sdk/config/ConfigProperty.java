@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
+import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.Argument;
@@ -112,5 +113,9 @@ public final class ConfigProperty implements Bufferable, Serializable {
         index = BufferWriter.writeBufferableRef(buffer, index, context, oldProperty.get());
         index = BufferWriter.writeBufferableRef(buffer, index, context, invalidProperty.get());
         return index;
+    }
+
+    static {
+        BufferObjectType.registerBufferableClass(UUID.fromString("566940a3-3063-45bd-8574-76d302e7e063"), ConfigProperty.class);
     }
 }

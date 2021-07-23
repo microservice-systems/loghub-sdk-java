@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
+import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.Argument;
@@ -27,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -103,5 +105,9 @@ public final class ConfigValue implements Comparable<ConfigValue>, Bufferable, S
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new Error(e);
         }
+    }
+
+    static {
+        BufferObjectType.registerBufferableClass(UUID.fromString("6047e1ba-6898-4f6a-9f37-e49129c27771"), ConfigValue.class);
     }
 }

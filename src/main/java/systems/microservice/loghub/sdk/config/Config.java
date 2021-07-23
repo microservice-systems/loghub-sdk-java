@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
+import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
@@ -86,6 +87,10 @@ public final class Config implements Bufferable, Serializable {
     @Override
     public int write(byte[] buffer, int index, Map<String, Object> context) {
         return 0;
+    }
+
+    static {
+        BufferObjectType.registerBufferableClass(UUID.fromString("47d75af4-90fb-40a2-9f52-f92bce8e6044"), Config.class);
     }
 
     private static Map<String, ConfigProperty> createProperties(Collection<ConfigProperty> properties, ConfigProperty property) {

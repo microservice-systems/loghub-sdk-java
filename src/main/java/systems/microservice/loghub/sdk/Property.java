@@ -19,6 +19,11 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
+import systems.microservice.loghub.sdk.config.Config;
+import systems.microservice.loghub.sdk.config.ConfigExtractor;
+import systems.microservice.loghub.sdk.config.ConfigProperty;
+import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
+import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -31,7 +36,32 @@ import java.util.UUID;
 public class Property<T> implements Bufferable, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public Property() {
+    public Property(String key, Class<T> clazz) {
+    }
+
+    public Property(String key, Class<T> clazz, T defaultValue) {
+    }
+
+    public Property(String key, Class<T> clazz, T defaultValue, String unit) {
+    }
+
+    public Property(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable) {
+    }
+
+    public Property(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, T[] possibleValues) {
+    }
+
+    public <I, O> Property(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass) {
+    }
+
+    public <I, O> Property(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+    }
+
+
+    public <I extends Comparable<I>, O> Property(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass) {
+    }
+
+    public <I extends Comparable<I>, O> Property(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
     }
 
     public T get() {

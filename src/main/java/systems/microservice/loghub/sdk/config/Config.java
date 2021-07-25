@@ -244,7 +244,7 @@ public final class Config implements Bufferable, Serializable {
         return null;
     }
 
-    public static <T extends Comparable<T>> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, Range<T> rangeValues) {
+    public static <T extends Comparable<T>> T getProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit, Range<T> rangeValues) {
         return defaultValue;
     }
 

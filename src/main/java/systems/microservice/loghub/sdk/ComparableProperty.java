@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
+import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.util.Argument;
@@ -36,39 +37,36 @@ public class ComparableProperty<T extends Comparable<T>> implements Bufferable, 
 
     protected final String key;
     protected final Class<T> clazz;
+    protected final boolean nullable;
     protected final T defaultValue;
     protected final String unit;
-    protected final boolean nullable;
     protected final Range<T> rangeValues;
 
     public ComparableProperty(String key, Class<T> clazz) {
-        this(key, clazz, null);
+        this(key, clazz, false);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, T defaultValue) {
-        this(key, clazz, defaultValue, null);
+    public ComparableProperty(String key, Class<T> clazz, boolean nullable) {
+        this(key, clazz, nullable, null);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, T defaultValue, String unit) {
-        this(key, clazz, defaultValue, unit, false);
+    public ComparableProperty(String key, Class<T> clazz, boolean nullable, T defaultValue) {
+        this(key, clazz, nullable, defaultValue, null);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable) {
-        this(key, clazz, defaultValue, unit, nullable, null);
+    public ComparableProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit) {
+        this(key, clazz, nullable, defaultValue, unit, null);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, Range<T> rangeValues) {
+    public ComparableProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit, Range<T> rangeValues) {
         Argument.notNull("key", key);
         Argument.notNull("clazz", clazz);
-        if (!nullable && (defaultValue == null)) {
-            throw new IllegalArgumentException(String.format("Not nullable comparable property '%s' has null default value", key));
-        }
 
         this.key = key;
         this.clazz = clazz;
+        this.nullable = nullable;
         this.defaultValue = defaultValue;
         this.unit = unit;
-        this.nullable = nullable;
         this.rangeValues = rangeValues;
     }
 
@@ -80,6 +78,10 @@ public class ComparableProperty<T extends Comparable<T>> implements Bufferable, 
         return clazz;
     }
 
+    public boolean isNullable() {
+        return nullable;
+    }
+
     public T getDefaultValue() {
         return defaultValue;
     }
@@ -88,21 +90,24 @@ public class ComparableProperty<T extends Comparable<T>> implements Bufferable, 
         return unit;
     }
 
-    public boolean isNullable() {
-        return nullable;
-    }
-
     public Range<T> getRangeValues() {
         return rangeValues;
     }
 
     public T get() {
-        return Config.getProperty(key, clazz, defaultValue, unit, nullable, rangeValues);
+        return Config.getProperty(key, clazz, nullable, defaultValue, unit, rangeValues);
     }
 
     @Override
     public int write(byte[] buffer, int index, Map<String, Object> context) {
-        return 0;
+        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
+        index = BufferWriter.writeString(buffer, index, key);
+        index = BufferWriter.writeString(buffer, index, clazz.getCanonicalName());
+        index = BufferWriter.writeBoolean(buffer, index, nullable);
+        index = BufferWriter.writeObjectRef(buffer, index, context, defaultValue);
+        index = BufferWriter.writeStringRef(buffer, index, unit);
+        index = BufferWriter.writeRangeRef(buffer, index, context, rangeValues);
+        return index;
     }
 
     static {

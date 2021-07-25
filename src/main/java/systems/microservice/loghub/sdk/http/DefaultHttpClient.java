@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.http;
 
-import systems.microservice.loghub.sdk.config.Config;
+import systems.microservice.loghub.sdk.ComparableProperty;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.IOException;
@@ -29,9 +29,7 @@ import java.net.URL;
  * @since 1.0
  */
 public class DefaultHttpClient implements HttpClient {
-    private static final String CONNECT_TIMEOUT_PROPERTY = "loghub.sdk.http.client.default.connect.timeout";
-    private static final Integer CONNECT_TIMEOUT_DEFAULT = 30000;
-    private static final Range<Integer> CONNECT_TIMEOUT_RANGE = new Range<>(0, Integer.MAX_VALUE);
+    protected static final ComparableProperty<Integer> connectTimeout = new ComparableProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE));
 
     public DefaultHttpClient() {
     }
@@ -41,7 +39,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);
@@ -62,7 +60,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("PUT");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);
@@ -83,7 +81,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);
@@ -104,7 +102,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("DELETE");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);
@@ -125,7 +123,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("HEAD");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);
@@ -146,7 +144,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("OPTIONS");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);
@@ -167,7 +165,7 @@ public class DefaultHttpClient implements HttpClient {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("TRACE");
         conn.setUseCaches(false);
-        conn.setConnectTimeout(Config.getProperty(CONNECT_TIMEOUT_PROPERTY, Integer.class, CONNECT_TIMEOUT_DEFAULT, "ms", false, CONNECT_TIMEOUT_RANGE));
+        conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);

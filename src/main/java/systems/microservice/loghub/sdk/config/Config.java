@@ -236,11 +236,7 @@ public final class Config implements Bufferable, Serializable {
         return p.value.get(clazz);
     }
 
-    public static <I, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, possibleValues, outputClass, ValueOfConfigExtractor.getInstance());
-    }
-
-    public static <I, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, I[] possibleValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+    public static <I, O> O getProperty(String key, Class<I> clazz, boolean nullable, I defaultValue, String unit, I[] possibleValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         return null;
     }
 

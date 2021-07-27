@@ -201,7 +201,11 @@ public enum BufferObjectType {
     public static BufferObjectType getObjectType(Class clazz) {
         Argument.notNull("clazz", clazz);
 
-        return classObjectTypes.get(clazz);
+        if (!Bufferable.class.isAssignableFrom(clazz)) {
+            return classObjectTypes.get(clazz);
+        } else {
+            return BufferObjectType.BUFFERABLE;
+        }
     }
 
     public static <T extends Bufferable> void registerBufferableClass(UUID uuid, Class<T> clazz) {

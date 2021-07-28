@@ -83,13 +83,8 @@ public final class Config implements Serializable {
         this.time = System.currentTimeMillis();
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         return 0;
-    }
-
-    static {
-        BufferObjectType.registerBufferableClass(UUID.fromString("47d75af4-90fb-40a2-9f52-f92bce8e6044"), Config.class);
     }
 
     private static Map<String, ConfigProperty> createProperties(Collection<ConfigProperty> properties, ConfigProperty property) {

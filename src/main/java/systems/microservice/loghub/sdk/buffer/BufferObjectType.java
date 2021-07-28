@@ -60,7 +60,6 @@ public enum BufferObjectType {
     TAG((byte) 18, Tag.class, new TagReader(), new TagWriter()),
     IMAGE((byte) 19, Image.class, new ImageReader(), new ImageWriter()),
     BLOB((byte) 20, Blob.class, new BlobReader(), new BlobWriter()),
-    BUFFERABLE((byte) 49, Bufferable.class, new BufferableReader(), new BufferableWriter()),
     BOOLEAN_ARRAY((byte) 51, boolean[].class, new BooleanArrayReader(), new BooleanArrayWriter()),
     BYTE_ARRAY((byte) 52, byte[].class, new ByteArrayReader(), new ByteArrayWriter()),
     CHAR_ARRAY((byte) 53, char[].class, new CharArrayReader(), new CharArrayWriter()),
@@ -80,8 +79,7 @@ public enum BufferObjectType {
     RANGE_ARRAY((byte) 67, Range[].class, new RangeArrayReader(), new RangeArrayWriter()),
     TAG_ARRAY((byte) 68, Tag[].class, new TagArrayReader(), new TagArrayWriter()),
     IMAGE_ARRAY((byte) 69, Image[].class, new ImageArrayReader(), new ImageArrayWriter()),
-    BLOB_ARRAY((byte) 70, Blob[].class, new BlobArrayReader(), new BlobArrayWriter()),
-    BUFFERABLE_ARRAY((byte) 99, Bufferable[].class, new BufferableArrayReader(), new BufferableArrayWriter());
+    BLOB_ARRAY((byte) 70, Blob[].class, new BlobArrayReader(), new BlobArrayWriter());
 
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
     private static final HashMap<Class, BufferObjectType> classObjectTypes = createClassObjectTypes();
@@ -120,7 +118,6 @@ public enum BufferObjectType {
         iots.put(TAG.id, TAG);
         iots.put(IMAGE.id, IMAGE);
         iots.put(BLOB.id, BLOB);
-        iots.put(BUFFERABLE.id, BUFFERABLE);
         iots.put(BOOLEAN_ARRAY.id, BOOLEAN_ARRAY);
         iots.put(BYTE_ARRAY.id, BYTE_ARRAY);
         iots.put(CHAR_ARRAY.id, CHAR_ARRAY);
@@ -141,7 +138,6 @@ public enum BufferObjectType {
         iots.put(TAG_ARRAY.id, TAG_ARRAY);
         iots.put(IMAGE_ARRAY.id, IMAGE_ARRAY);
         iots.put(BLOB_ARRAY.id, BLOB_ARRAY);
-        iots.put(BUFFERABLE_ARRAY.id, BUFFERABLE_ARRAY);
         return iots;
     }
 
@@ -167,7 +163,6 @@ public enum BufferObjectType {
         cots.put(TAG.clazz, TAG);
         cots.put(IMAGE.clazz, IMAGE);
         cots.put(BLOB.clazz, BLOB);
-        cots.put(BUFFERABLE.clazz, BUFFERABLE);
         cots.put(BOOLEAN_ARRAY.clazz, BOOLEAN_ARRAY);
         cots.put(BYTE_ARRAY.clazz, BYTE_ARRAY);
         cots.put(CHAR_ARRAY.clazz, CHAR_ARRAY);
@@ -188,7 +183,6 @@ public enum BufferObjectType {
         cots.put(TAG_ARRAY.clazz, TAG_ARRAY);
         cots.put(IMAGE_ARRAY.clazz, IMAGE_ARRAY);
         cots.put(BLOB_ARRAY.clazz, BLOB_ARRAY);
-        cots.put(BUFFERABLE_ARRAY.clazz, BUFFERABLE_ARRAY);
         return cots;
     }
 
@@ -199,11 +193,7 @@ public enum BufferObjectType {
     public static BufferObjectType getObjectType(Class clazz) {
         Argument.notNull("clazz", clazz);
 
-        if (!Bufferable.class.isAssignableFrom(clazz)) {
-            return classObjectTypes.get(clazz);
-        } else {
-            return BufferObjectType.BUFFERABLE;
-        }
+        return classObjectTypes.get(clazz);
     }
 
     private static final class BooleanReader implements BufferObjectReader {
@@ -344,20 +334,6 @@ public enum BufferObjectType {
         @Override
         public Object read(BufferReader reader) {
             return reader.readBlob();
-        }
-    }
-
-    private static final class BufferableReader implements BufferObjectReader {
-        @SuppressWarnings("unchecked")
-        @Override
-        public Object read(BufferReader reader) {
-            UUID uuid = reader.readUUID();
-            Class c = bufferableClasses.get(uuid);
-            if (c != null) {
-                return reader.readBufferable(c);
-            } else {
-                throw new BufferException(String.format("Bufferable class with uuid '%s' is not registered", uuid));
-            }
         }
     }
 
@@ -502,121 +478,114 @@ public enum BufferObjectType {
         }
     }
 
-    private static final class BufferableArrayReader implements BufferObjectReader {
-        @Override
-        public Object read(BufferReader reader) {
-            return reader.readBufferableArray(null);
-        }
-    }
-
     private static final class BooleanWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBoolean(buffer, index, (Boolean) value);
         }
     }
 
     private static final class ByteWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeByte(buffer, index, (Byte) value);
         }
     }
 
     private static final class CharacterWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeChar(buffer, index, (Character) value);
         }
     }
 
     private static final class ShortWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeShort(buffer, index, (Short) value);
         }
     }
 
     private static final class IntegerWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeInt(buffer, index, (Integer) value);
         }
     }
 
     private static final class LongWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeLong(buffer, index, (Long) value);
         }
     }
 
     private static final class FloatWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeFloat(buffer, index, (Float) value);
         }
     }
 
     private static final class DoubleWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeDouble(buffer, index, (Double) value);
         }
     }
 
     private static final class UUIDWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeUUID(buffer, index, (java.util.UUID) value);
         }
     }
 
     private static final class BigIntegerWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBigInteger(buffer, index, (BigInteger) value);
         }
     }
 
     private static final class BigDecimalWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBigDecimal(buffer, index, (BigDecimal) value);
         }
     }
 
     private static final class DateWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeDate(buffer, index, (Date) value);
         }
     }
 
     private static final class ColorWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeColor(buffer, index, (Color) value);
         }
     }
 
     private static final class StringWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeString(buffer, index, (String) value);
         }
     }
 
     private static final class PatternWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writePattern(buffer, index, (Pattern) value);
         }
     }
 
     private static final class URLWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeURL(buffer, index, (java.net.URL) value);
         }
     }
@@ -624,191 +593,169 @@ public enum BufferObjectType {
     private static final class RangeWriter implements BufferObjectWriter {
         @SuppressWarnings({"unchecked", "rawtypes"})
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-            return BufferWriter.writeRange(buffer, index, context, (Range) value);
+        public int write(byte[] buffer, int index, Object value) {
+            return BufferWriter.writeRange(buffer, index, (Range) value);
         }
     }
 
     private static final class TagWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeTag(buffer, index, (Tag) value);
         }
     }
 
     private static final class ImageWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeImage(buffer, index, (Image) value);
         }
     }
 
     private static final class BlobWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBlob(buffer, index, (Blob) value);
-        }
-    }
-
-    private static final class BufferableWriter implements BufferObjectWriter {
-        @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-            Bufferable v = (Bufferable) value;
-            Class c = v.getClass();
-            UUID uuid = bufferableUUIDs.get(c);
-            if (uuid != null) {
-                index = BufferWriter.writeUUID(buffer, index, uuid);
-                return BufferWriter.writeBufferable(buffer, index, context, v);
-            } else {
-                throw new BufferException(String.format("Bufferable class '%s' is not registered", c.getCanonicalName()));
-            }
         }
     }
 
     private static final class BooleanArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBooleanArray(buffer, index, (boolean[]) value);
         }
     }
 
     private static final class ByteArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeByteArray(buffer, index, (byte[]) value);
         }
     }
 
     private static final class CharArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeCharArray(buffer, index, (char[]) value);
         }
     }
 
     private static final class ShortArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeShortArray(buffer, index, (short[]) value);
         }
     }
 
     private static final class IntArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeIntArray(buffer, index, (int[]) value);
         }
     }
 
     private static final class LongArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeLongArray(buffer, index, (long[]) value);
         }
     }
 
     private static final class FloatArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeFloatArray(buffer, index, (float[]) value);
         }
     }
 
     private static final class DoubleArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeDoubleArray(buffer, index, (double[]) value);
         }
     }
 
     private static final class UUIDArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeUUIDArray(buffer, index, (UUID[]) value);
         }
     }
 
     private static final class BigIntegerArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBigIntegerArray(buffer, index, (BigInteger[]) value);
         }
     }
 
     private static final class BigDecimalArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBigDecimalArray(buffer, index, (BigDecimal[]) value);
         }
     }
 
     private static final class DateArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeDateArray(buffer, index, (Date[]) value);
         }
     }
 
     private static final class ColorArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeColorArray(buffer, index, (Color[]) value);
         }
     }
 
     private static final class StringArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeStringArray(buffer, index, (String[]) value);
         }
     }
 
     private static final class PatternArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writePatternArray(buffer, index, (Pattern[]) value);
         }
     }
 
     private static final class URLArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeURLArray(buffer, index, (URL[]) value);
         }
     }
 
     private static final class RangeArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-            return BufferWriter.writeRangeArray(buffer, index, context, (Range[]) value);
+        public int write(byte[] buffer, int index, Object value) {
+            return BufferWriter.writeRangeArray(buffer, index, (Range[]) value);
         }
     }
 
     private static final class TagArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeTagArray(buffer, index, (Tag[]) value);
         }
     }
 
     private static final class ImageArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeImageArray(buffer, index, (Image[]) value);
         }
     }
 
     private static final class BlobArrayWriter implements BufferObjectWriter {
         @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
+        public int write(byte[] buffer, int index, Object value) {
             return BufferWriter.writeBlobArray(buffer, index, (Blob[]) value);
-        }
-    }
-
-    private static final class BufferableArrayWriter implements BufferObjectWriter {
-        @Override
-        public int write(byte[] buffer, int index, Map<String, Object> context, Object value) {
-            return BufferWriter.writeBufferableArray(buffer, index, context, (Bufferable[]) value);
         }
     }
 }

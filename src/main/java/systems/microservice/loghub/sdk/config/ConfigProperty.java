@@ -108,12 +108,20 @@ public final class ConfigProperty implements Serializable {
         index = BufferWriter.writeStringRef(buffer, index, user);
         index = BufferWriter.writeStringRef(buffer, index, commit);
         index = BufferWriter.writeLong(buffer, index, time);
-        index = BufferWriter.writeBufferableRef(buffer, index, context, oldProperty.get());
-        index = BufferWriter.writeBufferableRef(buffer, index, context, invalidProperty.get());
+        ConfigProperty op = oldProperty.get();
+        if (op != null) {
+            index = BufferWriter.writeByte(buffer, index, (byte) 1);
+            index = op.write(buffer, index);
+        } else {
+            index = BufferWriter.writeByte(buffer, index, (byte) 0);
+        }
+        ConfigProperty ip = invalidProperty.get();
+        if (ip != null) {
+            index = BufferWriter.writeByte(buffer, index, (byte) 1);
+            index = ip.write(buffer, index);
+        } else {
+            index = BufferWriter.writeByte(buffer, index, (byte) 0);
+        }
         return index;
-    }
-
-    static {
-        BufferObjectType.registerBufferableClass(UUID.fromString("566940a3-3063-45bd-8574-76d302e7e063"), ConfigProperty.class);
     }
 }

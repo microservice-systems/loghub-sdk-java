@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.util.Range;
 
@@ -30,7 +29,7 @@ import java.util.UUID;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class Property<T> implements Bufferable, Serializable {
+public class Property<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Property(String key, Class<T> clazz) {
@@ -63,14 +62,5 @@ public class Property<T> implements Bufferable, Serializable {
 
     public T get() {
         return null;
-    }
-
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
-        return 0;
-    }
-
-    static {
-        BufferObjectType.registerBufferableClass(UUID.fromString("35f98446-317a-49a9-ba79-8d931d22113a"), Property.class);
     }
 }

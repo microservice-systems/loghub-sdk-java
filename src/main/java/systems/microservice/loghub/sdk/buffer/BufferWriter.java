@@ -406,11 +406,11 @@ public final class BufferWriter {
         return writeString(buffer, index, value.toExternalForm());
     }
 
-    public static <T extends Comparable<T>> int writeRange(byte[] buffer, int index, Map<String, Object> context, Range<T> value) {
+    public static <T extends Comparable<T>> int writeRange(byte[] buffer, int index, Range<T> value) {
         Argument.notNull("value", value);
 
-        index = writeObject(buffer, index, context, value.min);
-        return writeObject(buffer, index, context, value.max);
+        index = writeObject(buffer, index, value.min);
+        return writeObject(buffer, index, value.max);
     }
 
     public static int writeTag(byte[] buffer, int index, Tag value) {
@@ -862,10 +862,10 @@ public final class BufferWriter {
         }
     }
 
-    public static <T extends Comparable<T>> int writeRangeRef(byte[] buffer, int index, Map<String, Object> context, Range<T> value) {
+    public static <T extends Comparable<T>> int writeRangeRef(byte[] buffer, int index, Range<T> value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeRange(buffer, index, context, value);
+            return writeRange(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
@@ -1098,43 +1098,43 @@ public final class BufferWriter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static int writeObject(byte[] buffer, int index, Map<String, Object> context, Object value) {
+    public static int writeObject(byte[] buffer, int index, Object value) {
         Argument.notNull("value", value);
 
         Class c = value.getClass();
         BufferObjectType ot = BufferObjectType.getObjectType(c);
         if (ot != null) {
             index = writeByte(buffer, index, ot.id);
-            return ot.writer.write(buffer, index, context, value);
+            return ot.writer.write(buffer, index, value);
         } else {
             throw new BufferException(String.format("Class '%s' is not supported", c.getCanonicalName()));
         }
     }
 
-    public static int writeObjectRef(byte[] buffer, int index, Map<String, Object> context, Object value) {
+    public static int writeObjectRef(byte[] buffer, int index, Object value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeObject(buffer, index, context, value);
+            return writeObject(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
     }
 
-    public static int writeObjectArray(byte[] buffer, int index, Map<String, Object> context, Object[] value) {
+    public static int writeObjectArray(byte[] buffer, int index, Object[] value) {
         Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
-            index = writeObject(buffer, index, context, value[i]);
+            index = writeObject(buffer, index, value[i]);
         }
         return index;
     }
 
-    public static int writeObjectArrayRef(byte[] buffer, int index, Map<String, Object> context, Object[] value) {
+    public static int writeObjectArrayRef(byte[] buffer, int index, Object[] value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeObjectArray(buffer, index, context, value);
+            return writeObjectArray(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
@@ -1163,15 +1163,15 @@ public final class BufferWriter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static int writeObjectMap(byte[] buffer, int index, Map<String, Object> context, Map value) {
+    public static int writeObjectMap(byte[] buffer, int index, Map value) {
         Argument.notNull("value", value);
 
         int l = value.size();
         index = writeLength(buffer, index, l);
         for (Object e : value.entrySet()) {
             Map.Entry en = (Map.Entry) e;
-            index = writeObject(buffer, index, context, en.getKey());
-            index = writeObject(buffer, index, context, en.getValue());
+            index = writeObject(buffer, index, en.getKey());
+            index = writeObject(buffer, index, en.getValue());
         }
         return index;
     }

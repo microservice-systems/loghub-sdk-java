@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,7 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-final class LogMetricValue implements Bufferable {
+final class LogMetricValue {
     private static final double[] POINTS = {1.0, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001, 0.0000001, 0.00000001,
                                             0.000000001, 0.0000000001, 0.00000000001, 0.000000000001, 0.0000000000001,
                                             0.00000000000001};
@@ -64,8 +63,7 @@ final class LogMetricValue implements Bufferable {
         }
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         byte v = 1;
         double p = POINTS[point];
         index = BufferWriter.writeByte(buffer, index, v);

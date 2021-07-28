@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
 import java.util.Map;
@@ -30,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-final class LogEventStringMap implements Bufferable {
+final class LogEventStringMap {
     private static final int MIN_ID = Short.MIN_VALUE;
     private static final int MAX_ID = Short.MAX_VALUE;
 
@@ -76,8 +75,7 @@ final class LogEventStringMap implements Bufferable {
         idGenerator.set(id);
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         for (Map.Entry<String, StringID> en : stringIDs.entrySet()) {
             StringID v = en.getValue();

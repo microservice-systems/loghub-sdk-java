@@ -19,7 +19,6 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
@@ -32,7 +31,7 @@ import java.util.UUID;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ComparableProperty<T extends Comparable<T>> implements Bufferable, Serializable {
+public class ComparableProperty<T extends Comparable<T>> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final String key;
@@ -98,19 +97,14 @@ public class ComparableProperty<T extends Comparable<T>> implements Bufferable, 
         return Config.getProperty(key, clazz, nullable, defaultValue, unit, rangeValues);
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         index = BufferWriter.writeString(buffer, index, key);
         index = BufferWriter.writeString(buffer, index, clazz.getCanonicalName());
         index = BufferWriter.writeBoolean(buffer, index, nullable);
-        index = BufferWriter.writeObjectRef(buffer, index, context, defaultValue);
+        index = BufferWriter.writeObjectRef(buffer, index, defaultValue);
         index = BufferWriter.writeStringRef(buffer, index, unit);
-        index = BufferWriter.writeRangeRef(buffer, index, context, rangeValues);
+        index = BufferWriter.writeRangeRef(buffer, index, rangeValues);
         return index;
-    }
-
-    static {
-        BufferObjectType.registerBufferableClass(UUID.fromString("367513fb-ef76-4031-970f-b8b95392e2af"), ComparableProperty.class);
     }
 }

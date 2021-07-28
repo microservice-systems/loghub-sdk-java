@@ -17,8 +17,6 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.buffer.Bufferable;
-
 import java.io.Serializable;
 import java.util.Map;
 
@@ -26,17 +24,12 @@ import java.util.Map;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class LogMetricConfig implements Bufferable, Serializable {
+public class LogMetricConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final boolean enabled;
 
     public LogMetricConfig(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
-        return 0;
     }
 }

@@ -17,8 +17,6 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.buffer.Bufferable;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -27,7 +25,7 @@ import java.util.regex.Pattern;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class LogEventConfig implements Bufferable, Serializable {
+public class LogEventConfig implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final boolean enabled;
@@ -64,10 +62,5 @@ public class LogEventConfig implements Bufferable, Serializable {
         this.logger = logger;
         this.message = message;
         this.tags = tags;
-    }
-
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
-        return 0;
     }
 }

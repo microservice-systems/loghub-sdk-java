@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.MapUtil;
 import systems.microservice.loghub.sdk.util.ThreadSection;
 
@@ -30,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-final class LogMetricBuffer implements Bufferable {
+final class LogMetricBuffer {
     private final ThreadSection section;
     private final ConcurrentHashMap<String, LogMetricValue> metrics;
     private final AtomicLong begin;
@@ -81,11 +80,10 @@ final class LogMetricBuffer implements Bufferable {
         }
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         byte v = 1;
         index = BufferWriter.writeVersion(buffer, index, v);
-        index = BufferWriter.writeObjectMap(buffer, index, context, metrics);
+        index = BufferWriter.writeObjectMap(buffer, index, metrics);
         return index;
     }
 }

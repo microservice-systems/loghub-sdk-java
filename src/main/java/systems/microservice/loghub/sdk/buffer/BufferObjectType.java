@@ -85,8 +85,6 @@ public enum BufferObjectType {
 
     private static final HashMap<Byte, BufferObjectType> idObjectTypes = createIDObjectTypes();
     private static final HashMap<Class, BufferObjectType> classObjectTypes = createClassObjectTypes();
-    private static final ConcurrentHashMap<UUID, Class> bufferableClasses = new ConcurrentHashMap<>(16, 0.75f, 1);
-    private static final ConcurrentHashMap<Class, UUID> bufferableUUIDs = new ConcurrentHashMap<>(16, 0.75f, 1);
 
     public final byte id;
     public final Class clazz;
@@ -206,14 +204,6 @@ public enum BufferObjectType {
         } else {
             return BufferObjectType.BUFFERABLE;
         }
-    }
-
-    public static <T extends Bufferable> void registerBufferableClass(UUID uuid, Class<T> clazz) {
-        Argument.notNull("uuid", uuid);
-        Argument.notNull("clazz", clazz);
-
-        bufferableClasses.put(uuid, clazz);
-        bufferableUUIDs.put(clazz, uuid);
     }
 
     private static final class BooleanReader implements BufferObjectReader {

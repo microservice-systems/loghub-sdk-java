@@ -100,7 +100,7 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
         if (sid == LogEventStringMap.NOT_EXIST_ID) {
             index = BufferWriter.writeString(buffer, index, key);
         }
-        index = BufferWriter.writeObject(buffer, index, null, value);
+        index = BufferWriter.writeObject(buffer, index, value);
         if (unit != null) {
             index = BufferWriter.writeByte(buffer, index, (byte) 1);
             sid = strings.getStringID(unit);

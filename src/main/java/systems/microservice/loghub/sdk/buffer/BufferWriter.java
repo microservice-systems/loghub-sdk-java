@@ -417,7 +417,7 @@ public final class BufferWriter {
         Argument.notNull("value", value);
 
         index = writeString(buffer, index, value.key);
-        index = writeObject(buffer, index, null, value.value);
+        index = writeObject(buffer, index, value.value);
         return writeStringRef(buffer, index, value.unit);
     }
 
@@ -433,12 +433,6 @@ public final class BufferWriter {
 
         index = writeByteArray(buffer, index, value.content);
         return writeString(buffer, index, value.contentType);
-    }
-
-    public static int writeBufferable(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {
-        Argument.notNull("value", value);
-
-        return value.write(buffer, index, context);
     }
 
     public static int writeBooleanArray(byte[] buffer, int index, boolean[] value) {
@@ -618,13 +612,13 @@ public final class BufferWriter {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static int writeRangeArray(byte[] buffer, int index, Map<String, Object> context, Range[] value) {
+    public static int writeRangeArray(byte[] buffer, int index, Range[] value) {
         Argument.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
-            index = writeRange(buffer, index, context, value[i]);
+            index = writeRange(buffer, index, value[i]);
         }
         return index;
     }
@@ -658,17 +652,6 @@ public final class BufferWriter {
         index = writeLength(buffer, index, l);
         for (int i = 0; i < l; ++i) {
             index = writeBlob(buffer, index, value[i]);
-        }
-        return index;
-    }
-
-    public static int writeBufferableArray(byte[] buffer, int index, Map<String, Object> context, Bufferable[] value) {
-        Argument.notNull("value", value);
-
-        int l = value.length;
-        index = writeLength(buffer, index, l);
-        for (int i = 0; i < l; ++i) {
-            index = writeBufferable(buffer, index, context, value[i]);
         }
         return index;
     }
@@ -898,15 +881,6 @@ public final class BufferWriter {
         }
     }
 
-    public static int writeBufferableRef(byte[] buffer, int index, Map<String, Object> context, Bufferable value) {
-        if (value != null) {
-            index = writeByte(buffer, index, (byte) 1);
-            return writeBufferable(buffer, index, context, value);
-        } else {
-            return writeByte(buffer, index, (byte) 0);
-        }
-    }
-
     public static int writeBooleanArrayRef(byte[] buffer, int index, boolean[] value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
@@ -1052,10 +1026,10 @@ public final class BufferWriter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static int writeRangeArrayRef(byte[] buffer, int index, Map<String, Object> context, Range[] value) {
+    public static int writeRangeArrayRef(byte[] buffer, int index, Range[] value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeRangeArray(buffer, index, context, value);
+            return writeRangeArray(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
@@ -1083,15 +1057,6 @@ public final class BufferWriter {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
             return writeBlobArray(buffer, index, value);
-        } else {
-            return writeByte(buffer, index, (byte) 0);
-        }
-    }
-
-    public static int writeBufferableArrayRef(byte[] buffer, int index, Map<String, Object> context, Bufferable[] value) {
-        if (value != null) {
-            index = writeByte(buffer, index, (byte) 1);
-            return writeBufferableArray(buffer, index, context, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
@@ -1141,22 +1106,22 @@ public final class BufferWriter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static int writeObjectCollection(byte[] buffer, int index, Map<String, Object> context, Collection value) {
+    public static int writeObjectCollection(byte[] buffer, int index, Collection value) {
         Argument.notNull("value", value);
 
         int l = value.size();
         index = writeLength(buffer, index, l);
         for (Object e : value) {
-            index = writeObject(buffer, index, context, e);
+            index = writeObject(buffer, index, e);
         }
         return index;
     }
 
     @SuppressWarnings("rawtypes")
-    public static int writeObjectCollectionRef(byte[] buffer, int index, Map<String, Object> context, Collection value) {
+    public static int writeObjectCollectionRef(byte[] buffer, int index, Collection value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeObjectCollection(buffer, index, context, value);
+            return writeObjectCollection(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }
@@ -1177,10 +1142,10 @@ public final class BufferWriter {
     }
 
     @SuppressWarnings("rawtypes")
-    public static int writeObjectMapRef(byte[] buffer, int index, Map<String, Object> context, Map value) {
+    public static int writeObjectMapRef(byte[] buffer, int index, Map value) {
         if (value != null) {
             index = writeByte(buffer, index, (byte) 1);
-            return writeObjectMap(buffer, index, context, value);
+            return writeObjectMap(buffer, index, value);
         } else {
             return writeByte(buffer, index, (byte) 0);
         }

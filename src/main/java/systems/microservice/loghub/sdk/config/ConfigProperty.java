@@ -19,7 +19,6 @@ package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 
@@ -34,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class ConfigProperty implements Bufferable, Serializable {
+public final class ConfigProperty implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final UUID uuid;
@@ -93,17 +92,16 @@ public final class ConfigProperty implements Bufferable, Serializable {
         this.invalidProperty = new AtomicReference<>(null);
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
         index = BufferWriter.writeUUID(buffer, index, uuid);
         index = BufferWriter.writeString(buffer, index, group);
         index = BufferWriter.writeString(buffer, index, key);
 //        index = BufferWriter.writeUUID(buffer, index, type);
-        index = BufferWriter.writeBufferable(buffer, index, context, value);
-        index = BufferWriter.writeBufferable(buffer, index, context, defaultValue);
-        index = BufferWriter.writeObjectCollectionRef(buffer, index, context, possibleValues);
-        index = BufferWriter.writeRange(buffer, index, context, rangeValues);
+        index = value.write(buffer, index);
+        index = defaultValue.write(buffer, index);
+        index = BufferWriter.writeObjectCollectionRef(buffer, index, possibleValues);
+        index = BufferWriter.writeRange(buffer, index, rangeValues);
         index = BufferWriter.writeString(buffer, index, unit);
         index = BufferWriter.writeString(buffer, index, description);
         index = BufferWriter.writeURL(buffer, index, url);

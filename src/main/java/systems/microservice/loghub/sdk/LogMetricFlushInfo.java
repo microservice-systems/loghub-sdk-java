@@ -39,13 +39,13 @@ final class LogMetricFlushInfo implements Serializable {
     }
 
     public int writeContent(LogMetricBuffer content) {
-        int index = BufferWriter.writeBufferable(null, headerEnd, null, content);
+        int index = content.write(null, headerEnd);
         if (index >= buffer.length) {
             byte[] b = new byte[index];
             System.arraycopy(buffer, 0, b, 0, headerEnd);
             buffer = b;
         }
-        contentEnd = BufferWriter.writeBufferable(buffer, headerEnd, null, content);
+        contentEnd = content.write(buffer, headerEnd);
         if (contentEnd != index) {
             throw new RuntimeException(String.format("Content end %d is not equal to index %d after two phase bufferization", contentEnd, index));
         }

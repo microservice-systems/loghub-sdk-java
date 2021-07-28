@@ -19,7 +19,6 @@ package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
@@ -36,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0
  */
 @SuppressWarnings("rawtypes")
-public final class ConfigValue implements Comparable<ConfigValue>, Bufferable, Serializable {
+public final class ConfigValue implements Comparable<ConfigValue>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Class clazz;
@@ -89,10 +88,9 @@ public final class ConfigValue implements Comparable<ConfigValue>, Bufferable, S
         return tc.compareTo(oc);
     }
 
-    @Override
-    public int write(byte[] buffer, int index, Map<String, Object> context) {
+    public int write(byte[] buffer, int index) {
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
-        index = BufferWriter.writeObjectRef(buffer, index, context, object);
+        index = BufferWriter.writeObjectRef(buffer, index, object);
         return index;
     }
 
@@ -105,9 +103,5 @@ public final class ConfigValue implements Comparable<ConfigValue>, Bufferable, S
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new Error(e);
         }
-    }
-
-    static {
-        BufferObjectType.registerBufferableClass(UUID.fromString("6047e1ba-6898-4f6a-9f37-e49129c27771"), ConfigValue.class);
     }
 }

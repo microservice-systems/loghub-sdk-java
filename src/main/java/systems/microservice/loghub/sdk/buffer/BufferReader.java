@@ -265,14 +265,6 @@ public final class BufferReader {
         return new Blob(c, ct);
     }
 
-    public <T extends Bufferable> T readBufferable(Class<T> clazz) {
-        try {
-            return clazz.getConstructor(BufferReader.class).newInstance(this);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new BufferException(e);
-        }
-    }
-
     public boolean[] readBooleanArray() {
         int l = readLength(1);
         boolean[] v = new boolean[Math.min(l, ARRAY_READ_LENGTH_MAX)];
@@ -674,27 +666,6 @@ public final class BufferReader {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends Bufferable> T[] readBufferableArray(Class<T> clazz) {
-        int l = readLength(1);
-        T[] v = (T[]) Array.newInstance(clazz, Math.min(l, ARRAY_READ_LENGTH_MAX));
-        for (int i = 0; i < l; ++i) {
-            if (i >= v.length) {
-                T[] nv = (T[]) Array.newInstance(clazz, v.length * 2);
-                System.arraycopy(v, 0, nv, 0, v.length);
-                v = nv;
-            }
-            v[i] = readBufferable(clazz);
-        }
-        if (l == v.length) {
-            return v;
-        } else {
-            T[] nv = (T[]) Array.newInstance(clazz, l);
-            System.arraycopy(v, 0, nv, 0, l);
-            return nv;
-        }
-    }
-
     public Boolean readBooleanRef() {
         int idx = index;
         byte ref = readByte();
@@ -928,18 +899,6 @@ public final class BufferReader {
         byte ref = readByte();
         if (ref == (byte) 1) {
             return readBlob();
-        } else if (ref == (byte) 0) {
-            return null;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
-        }
-    }
-
-    public <T extends Bufferable> T readBufferableRef(Class<T> clazz) {
-        int idx = index;
-        byte ref = readByte();
-        if (ref == (byte) 1) {
-            return readBufferable(clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {
@@ -1181,18 +1140,6 @@ public final class BufferReader {
         byte ref = readByte();
         if (ref == (byte) 1) {
             return readBlobArray();
-        } else if (ref == (byte) 0) {
-            return null;
-        } else {
-            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
-        }
-    }
-
-    public <T extends Bufferable> T[] readBufferableArrayRef(Class<T> clazz) {
-        int idx = index;
-        byte ref = readByte();
-        if (ref == (byte) 1) {
-            return readBufferableArray(clazz);
         } else if (ref == (byte) 0) {
             return null;
         } else {

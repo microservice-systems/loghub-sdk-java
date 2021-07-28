@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.buffer.BufferObjectType;
-import systems.microservice.loghub.sdk.buffer.Bufferable;
 import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
@@ -41,7 +40,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class Config implements Bufferable, Serializable {
+public final class Config implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final ReentrantLock lock = new ReentrantLock(false);
     private static final AtomicReference<Config> config = new AtomicReference<>(new Config());

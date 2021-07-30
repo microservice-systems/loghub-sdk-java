@@ -22,6 +22,6 @@ package systems.microservice.loghub.sdk.buffer;
  * @since 1.0
  */
 @FunctionalInterface
-public interface BufferRefWriter {
-    public void run();
+public interface BufferRefWriter<T> {
+    public int write(byte[] buffer, int index, T value);
 }

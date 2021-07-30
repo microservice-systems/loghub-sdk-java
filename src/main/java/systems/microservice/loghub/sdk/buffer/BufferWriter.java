@@ -1150,4 +1150,13 @@ public final class BufferWriter {
             return writeByte(buffer, index, (byte) 0);
         }
     }
+
+    public static <T> int writeRef(byte[] buffer, int index, T value, BufferRefWriter<T> writer) {
+        if (value != null) {
+            index = writeByte(buffer, index, (byte) 1);
+            return writer.write(buffer, index, value);
+        } else {
+            return writeByte(buffer, index, (byte) 0);
+        }
+    }
 }

@@ -1244,4 +1244,16 @@ public final class BufferReader {
             throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
         }
     }
+
+    public <T> T readRef(BufferRefReader<T> reader) {
+        int idx = index;
+        byte ref = readByte();
+        if (ref == (byte) 1) {
+            return reader.read(this);
+        } else if (ref == (byte) 0) {
+            return null;
+        } else {
+            throw new BufferException(String.format("Buffer of size %d has illegal format at index %d: illegal reference value %d", buffer.length, idx, ref));
+        }
+    }
 }

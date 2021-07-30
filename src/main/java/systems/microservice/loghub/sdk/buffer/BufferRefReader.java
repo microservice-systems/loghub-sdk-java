@@ -22,6 +22,6 @@ package systems.microservice.loghub.sdk.buffer;
  * @since 1.0
  */
 @FunctionalInterface
-public interface BufferRefReader {
-    public void run();
+public interface BufferRefReader<T> {
+    public T read(BufferReader reader);
 }

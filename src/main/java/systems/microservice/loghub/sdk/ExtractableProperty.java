@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ExtractableProperty<I, O> implements Serializable {
+public class ExtractableProperty<I, O> implements Property<O>, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final String key;
@@ -92,6 +92,7 @@ public class ExtractableProperty<I, O> implements Serializable {
         return extractor;
     }
 
+    @Override
     public O get() {
         return Config.getProperty(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, extractor);
     }

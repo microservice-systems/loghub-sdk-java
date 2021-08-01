@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.http;
 
 import systems.microservice.loghub.sdk.ComparableProperty;
+import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.IOException;
@@ -31,11 +32,20 @@ import java.net.URL;
 public class DefaultHttpClient implements HttpClient {
     protected static final ComparableProperty<Integer> connectTimeout = new ComparableProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE));
 
-    public DefaultHttpClient() {
+    protected final URL url;
+
+    public DefaultHttpClient(URL url) {
+        Argument.notNull("url", url);
+
+        this.url = url;
+    }
+
+    public URL getURL() {
+        return url;
     }
 
     @Override
-    public HttpURLConnection get(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection get(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setUseCaches(false);
@@ -56,7 +66,7 @@ public class DefaultHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection put(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection put(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("PUT");
         conn.setUseCaches(false);
@@ -77,7 +87,7 @@ public class DefaultHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection post(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection post(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
@@ -98,7 +108,7 @@ public class DefaultHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection delete(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection delete(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("DELETE");
         conn.setUseCaches(false);
@@ -119,7 +129,7 @@ public class DefaultHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection head(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection head(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("HEAD");
         conn.setUseCaches(false);
@@ -140,7 +150,7 @@ public class DefaultHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection options(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection options(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("OPTIONS");
         conn.setUseCaches(false);
@@ -161,7 +171,7 @@ public class DefaultHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection trace(URL url, String contentType, String accept) throws IOException {
+    public HttpURLConnection trace(String contentType, String accept) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("TRACE");
         conn.setUseCaches(false);

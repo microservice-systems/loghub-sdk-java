@@ -99,17 +99,4 @@ public class ExtractableProperty<I, O> implements Serializable {
     public O get() {
         return Config.getProperty(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, extractor);
     }
-
-    public int write(byte[] buffer, int index) {
-        index = BufferWriter.writeVersion(buffer, index, (byte) 1);
-        index = BufferWriter.writeString(buffer, index, key);
-        index = BufferWriter.writeString(buffer, index, clazz.getCanonicalName());
-        index = BufferWriter.writeBoolean(buffer, index, nullable);
-        index = BufferWriter.writeObjectRef(buffer, index, defaultValue);
-        index = BufferWriter.writeStringRef(buffer, index, unit);
-        index = BufferWriter.writeObjectArrayRef(buffer, index, possibleValues);
-        index = BufferWriter.writeString(buffer, index, outputClass.getCanonicalName());
-        index = BufferWriter.writeObject(buffer, index, extractor);
-        return index;
-    }
 }

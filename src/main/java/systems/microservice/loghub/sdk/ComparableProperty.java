@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ComparableProperty<T extends Comparable<T>> implements Serializable {
+public class ComparableProperty<T extends Comparable<T>> implements Property<T>, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final String key;
@@ -89,6 +89,7 @@ public class ComparableProperty<T extends Comparable<T>> implements Serializable
         return rangeValues;
     }
 
+    @Override
     public T get() {
         return Config.getProperty(key, clazz, nullable, defaultValue, unit, rangeValues);
     }

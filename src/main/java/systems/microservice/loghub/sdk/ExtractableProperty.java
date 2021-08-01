@@ -17,16 +17,12 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.buffer.BufferObjectType;
-import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author Dmitry Kotlyarov

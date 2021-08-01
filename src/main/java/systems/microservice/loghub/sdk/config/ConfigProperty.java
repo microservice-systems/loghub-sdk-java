@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
@@ -25,7 +24,6 @@ import systems.microservice.loghub.sdk.util.Range;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 

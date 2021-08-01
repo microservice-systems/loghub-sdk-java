@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov

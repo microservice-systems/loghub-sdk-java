@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;

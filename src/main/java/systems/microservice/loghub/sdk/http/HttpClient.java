@@ -19,7 +19,6 @@ package systems.microservice.loghub.sdk.http;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * @author Dmitry Kotlyarov

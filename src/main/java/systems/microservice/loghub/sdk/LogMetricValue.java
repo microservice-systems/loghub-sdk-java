@@ -19,7 +19,6 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

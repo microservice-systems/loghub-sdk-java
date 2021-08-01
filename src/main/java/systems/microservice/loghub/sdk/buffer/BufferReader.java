@@ -25,7 +25,6 @@ import systems.microservice.loghub.sdk.util.Range;
 import systems.microservice.loghub.sdk.util.Tag;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;

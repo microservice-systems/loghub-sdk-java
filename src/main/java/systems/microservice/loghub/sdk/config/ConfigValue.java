@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.buffer.BufferObjectType;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.MapUtil;
@@ -26,8 +25,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

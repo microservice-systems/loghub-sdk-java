@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.http;
 
+import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.RangeProperty;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
@@ -30,18 +31,28 @@ import java.net.URL;
  * @since 1.0
  */
 public class DefaultHttpClient implements HttpClient {
-    protected static final RangeProperty<Integer> connectTimeout = new RangeProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE));
-
     protected final URL url;
+    protected final Property<Integer> connectTimeout;
 
     public DefaultHttpClient(URL url) {
+        this(url,
+             new RangeProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE)));
+    }
+
+    public DefaultHttpClient(URL url, Property<Integer> connectTimeout) {
         Argument.notNull("url", url);
+        Argument.notNull("connectTimeout", connectTimeout);
 
         this.url = url;
+        this.connectTimeout = connectTimeout;
     }
 
     public URL getURL() {
         return url;
+    }
+
+    public int getConnectTimeout() {
+        return connectTimeout.get();
     }
 
     @Override

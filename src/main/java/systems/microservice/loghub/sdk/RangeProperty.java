@@ -27,7 +27,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ComparableProperty<T extends Comparable<T>> implements Property<T>, Serializable {
+public class RangeProperty<T extends Comparable<T>> implements Property<T>, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final String key;
@@ -37,23 +37,23 @@ public class ComparableProperty<T extends Comparable<T>> implements Property<T>,
     protected final String unit;
     protected final Range<T> rangeValues;
 
-    public ComparableProperty(String key, Class<T> clazz) {
+    public RangeProperty(String key, Class<T> clazz) {
         this(key, clazz, false);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, boolean nullable) {
+    public RangeProperty(String key, Class<T> clazz, boolean nullable) {
         this(key, clazz, nullable, null);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, boolean nullable, T defaultValue) {
+    public RangeProperty(String key, Class<T> clazz, boolean nullable, T defaultValue) {
         this(key, clazz, nullable, defaultValue, null);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit) {
+    public RangeProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit) {
         this(key, clazz, nullable, defaultValue, unit, null);
     }
 
-    public ComparableProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit, Range<T> rangeValues) {
+    public RangeProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit, Range<T> rangeValues) {
         Argument.notNull("key", key);
         Argument.notNull("clazz", clazz);
 

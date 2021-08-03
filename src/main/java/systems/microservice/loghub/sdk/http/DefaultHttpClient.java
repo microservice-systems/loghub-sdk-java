@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.http;
 
-import systems.microservice.loghub.sdk.ComparableProperty;
+import systems.microservice.loghub.sdk.RangeProperty;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 
@@ -30,7 +30,7 @@ import java.net.URL;
  * @since 1.0
  */
 public class DefaultHttpClient implements HttpClient {
-    protected static final ComparableProperty<Integer> connectTimeout = new ComparableProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE));
+    protected static final RangeProperty<Integer> connectTimeout = new RangeProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE));
 
     protected final URL url;
 

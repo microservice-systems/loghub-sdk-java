@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
+import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.MapUtil;
 import systems.microservice.loghub.sdk.util.Range;
@@ -225,7 +225,7 @@ public final class Config implements Serializable {
     }
 
     public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, rangeValues, outputClass, ValueOfConfigExtractor.getInstance());
+        return getProperty(key, clazz, defaultValue, unit, nullable, rangeValues, outputClass, ConfigValueOfExtractor.getInstance());
     }
 
     public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {

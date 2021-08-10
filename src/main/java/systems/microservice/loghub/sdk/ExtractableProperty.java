@@ -21,7 +21,7 @@ import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.config.ConfigPropertyListener;
 import systems.microservice.loghub.sdk.config.ConfigPropertyValidator;
-import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
+import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
@@ -43,7 +43,7 @@ public class ExtractableProperty<I, O> implements Property<O>, Serializable {
     protected final ConfigExtractor<I, O> extractor;
 
     public ExtractableProperty(String key, Class<I> clazz, boolean nullable, I defaultValue, String unit, I[] possibleValues, Class<O> outputClass) {
-        this(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, ValueOfConfigExtractor.getInstance());
+        this(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, ConfigValueOfExtractor.getInstance());
     }
 
     public ExtractableProperty(String key, Class<I> clazz, boolean nullable, I defaultValue, String unit, I[] possibleValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {

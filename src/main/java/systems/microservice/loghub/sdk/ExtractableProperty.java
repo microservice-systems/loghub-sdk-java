@@ -19,6 +19,8 @@ package systems.microservice.loghub.sdk;
 
 import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
+import systems.microservice.loghub.sdk.config.ConfigPropertyListener;
+import systems.microservice.loghub.sdk.config.ConfigPropertyValidator;
 import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 
@@ -95,5 +97,25 @@ public class ExtractableProperty<I, O> implements Property<O>, Serializable {
     @Override
     public O get() {
         return Config.getProperty(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, extractor);
+    }
+
+    @Override
+    public void addValidator(ConfigPropertyValidator validator) {
+        Config.addPropertyValidator(key, validator);
+    }
+
+    @Override
+    public void removeValidator(ConfigPropertyValidator validator) {
+        Config.removePropertyValidator(key, validator);
+    }
+
+    @Override
+    public void addListener(ConfigPropertyListener listener) {
+        Config.addPropertyListener(key, listener);
+    }
+
+    @Override
+    public void removeListener(ConfigPropertyListener listener) {
+        Config.removePropertyListener(key, listener);
     }
 }

@@ -17,6 +17,10 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.config.Config;
+import systems.microservice.loghub.sdk.config.ConfigPropertyListener;
+import systems.microservice.loghub.sdk.config.ConfigPropertyValidator;
+
 import java.io.Serializable;
 
 /**
@@ -26,11 +30,34 @@ import java.io.Serializable;
 public class PossibleProperty<T> implements Property<T>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    protected final String key;
+
     public PossibleProperty() {
+        this.key = null;
     }
 
     @Override
     public T get() {
         return null;
+    }
+
+    @Override
+    public void addValidator(ConfigPropertyValidator validator) {
+        Config.addPropertyValidator(key, validator);
+    }
+
+    @Override
+    public void removeValidator(ConfigPropertyValidator validator) {
+        Config.removePropertyValidator(key, validator);
+    }
+
+    @Override
+    public void addListener(ConfigPropertyListener listener) {
+        Config.addPropertyListener(key, listener);
+    }
+
+    @Override
+    public void removeListener(ConfigPropertyListener listener) {
+        Config.removePropertyListener(key, listener);
     }
 }

@@ -17,10 +17,17 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.sdk.config.ConfigPropertyListener;
+import systems.microservice.loghub.sdk.config.ConfigPropertyValidator;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
 public interface Property<T> {
     public T get();
+    public void addValidator(ConfigPropertyValidator validator);
+    public void removeValidator(ConfigPropertyValidator validator);
+    public void addListener(ConfigPropertyListener listener);
+    public void removeListener(ConfigPropertyListener listener);
 }

@@ -32,10 +32,10 @@ import java.util.Properties;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class URLPropertiesConfigExtractor implements ConfigExtractor<URL, Map<String, String>> {
-    private static final URLPropertiesConfigExtractor instance = new URLPropertiesConfigExtractor();
+public final class ConfigURLPropertiesExtractor implements ConfigExtractor<URL, Map<String, String>> {
+    private static final ConfigURLPropertiesExtractor instance = new ConfigURLPropertiesExtractor();
 
-    private URLPropertiesConfigExtractor() {
+    private ConfigURLPropertiesExtractor() {
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class URLPropertiesConfigExtractor implements ConfigExtractor<URL, 
         return PropertiesUtil.toMap(ps);
     }
 
-    public static URLPropertiesConfigExtractor getInstance() {
+    public static ConfigURLPropertiesExtractor getInstance() {
         return instance;
     }
 }

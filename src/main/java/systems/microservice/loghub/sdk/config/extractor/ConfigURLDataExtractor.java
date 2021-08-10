@@ -28,10 +28,10 @@ import java.net.URL;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class URLDataConfigExtractor implements ConfigExtractor<URL, byte[]> {
-    private static final URLDataConfigExtractor instance = new URLDataConfigExtractor();
+public final class ConfigURLDataExtractor implements ConfigExtractor<URL, byte[]> {
+    private static final ConfigURLDataExtractor instance = new ConfigURLDataExtractor();
 
-    private URLDataConfigExtractor() {
+    private ConfigURLDataExtractor() {
     }
 
     @Override
@@ -50,7 +50,7 @@ public final class URLDataConfigExtractor implements ConfigExtractor<URL, byte[]
         return out.toByteArray();
     }
 
-    public static URLDataConfigExtractor getInstance() {
+    public static ConfigURLDataExtractor getInstance() {
         return instance;
     }
 }

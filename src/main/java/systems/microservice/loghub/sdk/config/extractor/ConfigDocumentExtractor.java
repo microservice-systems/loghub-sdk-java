@@ -32,10 +32,10 @@ import java.io.StringReader;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class DocumentConfigExtractor implements ConfigExtractor<String, Document> {
-    private static final DocumentConfigExtractor instance = new DocumentConfigExtractor();
+public final class ConfigDocumentExtractor implements ConfigExtractor<String, Document> {
+    private static final ConfigDocumentExtractor instance = new ConfigDocumentExtractor();
 
-    private DocumentConfigExtractor() {
+    private ConfigDocumentExtractor() {
     }
 
     @Override
@@ -52,7 +52,7 @@ public final class DocumentConfigExtractor implements ConfigExtractor<String, Do
         }
     }
 
-    public static DocumentConfigExtractor getInstance() {
+    public static ConfigDocumentExtractor getInstance() {
         return instance;
     }
 }

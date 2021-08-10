@@ -26,10 +26,10 @@ import java.lang.reflect.Method;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class ValueOfConfigExtractor<I, O> implements ConfigExtractor<I, O> {
-    private static final ValueOfConfigExtractor<Object, Object> instance = new ValueOfConfigExtractor<>();
+public final class ConfigValueOfExtractor<I, O> implements ConfigExtractor<I, O> {
+    private static final ConfigValueOfExtractor<Object, Object> instance = new ConfigValueOfExtractor<>();
 
-    private ValueOfConfigExtractor() {
+    private ConfigValueOfExtractor() {
     }
 
     @SuppressWarnings("unchecked")
@@ -44,7 +44,7 @@ public final class ValueOfConfigExtractor<I, O> implements ConfigExtractor<I, O>
     }
 
     @SuppressWarnings("unchecked")
-    public static <I, O> ValueOfConfigExtractor<I, O> getInstance() {
-        return (ValueOfConfigExtractor<I, O>) instance;
+    public static <I, O> ConfigValueOfExtractor<I, O> getInstance() {
+        return (ConfigValueOfExtractor<I, O>) instance;
     }
 }

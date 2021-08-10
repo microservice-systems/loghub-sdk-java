@@ -29,10 +29,10 @@ import java.util.Properties;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class PropertiesConfigExtractor implements ConfigExtractor<String, Map<String, String>> {
-    private static final PropertiesConfigExtractor instance = new PropertiesConfigExtractor();
+public final class ConfigPropertiesExtractor implements ConfigExtractor<String, Map<String, String>> {
+    private static final ConfigPropertiesExtractor instance = new ConfigPropertiesExtractor();
 
-    private PropertiesConfigExtractor() {
+    private ConfigPropertiesExtractor() {
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class PropertiesConfigExtractor implements ConfigExtractor<String, 
         return PropertiesUtil.toMap(ps);
     }
 
-    public static PropertiesConfigExtractor getInstance() {
+    public static ConfigPropertiesExtractor getInstance() {
         return instance;
     }
 }

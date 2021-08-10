@@ -35,10 +35,10 @@ import java.net.URL;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class URLDocumentConfigExtractor implements ConfigExtractor<URL, Document> {
-    private static final URLDocumentConfigExtractor instance = new URLDocumentConfigExtractor();
+public final class ConfigURLDocumentExtractor implements ConfigExtractor<URL, Document> {
+    private static final ConfigURLDocumentExtractor instance = new ConfigURLDocumentExtractor();
 
-    private URLDocumentConfigExtractor() {
+    private ConfigURLDocumentExtractor() {
     }
 
     @Override
@@ -64,7 +64,7 @@ public final class URLDocumentConfigExtractor implements ConfigExtractor<URL, Do
         }
     }
 
-    public static URLDocumentConfigExtractor getInstance() {
+    public static ConfigURLDocumentExtractor getInstance() {
         return instance;
     }
 }

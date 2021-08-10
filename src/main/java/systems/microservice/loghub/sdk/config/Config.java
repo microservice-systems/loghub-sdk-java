@@ -19,6 +19,7 @@ package systems.microservice.loghub.sdk.config;
 
 import systems.microservice.loghub.sdk.config.extractor.ValueOfConfigExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.MapUtil;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.Serializable;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +46,8 @@ public final class Config implements Serializable {
     private static final ReentrantLock lock = new ReentrantLock(false);
     private static final AtomicReference<Config> config = new AtomicReference<>(new Config());
     private static final ThreadLocal<ThreadConfig> threadConfig = ThreadLocal.withInitial(() -> new ThreadConfig());
-    private static final ConcurrentHashMap<String, Set<ConfigPropertyListener>> propertyListeners = new ConcurrentHashMap<>(256, 0.75f, 1);
+    private static final ConcurrentHashMap<String, Set<ConfigPropertyValidator>> propertyValidators = new ConcurrentHashMap<>(256, 0.75f, 16);
+    private static final ConcurrentHashMap<String, Set<ConfigPropertyListener>> propertyListeners = new ConcurrentHashMap<>(256, 0.75f, 16);
 
     public final UUID uuid;
     public final Map<String, ConfigProperty> properties;
@@ -168,11 +171,11 @@ public final class Config implements Serializable {
                 }
             }
             for (ConfigPropertyEvent pe : pes) {
-                Set<ConfigPropertyListener> pls = propertyListeners.get(pe.key);
-                if (pls != null) {
-                    for (ConfigPropertyListener pl : pls) {
+                Set<ConfigPropertyValidator> pvs = propertyValidators.get(pe.key);
+                if (pvs != null) {
+                    for (ConfigPropertyValidator pv : pvs) {
                         try {
-                            if (!pl.onPropertyValidate(pe)) {
+                            if (!pv.validate(pe)) {
                                 v = false;
                                 pe.oldProperty.invalidProperty.set(pe.newProperty);
                             }
@@ -191,7 +194,7 @@ public final class Config implements Serializable {
                     if (pls != null) {
                         for (ConfigPropertyListener pl : pls) {
                             try {
-                                pl.onPropertyChange(pe);
+                                pl.onChange(pe);
                             } catch (Throwable ex) {
                             }
                         }
@@ -202,22 +205,6 @@ public final class Config implements Serializable {
         } finally {
             lock.unlock();
         }
-    }
-
-    public static <T> T getProperty(String key, Class<T> clazz) {
-        return getProperty(key, clazz, null, null, false, null);
-    }
-
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue) {
-        return getProperty(key, clazz, defaultValue, null, false, null);
-    }
-
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit) {
-        return getProperty(key, clazz, defaultValue, unit, false, null);
-    }
-
-    public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, null);
     }
 
     public static <T> T getProperty(String key, Class<T> clazz, T defaultValue, String unit, boolean nullable, T[] possibleValues) {
@@ -243,6 +230,48 @@ public final class Config implements Serializable {
 
     public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         return null;
+    }
+
+    public static void addPropertyValidator(String key, ConfigPropertyValidator validator) {
+        Argument.notNull("key", key);
+        Argument.notNull("validator", validator);
+
+        Set<ConfigPropertyValidator> pvs = propertyValidators.get(key);
+        if (pvs == null) {
+            pvs = MapUtil.putIfAbsent(propertyValidators, key, Collections.synchronizedSet(new LinkedHashSet<>(4)));
+        }
+        pvs.add(validator);
+    }
+
+    public static void removePropertyValidator(String key, ConfigPropertyValidator validator) {
+        Argument.notNull("key", key);
+        Argument.notNull("validator", validator);
+
+        Set<ConfigPropertyValidator> pvs = propertyValidators.get(key);
+        if (pvs != null) {
+            pvs.remove(validator);
+        }
+    }
+
+    public static void addPropertyListener(String key, ConfigPropertyListener listener) {
+        Argument.notNull("key", key);
+        Argument.notNull("listener", listener);
+
+        Set<ConfigPropertyListener> pls = propertyListeners.get(key);
+        if (pls == null) {
+            pls = MapUtil.putIfAbsent(propertyListeners, key, Collections.synchronizedSet(new LinkedHashSet<>(4)));
+        }
+        pls.add(listener);
+    }
+
+    public static void removePropertyListener(String key, ConfigPropertyListener listener) {
+        Argument.notNull("key", key);
+        Argument.notNull("listener", listener);
+
+        Set<ConfigPropertyListener> pls = propertyListeners.get(key);
+        if (pls != null) {
+            pls.remove(listener);
+        }
     }
 
     private static final class ThreadConfig {

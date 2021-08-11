@@ -224,11 +224,7 @@ public final class Config implements Serializable {
         return defaultValue;
     }
 
-    public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass) {
-        return getProperty(key, clazz, defaultValue, unit, nullable, rangeValues, outputClass, ConfigValueOfExtractor.getInstance());
-    }
-
-    public static <I extends Comparable<I>, O> O getProperty(String key, Class<I> clazz, I defaultValue, String unit, boolean nullable, Range<I> rangeValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+    public static <I extends Comparable<I>, O> O getProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, Range<I> rangeValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         return null;
     }
 

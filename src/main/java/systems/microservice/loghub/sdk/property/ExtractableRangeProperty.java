@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk;
+package systems.microservice.loghub.sdk.property;
 
 /**
  * @author Dmitry Kotlyarov

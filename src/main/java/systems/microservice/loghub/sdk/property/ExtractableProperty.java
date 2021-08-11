@@ -32,33 +32,48 @@ import java.io.Serializable;
 public class ExtractableProperty<I, O> implements Property<O>, Serializable {
     private static final long serialVersionUID = 1L;
 
+    protected final String group;
     protected final String key;
     protected final Class<I> clazz;
     protected final boolean nullable;
+    protected final boolean secure;
     protected final I defaultValue;
-    protected final String unit;
     protected final I[] possibleValues;
+    protected final String unit;
     protected final Class<O> outputClass;
     protected final ConfigExtractor<I, O> extractor;
 
-    public ExtractableProperty(String key, Class<I> clazz, boolean nullable, I defaultValue, String unit, I[] possibleValues, Class<O> outputClass) {
-        this(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, ConfigValueOfExtractor.getInstance());
+    public ExtractableProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass) {
+        this(group, key, clazz, nullable, secure, defaultValue, possibleValues, unit, outputClass, ConfigValueOfExtractor.getInstance());
     }
 
-    public ExtractableProperty(String key, Class<I> clazz, boolean nullable, I defaultValue, String unit, I[] possibleValues, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+    public ExtractableProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+        Argument.notNull("group", group);
         Argument.notNull("key", key);
         Argument.notNull("clazz", clazz);
+        if (!nullable) {
+            if (defaultValue == null) {
+                throw new IllegalArgumentException(String.format("Default value is null for non nullable property '%s'", key));
+            }
+        }
+        Argument.notNull("possibleValues", possibleValues);
         Argument.notNull("outputClass", outputClass);
         Argument.notNull("extractor", extractor);
 
+        this.group = group;
         this.key = key;
         this.clazz = clazz;
         this.nullable = nullable;
+        this.secure = secure;
         this.defaultValue = defaultValue;
-        this.unit = unit;
         this.possibleValues = possibleValues;
+        this.unit = unit;
         this.outputClass = outputClass;
         this.extractor = extractor;
+    }
+
+    public String getGroup() {
+        return group;
     }
 
     public String getKey() {
@@ -73,16 +88,20 @@ public class ExtractableProperty<I, O> implements Property<O>, Serializable {
         return nullable;
     }
 
+    public boolean isSecure() {
+        return secure;
+    }
+
     public I getDefaultValue() {
         return defaultValue;
     }
 
-    public String getUnit() {
-        return unit;
-    }
-
     public I[] getPossibleValues() {
         return possibleValues;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 
     public Class<O> getOutputClass() {
@@ -95,6 +114,6 @@ public class ExtractableProperty<I, O> implements Property<O>, Serializable {
 
     @Override
     public O get() {
-        return Config.getProperty(key, clazz, nullable, defaultValue, unit, possibleValues, outputClass, extractor);
+        return Config.getProperty(group, key, clazz, nullable, secure, defaultValue, possibleValues, unit, outputClass, extractor);
     }
 }

@@ -34,6 +34,10 @@ public class FixedProperty<T> implements Property<T>, Serializable {
         this.value = value;
     }
 
+    public T getValue() {
+        return value;
+    }
+
     @Override
     public T get() {
         return value;

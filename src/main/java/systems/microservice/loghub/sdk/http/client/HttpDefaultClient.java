@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.http;
+package systems.microservice.loghub.sdk.http.client;
 
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.RangeProperty;
+import systems.microservice.loghub.sdk.http.HttpClient;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 

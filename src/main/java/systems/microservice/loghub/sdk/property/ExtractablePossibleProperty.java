@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ExtractableProperty<I, O> implements Property<O>, Serializable {
+public class ExtractablePossibleProperty<I, O> implements Property<O>, Serializable {
     private static final long serialVersionUID = 1L;
 
     protected final String group;
@@ -43,11 +43,11 @@ public class ExtractableProperty<I, O> implements Property<O>, Serializable {
     protected final Class<O> outputClass;
     protected final ConfigExtractor<I, O> extractor;
 
-    public ExtractableProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass) {
+    public ExtractablePossibleProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass) {
         this(group, key, clazz, nullable, secure, defaultValue, possibleValues, unit, outputClass, ConfigValueOfExtractor.getInstance());
     }
 
-    public ExtractableProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+    public ExtractablePossibleProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         Argument.notNull("group", group);
         Argument.notNull("key", key);
         Argument.notNull("clazz", clazz);

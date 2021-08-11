@@ -30,16 +30,16 @@ import java.net.URL;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class DefaultHttpClient implements HttpClient {
+public class HttpDefaultClient implements HttpClient {
     protected final URL url;
     protected final Property<Integer> connectTimeout;
 
-    public DefaultHttpClient(URL url) {
+    public HttpDefaultClient(URL url) {
         this(url,
              new RangeProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE)));
     }
 
-    public DefaultHttpClient(URL url, Property<Integer> connectTimeout) {
+    public HttpDefaultClient(URL url, Property<Integer> connectTimeout) {
         Argument.notNull("url", url);
         Argument.notNull("connectTimeout", connectTimeout);
 

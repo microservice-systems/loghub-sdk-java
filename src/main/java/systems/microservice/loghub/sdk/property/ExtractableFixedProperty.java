@@ -34,6 +34,7 @@ public class ExtractableFixedProperty<I, O> implements Property<O>, Serializable
     protected final I value;
     protected final Class<O> outputClass;
     protected final ConfigExtractor<I, O> extractor;
+    protected final O extractedValue;
 
     public ExtractableFixedProperty(I value, Class<O> outputClass) {
         this(value, outputClass, ConfigValueOfExtractor.getInstance());
@@ -46,6 +47,7 @@ public class ExtractableFixedProperty<I, O> implements Property<O>, Serializable
         this.value = value;
         this.outputClass = outputClass;
         this.extractor = extractor;
+        this.extractedValue = extractor.extract(value, outputClass);
     }
 
     public I getValue() {
@@ -60,8 +62,12 @@ public class ExtractableFixedProperty<I, O> implements Property<O>, Serializable
         return extractor;
     }
 
+    public O getExtractedValue() {
+        return extractedValue;
+    }
+
     @Override
     public O get() {
-        return extractor.extract(value, outputClass);
+        return extractedValue;
     }
 }

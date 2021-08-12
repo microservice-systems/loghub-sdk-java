@@ -19,8 +19,6 @@ package systems.microservice.loghub.sdk.property;
 
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.Config;
-import systems.microservice.loghub.sdk.config.ConfigExtractor;
-import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;

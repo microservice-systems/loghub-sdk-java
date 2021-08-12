@@ -37,7 +37,7 @@ public class HttpDefaultClient implements HttpClient {
 
     public HttpDefaultClient(URL url) {
         this(url,
-             new RangeProperty<>("loghub.sdk.http.client.default.connect.timeout", Integer.class, false, 30000, "ms", new Range<>(0, Integer.MAX_VALUE)));
+             new RangeProperty<>("LogHub", "loghub.sdk.http.client.default.connect.timeout", Integer.class, false, false, 60000, new Range<>(0, Integer.MAX_VALUE), "ms"));
     }
 
     public HttpDefaultClient(URL url, Property<Integer> connectTimeout) {

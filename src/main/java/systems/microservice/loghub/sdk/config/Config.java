@@ -219,16 +219,16 @@ public final class Config implements Serializable {
         return null;
     }
 
+    public static <T extends Comparable<T>> T getProperty(String group, String key, Class<T> clazz, boolean nullable, boolean secure, T defaultValue, Range<T> rangeValues, String unit) {
+        return null;
+    }
+
     public static <I, O> O getProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         return null;
     }
 
     public static <I, O> O getProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         return null;
-    }
-
-    public static <T extends Comparable<T>> T getProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit, Range<T> rangeValues) {
-        return defaultValue;
     }
 
     public static <I extends Comparable<I>, O> O getProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, Range<I> rangeValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {

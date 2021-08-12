@@ -215,6 +215,10 @@ public final class Config implements Serializable {
         return p.value.get(clazz);
     }
 
+    public static <T> T getProperty(String group, String key, Class<T> clazz, boolean nullable, boolean secure, T defaultValue, T[] possibleValues, String unit) {
+        return null;
+    }
+
     public static <I, O> O getProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
         return null;
     }

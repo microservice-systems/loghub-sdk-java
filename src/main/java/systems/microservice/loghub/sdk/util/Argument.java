@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.sdk.Property;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
@@ -31,6 +33,22 @@ public final class Argument {
                 return value;
             } else {
                 throw new IllegalArgumentException(String.format("Argument '%s' is null", argument));
+            }
+        } else {
+            throw new IllegalArgumentException("Argument 'argument' is null");
+        }
+    }
+
+    public static <T> Property<T> notNullProperty(String argument, Property<T> property) {
+        if (argument != null) {
+            if (property != null) {
+                if (property.get() != null) {
+                    return property;
+                } else {
+                    throw new IllegalArgumentException(String.format("Property argument '%s' has null value", argument));
+                }
+            } else {
+                throw new IllegalArgumentException(String.format("Property argument '%s' is null", argument));
             }
         } else {
             throw new IllegalArgumentException("Argument 'argument' is null");

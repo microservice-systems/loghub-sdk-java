@@ -48,9 +48,11 @@ public class CachedProperty<T> implements Property<T>, Serializable {
         Argument.inRangeLong("timeout", timeout, 0L, Long.MAX_VALUE);
         Argument.notNull("eval", eval);
 
+        T v = eval.eval();
+
         this.timeout = timeout;
         this.eval = eval;
-        this.value = new AtomicReference<>(eval.eval());
+        this.value = new AtomicReference<>(v);
         this.lock = new AtomicBoolean(false);
         this.invalid = new AtomicBoolean(false);
         this.time = new AtomicLong(System.currentTimeMillis());

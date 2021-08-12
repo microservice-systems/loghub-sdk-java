@@ -17,9 +17,96 @@
 
 package systems.microservice.loghub.sdk.property;
 
+import systems.microservice.loghub.sdk.Property;
+import systems.microservice.loghub.sdk.config.Config;
+import systems.microservice.loghub.sdk.config.ConfigExtractor;
+import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
+import systems.microservice.loghub.sdk.util.Argument;
+
+import java.io.Serializable;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ExtractableAnyProperty {
+public class ExtractableAnyProperty<I, O> implements Property<O>, Serializable {
+    private static final long serialVersionUID = 1L;
+
+    protected final String group;
+    protected final String key;
+    protected final Class<I> clazz;
+    protected final boolean nullable;
+    protected final boolean secure;
+    protected final I defaultValue;
+    protected final String unit;
+    protected final Class<O> outputClass;
+    protected final ConfigExtractor<I, O> extractor;
+
+    public ExtractableAnyProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, String unit, Class<O> outputClass) {
+        this(group, key, clazz, nullable, secure, defaultValue, unit, outputClass, ConfigValueOfExtractor.getInstance());
+    }
+
+    public ExtractableAnyProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
+        Argument.notNull("group", group);
+        Argument.notNull("key", key);
+        Argument.notNull("clazz", clazz);
+        if (!nullable) {
+            if (defaultValue == null) {
+                throw new IllegalArgumentException(String.format("Default value is null for non nullable property '%s'", key));
+            }
+        }
+        Argument.notNull("outputClass", outputClass);
+        Argument.notNull("extractor", extractor);
+
+        this.group = group;
+        this.key = key;
+        this.clazz = clazz;
+        this.nullable = nullable;
+        this.secure = secure;
+        this.defaultValue = defaultValue;
+        this.unit = unit;
+        this.outputClass = outputClass;
+        this.extractor = extractor;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public Class<I> getClazz() {
+        return clazz;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public I getDefaultValue() {
+        return defaultValue;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public Class<O> getOutputClass() {
+        return outputClass;
+    }
+
+    public ConfigExtractor<I, O> getExtractor() {
+        return extractor;
+    }
+
+    @Override
+    public O get() {
+        return Config.getProperty(group, key, clazz, nullable, secure, defaultValue, unit, outputClass, extractor);
+    }
 }

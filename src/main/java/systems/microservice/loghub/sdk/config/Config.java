@@ -206,7 +206,7 @@ public final class Config implements Serializable {
         }
     }
 
-    public static <T> T getProperty(String key, Class<T> clazz, boolean nullable, T defaultValue, String unit, T[] possibleValues) {
+    public static <T> T getProperty(String group, String key, Class<T> clazz, boolean nullable, boolean secure, T defaultValue, String unit) {
         Config cfg = getConfig();
         ConfigProperty p = cfg.properties.get(key);
         if (p == null) {

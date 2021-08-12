@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.MapUtil;
 import systems.microservice.loghub.sdk.util.Range;

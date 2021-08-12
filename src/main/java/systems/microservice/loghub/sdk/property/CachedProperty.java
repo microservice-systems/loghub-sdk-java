@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.property;
 
 import systems.microservice.loghub.sdk.Property;
+import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Eval;
 
 import java.io.Serializable;
@@ -36,13 +37,22 @@ public class CachedProperty<T> implements Property<T>, Serializable {
     protected final Eval<T> eval;
     protected final AtomicReference<T> value;
     protected final AtomicBoolean lock;
+    protected final AtomicBoolean invalid;
     protected final AtomicLong time;
 
+    public CachedProperty(Eval<T> eval) {
+        this(0L, eval);
+    }
+
     public CachedProperty(long timeout, Eval<T> eval) {
+        Argument.inRangeLong("timeout", timeout, 0L, Long.MAX_VALUE);
+        Argument.notNull("eval", eval);
+
         this.timeout = timeout;
         this.eval = eval;
         this.value = new AtomicReference<>(eval.eval());
         this.lock = new AtomicBoolean(false);
+        this.invalid = new AtomicBoolean(false);
         this.time = new AtomicLong(System.currentTimeMillis());
     }
 
@@ -58,22 +68,34 @@ public class CachedProperty<T> implements Property<T>, Serializable {
         return value.get();
     }
 
-    public boolean getLock() {
+    public boolean isLocked() {
         return lock.get();
+    }
+
+    public boolean isInvalid() {
+        return invalid.get();
     }
 
     public long getTime() {
         return time.get();
     }
 
+    public void invalidate() {
+        invalid.set(true);
+    }
+
     @Override
     public T get() {
         long t = System.currentTimeMillis();
-        if (t >= time.get() + timeout) {
+        if ((timeout > 0L) && (t >= time.get() + timeout)) {
+            invalidate();
+        }
+        if (invalid.get()) {
             if (lock.compareAndSet(false, true)) {
                 try {
                     T v = eval.eval();
                     value.set(v);
+                    invalid.set(false);
                     time.set(t);
                 } finally {
                     lock.set(false);

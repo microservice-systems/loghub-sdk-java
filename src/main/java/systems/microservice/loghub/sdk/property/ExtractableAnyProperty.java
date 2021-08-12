@@ -58,6 +58,8 @@ public class ExtractableAnyProperty<I, O> implements Property<O>, Serializable {
         Argument.notNull("outputClass", outputClass);
         Argument.notNull("extractor", extractor);
 
+        O ev = Config.getProperty(group, key, clazz, nullable, secure, defaultValue, unit, outputClass, extractor);
+
         this.group = group;
         this.key = key;
         this.clazz = clazz;

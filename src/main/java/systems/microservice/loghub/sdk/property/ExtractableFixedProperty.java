@@ -44,10 +44,12 @@ public class ExtractableFixedProperty<I, O> implements Property<O>, Serializable
         Argument.notNull("outputClass", outputClass);
         Argument.notNull("extractor", extractor);
 
+        O ev = extractor.extract(value, outputClass);
+
         this.value = value;
         this.outputClass = outputClass;
         this.extractor = extractor;
-        this.extractedValue = extractor.extract(value, outputClass);
+        this.extractedValue = ev;
     }
 
     public I getValue() {

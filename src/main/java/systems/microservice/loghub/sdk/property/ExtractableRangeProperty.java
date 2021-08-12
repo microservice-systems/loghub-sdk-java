@@ -61,6 +61,8 @@ public class ExtractableRangeProperty<I extends Comparable<I>, O> implements Pro
         Argument.notNull("outputClass", outputClass);
         Argument.notNull("extractor", extractor);
 
+        O ev = Config.getProperty(group, key, clazz, nullable, secure, defaultValue, rangeValues, unit, outputClass, extractor);
+
         this.group = group;
         this.key = key;
         this.clazz = clazz;

@@ -56,10 +56,11 @@ public class HttpDefaultClient implements HttpClient {
         return connectTimeout.get();
     }
 
-    @Override
-    public HttpURLConnection get(String contentType, String accept) throws IOException {
+    protected HttpURLConnection createConnection(String method, String contentType, String accept) throws IOException {
+        Argument.notNull("method", method);
+
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
+        conn.setRequestMethod(method);
         conn.setUseCaches(false);
         conn.setConnectTimeout(connectTimeout.get());
         if (contentType != null) {
@@ -78,128 +79,37 @@ public class HttpDefaultClient implements HttpClient {
     }
 
     @Override
-    public HttpURLConnection put(String contentType, String accept) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("PUT");
-        conn.setUseCaches(false);
-        conn.setConnectTimeout(connectTimeout.get());
-        if (contentType != null) {
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", contentType);
-        } else {
-            conn.setDoOutput(false);
-        }
-        if (accept != null) {
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
-        } else {
-            conn.setDoInput(false);
-        }
-        return conn;
+    public HttpURLConnection get(String contentType, String accept) throws IOException {
+        return createConnection("GET", contentType, accept);
     }
 
     @Override
     public HttpURLConnection post(String contentType, String accept) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setUseCaches(false);
-        conn.setConnectTimeout(connectTimeout.get());
-        if (contentType != null) {
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", contentType);
-        } else {
-            conn.setDoOutput(false);
-        }
-        if (accept != null) {
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
-        } else {
-            conn.setDoInput(false);
-        }
-        return conn;
+        return createConnection("POST", contentType, accept);
+    }
+
+    @Override
+    public HttpURLConnection put(String contentType, String accept) throws IOException {
+        return createConnection("PUT", contentType, accept);
     }
 
     @Override
     public HttpURLConnection delete(String contentType, String accept) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("DELETE");
-        conn.setUseCaches(false);
-        conn.setConnectTimeout(connectTimeout.get());
-        if (contentType != null) {
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", contentType);
-        } else {
-            conn.setDoOutput(false);
-        }
-        if (accept != null) {
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
-        } else {
-            conn.setDoInput(false);
-        }
-        return conn;
+        return createConnection("DELETE", contentType, accept);
     }
 
     @Override
     public HttpURLConnection head(String contentType, String accept) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("HEAD");
-        conn.setUseCaches(false);
-        conn.setConnectTimeout(connectTimeout.get());
-        if (contentType != null) {
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", contentType);
-        } else {
-            conn.setDoOutput(false);
-        }
-        if (accept != null) {
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
-        } else {
-            conn.setDoInput(false);
-        }
-        return conn;
+        return createConnection("HEAD", contentType, accept);
     }
 
     @Override
     public HttpURLConnection options(String contentType, String accept) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("OPTIONS");
-        conn.setUseCaches(false);
-        conn.setConnectTimeout(connectTimeout.get());
-        if (contentType != null) {
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", contentType);
-        } else {
-            conn.setDoOutput(false);
-        }
-        if (accept != null) {
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
-        } else {
-            conn.setDoInput(false);
-        }
-        return conn;
+        return createConnection("OPTIONS", contentType, accept);
     }
 
     @Override
     public HttpURLConnection trace(String contentType, String accept) throws IOException {
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("TRACE");
-        conn.setUseCaches(false);
-        conn.setConnectTimeout(connectTimeout.get());
-        if (contentType != null) {
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", contentType);
-        } else {
-            conn.setDoOutput(false);
-        }
-        if (accept != null) {
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
-        } else {
-            conn.setDoInput(false);
-        }
-        return conn;
+        return createConnection("TRACE", contentType, accept);
     }
 }

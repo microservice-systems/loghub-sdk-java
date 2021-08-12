@@ -26,8 +26,8 @@ import java.net.HttpURLConnection;
  */
 public interface HttpClient {
     public HttpURLConnection get(String contentType, String accept) throws IOException;
-    public HttpURLConnection put(String contentType, String accept) throws IOException;
     public HttpURLConnection post(String contentType, String accept) throws IOException;
+    public HttpURLConnection put(String contentType, String accept) throws IOException;
     public HttpURLConnection delete(String contentType, String accept) throws IOException;
     public HttpURLConnection head(String contentType, String accept) throws IOException;
     public HttpURLConnection options(String contentType, String accept) throws IOException;

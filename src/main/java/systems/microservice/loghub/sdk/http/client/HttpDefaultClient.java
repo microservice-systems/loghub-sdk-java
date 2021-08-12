@@ -19,11 +19,13 @@ package systems.microservice.loghub.sdk.http.client;
 
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.http.HttpClient;
+import systems.microservice.loghub.sdk.property.NullProperty;
 import systems.microservice.loghub.sdk.property.RangeProperty;
 import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -31,25 +33,50 @@ import java.net.URL;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class HttpDefaultClient implements HttpClient {
-    protected final URL url;
+public class HttpDefaultClient implements HttpClient, Serializable {
+    private static final long serialVersionUID = 1L;
+
+    protected static final Property<Integer> defaultConnectTimeout = new RangeProperty<>("LogHub", "loghub.sdk.http.client.default.connect.timeout", Integer.class, false, false, 60000, new Range<>(0, Integer.MAX_VALUE), "ms");
+
+    protected final Property<URL> url;
+    protected final Property<String> user;
+    protected final Property<String> password;
     protected final Property<Integer> connectTimeout;
 
-    public HttpDefaultClient(URL url) {
-        this(url,
-             new RangeProperty<>("LogHub", "loghub.sdk.http.client.default.connect.timeout", Integer.class, false, false, 60000, new Range<>(0, Integer.MAX_VALUE), "ms"));
+    public HttpDefaultClient(Property<URL> url) {
+        this(url, defaultConnectTimeout);
     }
 
-    public HttpDefaultClient(URL url, Property<Integer> connectTimeout) {
-        Argument.notNull("url", url);
-        Argument.notNull("connectTimeout", connectTimeout);
+    public HttpDefaultClient(Property<URL> url, Property<Integer> connectTimeout) {
+        this(url, NullProperty.getInstance(), NullProperty.getInstance(), connectTimeout);
+    }
+
+    public HttpDefaultClient(Property<URL> url, Property<String> user, Property<String> password) {
+        this(url, user, password, defaultConnectTimeout);
+    }
+
+    public HttpDefaultClient(Property<URL> url, Property<String> user, Property<String> password, Property<Integer> connectTimeout) {
+        Argument.notNullProperty("url", url);
+        Argument.notNull("user", user);
+        Argument.notNull("password", password);
+        Argument.notNullProperty("connectTimeout", connectTimeout);
 
         this.url = url;
+        this.user = user;
+        this.password = password;
         this.connectTimeout = connectTimeout;
     }
 
     public URL getURL() {
-        return url;
+        return url.get();
+    }
+
+    public String getUser() {
+        return user.get();
+    }
+
+    public String getPassword() {
+        return password.get();
     }
 
     public int getConnectTimeout() {
@@ -59,7 +86,7 @@ public class HttpDefaultClient implements HttpClient {
     protected HttpURLConnection createConnection(String method, String contentType, String accept) throws IOException {
         Argument.notNull("method", method);
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.get().openConnection();
         conn.setRequestMethod(method);
         conn.setUseCaches(false);
         conn.setConnectTimeout(connectTimeout.get());

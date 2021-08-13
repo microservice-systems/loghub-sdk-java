@@ -93,7 +93,7 @@ public class HttpDefaultClient implements HttpClient, Serializable {
         }
     }
 
-    protected HttpURLConnection createConnection(String spec, String method, String contentType, String accept) throws IOException {
+    protected HttpURLConnection createConnection(String spec, String method, String contentType, String acceptType) throws IOException {
         Argument.notNull("method", method);
 
         HttpURLConnection conn = (spec != null) ? (HttpURLConnection) new URL(url.get(), spec).openConnection() : (HttpURLConnection) url.get().openConnection();
@@ -110,9 +110,9 @@ public class HttpDefaultClient implements HttpClient, Serializable {
         } else {
             conn.setDoOutput(false);
         }
-        if (accept != null) {
+        if (acceptType != null) {
             conn.setDoInput(true);
-            conn.setRequestProperty("Accept", accept);
+            conn.setRequestProperty("Accept", acceptType);
         } else {
             conn.setDoInput(false);
         }
@@ -120,37 +120,37 @@ public class HttpDefaultClient implements HttpClient, Serializable {
     }
 
     @Override
-    public HttpURLConnection get(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "GET", contentType, accept);
+    public HttpURLConnection get(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "GET", contentType, acceptType);
     }
 
     @Override
-    public HttpURLConnection post(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "POST", contentType, accept);
+    public HttpURLConnection post(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "POST", contentType, acceptType);
     }
 
     @Override
-    public HttpURLConnection put(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "PUT", contentType, accept);
+    public HttpURLConnection put(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "PUT", contentType, acceptType);
     }
 
     @Override
-    public HttpURLConnection delete(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "DELETE", contentType, accept);
+    public HttpURLConnection delete(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "DELETE", contentType, acceptType);
     }
 
     @Override
-    public HttpURLConnection head(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "HEAD", contentType, accept);
+    public HttpURLConnection head(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "HEAD", contentType, acceptType);
     }
 
     @Override
-    public HttpURLConnection options(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "OPTIONS", contentType, accept);
+    public HttpURLConnection options(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "OPTIONS", contentType, acceptType);
     }
 
     @Override
-    public HttpURLConnection trace(String spec, String contentType, String accept) throws IOException {
-        return createConnection(spec, "TRACE", contentType, accept);
+    public HttpURLConnection trace(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "TRACE", contentType, acceptType);
     }
 }

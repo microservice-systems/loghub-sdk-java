@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * @author Dmitry Kotlyarov
@@ -83,6 +85,14 @@ public class HttpDefaultClient implements HttpClient, Serializable {
         return connectTimeout.get();
     }
 
+    protected String createAuth(String user, String password) {
+        if ((user != null) && (password != null) && !user.isEmpty()) {
+            return "Basic " + new String(Base64.getEncoder().encode(String.format("%s:%s", user, password).getBytes(StandardCharsets.UTF_8)));
+        } else {
+            return null;
+        }
+    }
+
     protected HttpURLConnection createConnection(String method, String contentType, String accept) throws IOException {
         Argument.notNull("method", method);
 
@@ -90,6 +100,10 @@ public class HttpDefaultClient implements HttpClient, Serializable {
         conn.setRequestMethod(method);
         conn.setUseCaches(false);
         conn.setConnectTimeout(connectTimeout.get());
+        String auth = createAuth(user.get(), password.get());
+        if (auth != null) {
+            conn.setRequestProperty("Authorization", auth);
+        }
         if (contentType != null) {
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", contentType);

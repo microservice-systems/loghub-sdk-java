@@ -93,10 +93,10 @@ public class HttpDefaultClient implements HttpClient, Serializable {
         }
     }
 
-    protected HttpURLConnection createConnection(String method, String contentType, String accept) throws IOException {
+    protected HttpURLConnection createConnection(String spec, String method, String contentType, String accept) throws IOException {
         Argument.notNull("method", method);
 
-        HttpURLConnection conn = (HttpURLConnection) url.get().openConnection();
+        HttpURLConnection conn = (spec != null) ? (HttpURLConnection) new URL(url.get(), spec).openConnection() : (HttpURLConnection) url.get().openConnection();
         conn.setRequestMethod(method);
         conn.setUseCaches(false);
         conn.setConnectTimeout(connectTimeout.get());
@@ -120,37 +120,37 @@ public class HttpDefaultClient implements HttpClient, Serializable {
     }
 
     @Override
-    public HttpURLConnection get(String contentType, String accept) throws IOException {
-        return createConnection("GET", contentType, accept);
+    public HttpURLConnection get(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "GET", contentType, accept);
     }
 
     @Override
-    public HttpURLConnection post(String contentType, String accept) throws IOException {
-        return createConnection("POST", contentType, accept);
+    public HttpURLConnection post(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "POST", contentType, accept);
     }
 
     @Override
-    public HttpURLConnection put(String contentType, String accept) throws IOException {
-        return createConnection("PUT", contentType, accept);
+    public HttpURLConnection put(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "PUT", contentType, accept);
     }
 
     @Override
-    public HttpURLConnection delete(String contentType, String accept) throws IOException {
-        return createConnection("DELETE", contentType, accept);
+    public HttpURLConnection delete(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "DELETE", contentType, accept);
     }
 
     @Override
-    public HttpURLConnection head(String contentType, String accept) throws IOException {
-        return createConnection("HEAD", contentType, accept);
+    public HttpURLConnection head(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "HEAD", contentType, accept);
     }
 
     @Override
-    public HttpURLConnection options(String contentType, String accept) throws IOException {
-        return createConnection("OPTIONS", contentType, accept);
+    public HttpURLConnection options(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "OPTIONS", contentType, accept);
     }
 
     @Override
-    public HttpURLConnection trace(String contentType, String accept) throws IOException {
-        return createConnection("TRACE", contentType, accept);
+    public HttpURLConnection trace(String spec, String contentType, String accept) throws IOException {
+        return createConnection(spec, "TRACE", contentType, accept);
     }
 }

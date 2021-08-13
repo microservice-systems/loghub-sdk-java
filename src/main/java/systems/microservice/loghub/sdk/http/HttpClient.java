@@ -25,11 +25,11 @@ import java.net.HttpURLConnection;
  * @since 1.0
  */
 public interface HttpClient {
-    public HttpURLConnection get(String contentType, String accept) throws IOException;
-    public HttpURLConnection post(String contentType, String accept) throws IOException;
-    public HttpURLConnection put(String contentType, String accept) throws IOException;
-    public HttpURLConnection delete(String contentType, String accept) throws IOException;
-    public HttpURLConnection head(String contentType, String accept) throws IOException;
-    public HttpURLConnection options(String contentType, String accept) throws IOException;
-    public HttpURLConnection trace(String contentType, String accept) throws IOException;
+    public HttpURLConnection get(String spec, String contentType, String accept) throws IOException;
+    public HttpURLConnection post(String spec, String contentType, String accept) throws IOException;
+    public HttpURLConnection put(String spec, String contentType, String accept) throws IOException;
+    public HttpURLConnection delete(String spec, String contentType, String accept) throws IOException;
+    public HttpURLConnection head(String spec, String contentType, String accept) throws IOException;
+    public HttpURLConnection options(String spec, String contentType, String accept) throws IOException;
+    public HttpURLConnection trace(String spec, String contentType, String accept) throws IOException;
 }

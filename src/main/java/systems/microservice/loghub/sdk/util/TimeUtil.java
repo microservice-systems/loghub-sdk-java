@@ -43,7 +43,7 @@ public final class TimeUtil {
     }
 
     public static String format(long time) {
-        return String.format("%1$tY.%1$tm.%1$td %1$tH:%1$tM:%1$tS.%1$tL", time);
+        return String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", time);
     }
 
     public static String formatPath(long time) {
@@ -71,26 +71,6 @@ public final class TimeUtil {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Integer.parseInt(items[2]), Integer.parseInt(items[0]) - 1, Integer.parseInt(items[1]));
                 return new Date(calendar.getTimeInMillis());
-            } else {
-                return null;
-            }
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public static Integer getAge(Date dateOfBirth) {
-        try {
-            if (dateOfBirth != null) {
-                Calendar today = new GregorianCalendar(TIMEZONE_UTC);
-                Calendar birthDate = new GregorianCalendar(TIMEZONE_UTC);
-                birthDate.setTime(dateOfBirth);
-                int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-                if (age > 0) {
-                    return age;
-                } else {
-                    return null;
-                }
             } else {
                 return null;
             }

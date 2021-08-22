@@ -31,7 +31,7 @@ public final class FileUtil {
     private FileUtil() {
     }
 
-    public static void store(String directory, String file, String value) {
+    public static void storeString(String directory, String file, String value) {
         Argument.notNull("directory", directory);
         Argument.notNull("file", file);
         Argument.notNull("value", value);

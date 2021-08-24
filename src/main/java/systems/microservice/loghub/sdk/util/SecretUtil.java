@@ -32,9 +32,10 @@ public final class SecretUtil {
     }
 
     public static String randomSecret() {
+        SecureRandom random = new SecureRandom();
         char[] secret = new char[40];
         for (int i = 0; i < 40; ++i) {
-            secret[i] = symbols[new SecureRandom().nextInt(symbols.length)];
+            secret[i] = symbols[random.nextInt(symbols.length)];
         }
         return new String(secret);
     }

@@ -158,6 +158,23 @@ public final class Argument {
         }
     }
 
+    public static String service(String argument, String service) {
+        Argument.notNull("argument", argument);
+        Argument.notNull("service", service);
+
+        if (SpellUtil.isService(service)) {
+            return service;
+        } else {
+            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a service", argument, service));
+        }
+    }
+
+    public static String serviceNullable(String argument, String service) {
+        Argument.notNull("argument", argument);
+
+        return (service != null) ? service(argument, service) : null;
+    }
+
     public static String environment(String argument, String environment) {
         Argument.notNull("argument", argument);
         Argument.notNull("environment", environment);
@@ -167,6 +184,12 @@ public final class Argument {
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an environment", argument, environment));
         }
+    }
+
+    public static String environmentNullable(String argument, String environment) {
+        Argument.notNull("argument", argument);
+
+        return (environment != null) ? environment(argument, environment) : null;
     }
 
     public static String application(String argument, String application) {
@@ -180,6 +203,12 @@ public final class Argument {
         }
     }
 
+    public static String applicationNullable(String argument, String application) {
+        Argument.notNull("argument", argument);
+
+        return (application != null) ? application(argument, application) : null;
+    }
+
     public static String version(String argument, String version) {
         Argument.notNull("argument", argument);
         Argument.notNull("version", version);
@@ -189,6 +218,29 @@ public final class Argument {
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a version", argument, version));
         }
+    }
+
+    public static String versionNullable(String argument, String version) {
+        Argument.notNull("argument", argument);
+
+        return (version != null) ? version(argument, version) : null;
+    }
+
+    public static String revision(String argument, String revision) {
+        Argument.notNull("argument", argument);
+        Argument.notNull("revision", revision);
+
+        if (SpellUtil.isRevision(revision)) {
+            return revision;
+        } else {
+            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a revision", argument, revision));
+        }
+    }
+
+    public static String revisionNullable(String argument, String revision) {
+        Argument.notNull("argument", argument);
+
+        return (revision != null) ? revision(argument, revision) : null;
     }
 
     public static String instance(String argument, String instance) {
@@ -202,6 +254,12 @@ public final class Argument {
         }
     }
 
+    public static String instanceNullable(String argument, String instance) {
+        Argument.notNull("argument", argument);
+
+        return (instance != null) ? instance(argument, instance) : null;
+    }
+
     public static String process(String argument, String process) {
         Argument.notNull("argument", argument);
         Argument.notNull("process", process);
@@ -211,6 +269,12 @@ public final class Argument {
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a process", argument, process));
         }
+    }
+
+    public static String processNullable(String argument, String process) {
+        Argument.notNull("argument", argument);
+
+        return (process != null) ? process(argument, process) : null;
     }
 
     public static String secret(String argument, String secret) {
@@ -224,6 +288,12 @@ public final class Argument {
         }
     }
 
+    public static String secretNullable(String argument, String secret) {
+        Argument.notNull("argument", argument);
+
+        return (secret != null) ? secret(argument, secret) : null;
+    }
+
     public static String user(String argument, String user) {
         Argument.notNull("argument", argument);
         Argument.notNull("user", user);
@@ -233,6 +303,12 @@ public final class Argument {
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an user", argument, user));
         }
+    }
+
+    public static String userNullable(String argument, String user) {
+        Argument.notNull("argument", argument);
+
+        return (user != null) ? user(argument, user) : null;
     }
 
     public static String url(String argument, String url) {
@@ -246,6 +322,12 @@ public final class Argument {
         }
     }
 
+    public static String urlNullable(String argument, String url) {
+        Argument.notNull("argument", argument);
+
+        return (url != null) ? url(argument, url) : null;
+    }
+
     public static String email(String argument, String email) {
         Argument.notNull("argument", argument);
         Argument.notNull("email", email);
@@ -255,5 +337,11 @@ public final class Argument {
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an email", argument, email));
         }
+    }
+
+    public static String emailNullable(String argument, String email) {
+        Argument.notNull("argument", argument);
+
+        return (email != null) ? email(argument, email) : null;
     }
 }

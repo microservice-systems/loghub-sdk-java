@@ -28,6 +28,7 @@ public interface HttpClient {
     public HttpURLConnection get(String spec, String contentType, String acceptType) throws IOException;
     public HttpURLConnection post(String spec, String contentType, String acceptType) throws IOException;
     public HttpURLConnection put(String spec, String contentType, String acceptType) throws IOException;
+    public HttpURLConnection patch(String spec, String contentType, String acceptType) throws IOException;
     public HttpURLConnection delete(String spec, String contentType, String acceptType) throws IOException;
     public HttpURLConnection head(String spec, String contentType, String acceptType) throws IOException;
     public HttpURLConnection options(String spec, String contentType, String acceptType) throws IOException;

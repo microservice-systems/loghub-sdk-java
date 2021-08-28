@@ -135,6 +135,11 @@ public class HttpDefaultClient implements HttpClient, Serializable {
     }
 
     @Override
+    public HttpURLConnection patch(String spec, String contentType, String acceptType) throws IOException {
+        return createConnection(spec, "PATCH", contentType, acceptType);
+    }
+
+    @Override
     public HttpURLConnection delete(String spec, String contentType, String acceptType) throws IOException {
         return createConnection(spec, "DELETE", contentType, acceptType);
     }

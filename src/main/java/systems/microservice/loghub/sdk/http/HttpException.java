@@ -28,76 +28,76 @@ import java.net.URL;
 public class HttpException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    protected final URL url;
+    protected final String target;
     protected final String method;
-    protected final int code;
+    protected final int status;
 
     public HttpException(HttpURLConnection connection) {
-        this(getURL(connection), getMethod(connection), getCode(connection));
+        this(getExternalForm(getURL(connection)), getMethod(connection), getStatus(connection));
     }
 
     public HttpException(HttpURLConnection connection, Throwable cause) {
-        this(getURL(connection), getMethod(connection), getCode(connection), cause);
+        this(getExternalForm(getURL(connection)), getMethod(connection), getStatus(connection), cause);
     }
 
-    public HttpException(URL url, String method, int code) {
-        super(String.format("[%s][%d]: %s", getString(method), code, getExternalForm(url)));
+    public HttpException(String target, String method, int status) {
+        super(String.format("[%s][%d]: %s", getString(method), status, getString(target)));
 
-        this.url = url;
+        this.target = target;
         this.method = method;
-        this.code = code;
+        this.status = status;
     }
 
-    public HttpException(URL url, String method, int code, Throwable cause) {
-        super(String.format("[%s][%d]: %s", getString(method), code, getExternalForm(url)), cause);
+    public HttpException(String target, String method, int status, Throwable cause) {
+        super(String.format("[%s][%d]: %s", getString(method), status, getString(target)), cause);
 
-        this.url = url;
+        this.target = target;
         this.method = method;
-        this.code = code;
+        this.status = status;
     }
 
     public HttpException(String message) {
         super(message);
 
-        this.url = null;
+        this.target = null;
         this.method = null;
-        this.code = -1;
+        this.status = -1;
     }
 
     public HttpException(String message, Throwable cause) {
         super(message, cause);
 
-        this.url = null;
+        this.target = null;
         this.method = null;
-        this.code = -1;
+        this.status = -1;
     }
 
     public HttpException(Throwable cause) {
         super(cause);
 
-        this.url = null;
+        this.target = null;
         this.method = null;
-        this.code = -1;
+        this.status = -1;
     }
 
     public HttpException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
 
-        this.url = null;
+        this.target = null;
         this.method = null;
-        this.code = -1;
+        this.status = -1;
     }
 
-    public URL getURL() {
-        return url;
+    public String getTarget() {
+        return target;
     }
 
     public String getMethod() {
         return method;
     }
 
-    public int getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
     protected static URL getURL(HttpURLConnection connection) {
@@ -108,7 +108,7 @@ public class HttpException extends RuntimeException {
         return (connection != null) ? connection.getRequestMethod() : null;
     }
 
-    protected static int getCode(HttpURLConnection connection) {
+    protected static int getStatus(HttpURLConnection connection) {
         try {
             return (connection != null) ? connection.getResponseCode() : -1;
         } catch (IOException e) {

@@ -27,10 +27,10 @@ import java.io.Writer;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public abstract class Serializer implements Serializable {
+public abstract class SerializerOld implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected Serializer() {
+    protected SerializerOld() {
     }
 
     @SuppressWarnings("rawtypes")

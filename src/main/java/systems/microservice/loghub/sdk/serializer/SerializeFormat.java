@@ -22,24 +22,22 @@ package systems.microservice.loghub.sdk.serializer;
  * @since 1.0
  */
 public enum SerializeFormat {
-    JAVA("application/java-serialized-object", "ser", false),
-    JAVA_XML("application/java-xml", "xml", false),
-    JAVA_PROPERTIES("application/java-properties", "properties", false),
-    CBOR("application/cbor", "cbor", true),
-    SMILE("application/smile", "smile", true),
-    XML("application/xml", "xml", true),
-    JSON("application/json", "json", true),
-    YAML("application/yaml", "yaml", true),
-    CSV("text/csv", "csv", true),
-    PROPERTIES("application/properties", "properties", true);
+    JAVA("application/java-serialized-object", "ser"),
+    JAVA_XML("application/java-xml", "xml"),
+    JAVA_PROPERTIES("application/java-properties", "properties"),
+    CBOR("application/cbor", "cbor"),
+    SMILE("application/smile", "smile"),
+    XML("application/xml", "xml"),
+    JSON("application/json", "json"),
+    YAML("application/yaml", "yaml"),
+    CSV("text/csv", "csv"),
+    PROPERTIES("application/properties", "properties");
 
     public final String contentType;
     public final String extension;
-    public final boolean safe;
 
-    SerializeFormat(String contentType, String extension, boolean safe) {
+    SerializeFormat(String contentType, String extension) {
         this.contentType = contentType;
         this.extension = extension;
-        this.safe = safe;
     }
 }

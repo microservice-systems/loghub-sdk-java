@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.serializer;
 
+import systems.microservice.loghub.sdk.util.Argument;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -28,236 +30,84 @@ import java.io.Writer;
  * @since 1.0
  */
 public enum Serializer {
-    JAVA("application/java-serialized-object", "ser", new JavaHandler()),
-    JAVA_XML("application/java-xml", "xml", new JavaXmlHandler()),
-    JAVA_PROPERTIES("application/java-properties", "properties", new JavaPropertiesHandler()),
-    CBOR("application/cbor", "cbor", new JacksonHandler()),
-    SMILE("application/smile", "smile", new JacksonHandler()),
-    XML("application/xml", "xml", new JacksonHandler()),
-    JSON("application/json", "json", new JacksonHandler()),
-    YAML("application/yaml", "yaml", new JacksonHandler()),
-    CSV("text/csv", "csv", new JacksonHandler()),
-    PROPERTIES("application/properties", "properties", new JacksonHandler());
+    JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", new JavaHandler()),
+    JAVA_XML(SerializerFormat.TEXT, "application/java-xml", "xml", new JavaXmlHandler()),
+    JAVA_PROPERTIES(SerializerFormat.TEXT, "application/java-properties", "properties", new JavaPropertiesHandler()),
+    CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", new JacksonHandler()),
+    SMILE(SerializerFormat.BINARY, "application/smile", "smile", new JacksonHandler()),
+    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", new JacksonHandler()),
+    ION(SerializerFormat.BINARY, "application/ion", "ion", new JacksonHandler()),
+    AVRO(SerializerFormat.BINARY, "application/avro", "avro", new JacksonHandler()),
+    XML(SerializerFormat.TEXT, "application/xml", "xml", new JacksonHandler()),
+    JSON(SerializerFormat.TEXT, "application/json", "json", new JacksonHandler()),
+    YAML(SerializerFormat.TEXT, "application/yaml", "yaml", new JacksonHandler()),
+    TOML(SerializerFormat.TEXT, "application/toml", "toml", new JacksonHandler()),
+    CSV(SerializerFormat.TEXT, "text/csv", "csv", new JacksonHandler()),
+    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", new JacksonHandler());
 
+    public final SerializerFormat format;
     public final String contentType;
     public final String extension;
-    private final Handler handler;
+    public final SerializerHandler handler;
 
-    Serializer(String contentType, String extension, Handler handler) {
+    Serializer(SerializerFormat format, String contentType, String extension, SerializerHandler handler) {
+        this.format = format;
         this.contentType = contentType;
         this.extension = extension;
         this.handler = handler;
     }
 
-    private static abstract class Handler implements Serializable {
-        private static final long serialVersionUID = 1L;
+    public <T> T read(byte[] array, Class<T> clazz) {
+        Argument.notNull("array", array);
+        Argument.notNull("clazz", clazz);
 
-        protected Handler() {
-        }
-
-        @SuppressWarnings("rawtypes")
-        public abstract Object read(byte[] array, Class clazz);
-
-        @SuppressWarnings("rawtypes")
-        public abstract Object read(InputStream input, Class clazz);
-
-        @SuppressWarnings("rawtypes")
-        public abstract Object read(String string, Class clazz);
-
-        @SuppressWarnings("rawtypes")
-        public abstract Object read(Reader reader, Class clazz);
-
-        public abstract byte[] write(Object object);
-        public abstract OutputStream write(Object object, OutputStream output);
-        public abstract String writeS(Object object);
-        public abstract Writer write(Object object, Writer writer);
+        return handler.read(array, clazz);
     }
 
-    private static final class JavaHandler extends Handler {
-        private static final long serialVersionUID = 1L;
+    public <T> T read(InputStream input, Class<T> clazz) {
+        Argument.notNull("input", input);
+        Argument.notNull("clazz", clazz);
 
-        public JavaHandler() {
-        }
-
-        @Override
-        public Object read(byte[] array, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(InputStream input, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(String string, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(Reader reader, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public byte[] write(Object object) {
-            return new byte[0];
-        }
-
-        @Override
-        public OutputStream write(Object object, OutputStream output) {
-            return null;
-        }
-
-        @Override
-        public String writeS(Object object) {
-            return null;
-        }
-
-        @Override
-        public Writer write(Object object, Writer writer) {
-            return null;
-        }
+        return handler.read(input, clazz);
     }
 
-    private static final class JavaXmlHandler extends Handler {
-        private static final long serialVersionUID = 1L;
+    public <T> T read(String string, Class<T> clazz) {
+        Argument.notNull("string", string);
+        Argument.notNull("clazz", clazz);
 
-        public JavaXmlHandler() {
-        }
-
-        @Override
-        public Object read(byte[] array, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(InputStream input, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(String string, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(Reader reader, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public byte[] write(Object object) {
-            return new byte[0];
-        }
-
-        @Override
-        public OutputStream write(Object object, OutputStream output) {
-            return null;
-        }
-
-        @Override
-        public String writeS(Object object) {
-            return null;
-        }
-
-        @Override
-        public Writer write(Object object, Writer writer) {
-            return null;
-        }
+        return handler.read(string, clazz);
     }
 
-    private static final class JavaPropertiesHandler extends Handler {
-        private static final long serialVersionUID = 1L;
+    public <T> T read(Reader reader, Class<T> clazz) {
+        Argument.notNull("reader", reader);
+        Argument.notNull("clazz", clazz);
 
-        public JavaPropertiesHandler() {
-        }
-
-        @Override
-        public Object read(byte[] array, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(InputStream input, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(String string, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public Object read(Reader reader, Class clazz) {
-            return null;
-        }
-
-        @Override
-        public byte[] write(Object object) {
-            return new byte[0];
-        }
-
-        @Override
-        public OutputStream write(Object object, OutputStream output) {
-            return null;
-        }
-
-        @Override
-        public String writeS(Object object) {
-            return null;
-        }
-
-        @Override
-        public Writer write(Object object, Writer writer) {
-            return null;
-        }
+        return handler.read(reader, clazz);
     }
 
-    private static final class JacksonHandler extends Handler {
-        private static final long serialVersionUID = 1L;
+    public <T> byte[] write(T object) {
+        Argument.notNull("object", object);
 
-        public JacksonHandler() {
-        }
+        return handler.write(object);
+    }
 
-        @Override
-        public Object read(byte[] array, Class clazz) {
-            return null;
-        }
+    public <T> OutputStream write(T object, OutputStream output) {
+        Argument.notNull("object", object);
+        Argument.notNull("output", output);
 
-        @Override
-        public Object read(InputStream input, Class clazz) {
-            return null;
-        }
+        return handler.write(object, output);
+    }
 
-        @Override
-        public Object read(String string, Class clazz) {
-            return null;
-        }
+    public <T> String writeS(T object) {
+        Argument.notNull("object", object);
 
-        @Override
-        public Object read(Reader reader, Class clazz) {
-            return null;
-        }
+        return handler.writeS(object);
+    }
 
-        @Override
-        public byte[] write(Object object) {
-            return new byte[0];
-        }
+    public <T> Writer write(T object, Writer writer) {
+        Argument.notNull("object", object);
+        Argument.notNull("writer", writer);
 
-        @Override
-        public OutputStream write(Object object, OutputStream output) {
-            return null;
-        }
-
-        @Override
-        public String writeS(Object object) {
-            return null;
-        }
-
-        @Override
-        public Writer write(Object object, Writer writer) {
-            return null;
-        }
+        return handler.write(object, writer);
     }
 }

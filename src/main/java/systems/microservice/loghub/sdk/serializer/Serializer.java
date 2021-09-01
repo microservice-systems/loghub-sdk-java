@@ -31,19 +31,22 @@ import java.io.Writer;
  */
 public enum Serializer {
     JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", new JavaHandler()),
-    JAVA_XML(SerializerFormat.TEXT, "application/java-xml", "xml", new JavaXmlHandler()),
-    JAVA_PROPERTIES(SerializerFormat.TEXT, "application/java-properties", "properties", new JavaPropertiesHandler()),
     CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", new JacksonHandler()),
     SMILE(SerializerFormat.BINARY, "application/smile", "smile", new JacksonHandler()),
-    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", new JacksonHandler()),
     ION(SerializerFormat.BINARY, "application/ion", "ion", new JacksonHandler()),
+    MSGPACK(SerializerFormat.BINARY, "application/msgpack", "msgpack", new JacksonHandler()),
+    VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", new JacksonHandler()),
+    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", new JacksonHandler()),
     AVRO(SerializerFormat.BINARY, "application/avro", "avro", new JacksonHandler()),
+    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", new JacksonHandler()),
+    PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", new JavaPropertiesHandler()),
     XML(SerializerFormat.TEXT, "application/xml", "xml", new JacksonHandler()),
+    XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", new JavaXmlHandler()),
     JSON(SerializerFormat.TEXT, "application/json", "json", new JacksonHandler()),
     YAML(SerializerFormat.TEXT, "application/yaml", "yaml", new JacksonHandler()),
     TOML(SerializerFormat.TEXT, "application/toml", "toml", new JacksonHandler()),
-    CSV(SerializerFormat.TEXT, "text/csv", "csv", new JacksonHandler()),
-    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", new JacksonHandler());
+    HAL(SerializerFormat.TEXT, "application/hal", "hal", new JacksonHandler()),
+    CSV(SerializerFormat.TEXT, "text/csv", "csv", new JacksonHandler());
 
     public final SerializerFormat format;
     public final String contentType;

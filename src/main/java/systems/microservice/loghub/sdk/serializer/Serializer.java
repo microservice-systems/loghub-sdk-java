@@ -17,12 +17,28 @@
 
 package systems.microservice.loghub.sdk.serializer;
 
+import systems.microservice.loghub.sdk.serializer.handler.SerializerAvroHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerCborHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerCsvHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerHalHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerIonHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerJavaHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerJsonHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerMsgpackHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerPropertiesHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerPropertiesJavaHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerProtobufHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerSmileHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerTomlHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerVelocypackHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerXmlDomHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerXmlHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerYamlHandler;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.Serializable;
 import java.io.Writer;
 
 /**
@@ -30,23 +46,23 @@ import java.io.Writer;
  * @since 1.0
  */
 public enum Serializer {
-    JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", new JavaHandler()),
-    CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", new JacksonHandler()),
-    SMILE(SerializerFormat.BINARY, "application/smile", "smile", new JacksonHandler()),
-    ION(SerializerFormat.BINARY, "application/ion", "ion", new JacksonHandler()),
-    MSGPACK(SerializerFormat.BINARY, "application/msgpack", "msgpack", new JacksonHandler()),
-    VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", new JacksonHandler()),
-    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", new JacksonHandler()),
-    AVRO(SerializerFormat.BINARY, "application/avro", "avro", new JacksonHandler()),
-    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", new JacksonHandler()),
-    PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", new JavaPropertiesHandler()),
-    XML(SerializerFormat.TEXT, "application/xml", "xml", new JacksonHandler()),
-    XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", new JavaXmlHandler()),
-    JSON(SerializerFormat.TEXT, "application/json", "json", new JacksonHandler()),
-    YAML(SerializerFormat.TEXT, "application/yaml", "yaml", new JacksonHandler()),
-    TOML(SerializerFormat.TEXT, "application/toml", "toml", new JacksonHandler()),
-    HAL(SerializerFormat.TEXT, "application/hal", "hal", new JacksonHandler()),
-    CSV(SerializerFormat.TEXT, "text/csv", "csv", new JacksonHandler());
+    JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", createJavaHandler()),
+    CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", createCborHandler()),
+    SMILE(SerializerFormat.BINARY, "application/smile", "smile", createSmileHandler()),
+    ION(SerializerFormat.BINARY, "application/ion", "ion", createIonHandler()),
+    MSGPACK(SerializerFormat.BINARY, "application/msgpack", "msgpack", createMsgpackHandler()),
+    VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", createVelocypackHandler()),
+    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", createProtobufHandler()),
+    AVRO(SerializerFormat.BINARY, "application/avro", "avro", createAvroHandler()),
+    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", createPropertiesHandler()),
+    PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", createPropertiesJavaHandler()),
+    XML(SerializerFormat.TEXT, "application/xml", "xml", createXmlHandler()),
+    XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", createXmlDomHandler()),
+    JSON(SerializerFormat.TEXT, "application/json", "json", createJsonHandler()),
+    YAML(SerializerFormat.TEXT, "application/yaml", "yaml", createYamlHandler()),
+    TOML(SerializerFormat.TEXT, "application/toml", "toml", createTomlHandler()),
+    HAL(SerializerFormat.TEXT, "application/hal", "hal", createHalHandler()),
+    CSV(SerializerFormat.TEXT, "text/csv", "csv", createCsvHandler());
 
     public final SerializerFormat format;
     public final String contentType;
@@ -112,5 +128,73 @@ public enum Serializer {
         Argument.notNull("writer", writer);
 
         return handler.write(object, writer);
+    }
+
+    private static SerializerJavaHandler createJavaHandler() {
+        return new SerializerJavaHandler();
+    }
+
+    private static SerializerCborHandler createCborHandler() {
+        return new SerializerCborHandler();
+    }
+
+    private static SerializerSmileHandler createSmileHandler() {
+        return new SerializerSmileHandler();
+    }
+
+    private static SerializerIonHandler createIonHandler() {
+        return new SerializerIonHandler();
+    }
+
+    private static SerializerMsgpackHandler createMsgpackHandler() {
+        return new SerializerMsgpackHandler();
+    }
+
+    private static SerializerVelocypackHandler createVelocypackHandler() {
+        return new SerializerVelocypackHandler();
+    }
+
+    private static SerializerProtobufHandler createProtobufHandler() {
+        return new SerializerProtobufHandler();
+    }
+
+    private static SerializerAvroHandler createAvroHandler() {
+        return new SerializerAvroHandler();
+    }
+
+    private static SerializerPropertiesHandler createPropertiesHandler() {
+        return new SerializerPropertiesHandler();
+    }
+
+    private static SerializerPropertiesJavaHandler createPropertiesJavaHandler() {
+        return new SerializerPropertiesJavaHandler();
+    }
+
+    private static SerializerXmlHandler createXmlHandler() {
+        return new SerializerXmlHandler();
+    }
+
+    private static SerializerXmlDomHandler createXmlDomHandler() {
+        return new SerializerXmlDomHandler();
+    }
+
+    private static SerializerJsonHandler createJsonHandler() {
+        return new SerializerJsonHandler();
+    }
+
+    private static SerializerYamlHandler createYamlHandler() {
+        return new SerializerYamlHandler();
+    }
+
+    private static SerializerTomlHandler createTomlHandler() {
+        return new SerializerTomlHandler();
+    }
+
+    private static SerializerHalHandler createHalHandler() {
+        return new SerializerHalHandler();
+    }
+
+    private static SerializerCsvHandler createCsvHandler() {
+        return new SerializerCsvHandler();
     }
 }

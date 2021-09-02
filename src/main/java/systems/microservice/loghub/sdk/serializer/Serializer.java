@@ -46,33 +46,35 @@ import java.io.Writer;
  * @since 1.0
  */
 public enum Serializer {
-    JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", createJavaHandler()),
-    CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", createCborHandler()),
-    SMILE(SerializerFormat.BINARY, "application/smile", "smile", createSmileHandler()),
-    ION(SerializerFormat.BINARY, "application/ion", "ion", createIonHandler()),
-    MSGPACK(SerializerFormat.BINARY, "application/msgpack", "msgpack", createMsgpackHandler()),
-    VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", createVelocypackHandler()),
-    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", createProtobufHandler()),
-    AVRO(SerializerFormat.BINARY, "application/avro", "avro", createAvroHandler()),
-    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", createPropertiesHandler()),
-    PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", createPropertiesJavaHandler()),
-    XML(SerializerFormat.TEXT, "application/xml", "xml", createXmlHandler()),
-    XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", createXmlDomHandler()),
-    JSON(SerializerFormat.TEXT, "application/json", "json", createJsonHandler()),
-    YAML(SerializerFormat.TEXT, "application/yaml", "yaml", createYamlHandler()),
-    TOML(SerializerFormat.TEXT, "application/toml", "toml", createTomlHandler()),
-    HAL(SerializerFormat.TEXT, "application/hal", "hal", createHalHandler()),
-    CSV(SerializerFormat.TEXT, "text/csv", "csv", createCsvHandler());
+    JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", null, createJavaHandler()),
+    CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor", createCborHandler()),
+    SMILE(SerializerFormat.BINARY, "application/smile", "smile", "com.fasterxml.jackson.dataformat:jackson-dataformat-smile", createSmileHandler()),
+    ION(SerializerFormat.BINARY, "application/ion", "ion", "com.fasterxml.jackson.dataformat:jackson-dataformat-ion", createIonHandler()),
+    MSGPACK(SerializerFormat.BINARY, "application/msgpack", "msgpack", "org.msgpack:jackson-dataformat-msgpack", createMsgpackHandler()),
+    VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", "com.arangodb:jackson-dataformat-velocypack", createVelocypackHandler()),
+    PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", "com.fasterxml.jackson.dataformat:jackson-dataformat-protobuf", createProtobufHandler()),
+    AVRO(SerializerFormat.BINARY, "application/avro", "avro", "com.fasterxml.jackson.dataformat:jackson-dataformat-avro", createAvroHandler()),
+    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", "com.fasterxml.jackson.dataformat:jackson-dataformat-properties", createPropertiesHandler()),
+    PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", null, createPropertiesJavaHandler()),
+    XML(SerializerFormat.TEXT, "application/xml", "xml", "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", createXmlHandler()),
+    XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", null, createXmlDomHandler()),
+    JSON(SerializerFormat.TEXT, "application/json", "json", "", createJsonHandler()),
+    YAML(SerializerFormat.TEXT, "application/yaml", "yaml", "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", createYamlHandler()),
+    TOML(SerializerFormat.TEXT, "application/toml", "toml", "com.fasterxml.jackson.dataformat:jackson-dataformat-toml", createTomlHandler()),
+    HAL(SerializerFormat.TEXT, "application/hal", "hal", "io.openapitools.jackson.dataformat:jackson-dataformat-hal", createHalHandler()),
+    CSV(SerializerFormat.TEXT, "text/csv", "csv", "com.fasterxml.jackson.dataformat:jackson-dataformat-csv", createCsvHandler());
 
     public final SerializerFormat format;
     public final String contentType;
     public final String extension;
+    public final String dependency;
     public final SerializerHandler handler;
 
-    Serializer(SerializerFormat format, String contentType, String extension, SerializerHandler handler) {
+    Serializer(SerializerFormat format, String contentType, String extension, String dependency, SerializerHandler handler) {
         this.format = format;
         this.contentType = contentType;
         this.extension = extension;
+        this.dependency = dependency;
         this.handler = handler;
     }
 

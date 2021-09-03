@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.serializer;
 
 import systems.microservice.loghub.sdk.serializer.handler.SerializerAvroHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerBsonHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerCborHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerCsvHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerHalHandler;
@@ -50,6 +51,7 @@ public enum Serializer {
     CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor", createCborHandler()),
     SMILE(SerializerFormat.BINARY, "application/smile", "smile", "com.fasterxml.jackson.dataformat:jackson-dataformat-smile", createSmileHandler()),
     ION(SerializerFormat.BINARY, "application/ion", "ion", "com.fasterxml.jackson.dataformat:jackson-dataformat-ion", createIonHandler()),
+    BSON(SerializerFormat.BINARY, "application/bson", "bson", "de.undercouch:bson4jackson", createBsonHandler()),
     MSGPACK(SerializerFormat.BINARY, "application/msgpack", "msgpack", "org.msgpack:jackson-dataformat-msgpack", createMsgpackHandler()),
     VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", "com.arangodb:jackson-dataformat-velocypack", createVelocypackHandler()),
     PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", "com.fasterxml.jackson.dataformat:jackson-dataformat-protobuf", createProtobufHandler()),
@@ -58,7 +60,7 @@ public enum Serializer {
     PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", null, createPropertiesJavaHandler()),
     XML(SerializerFormat.TEXT, "application/xml", "xml", "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", createXmlHandler()),
     XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", null, createXmlDomHandler()),
-    JSON(SerializerFormat.TEXT, "application/json", "json", "", createJsonHandler()),
+    JSON(SerializerFormat.TEXT, "application/json", "json", "com.fasterxml.jackson.core:jackson-databind", createJsonHandler()),
     YAML(SerializerFormat.TEXT, "application/yaml", "yaml", "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", createYamlHandler()),
     TOML(SerializerFormat.TEXT, "application/toml", "toml", "com.fasterxml.jackson.dataformat:jackson-dataformat-toml", createTomlHandler()),
     HAL(SerializerFormat.TEXT, "application/hal", "hal", "io.openapitools.jackson.dataformat:jackson-dataformat-hal", createHalHandler()),
@@ -146,6 +148,10 @@ public enum Serializer {
 
     private static SerializerIonHandler createIonHandler() {
         return new SerializerIonHandler();
+    }
+
+    private static SerializerBsonHandler createBsonHandler() {
+        return new SerializerBsonHandler();
     }
 
     private static SerializerMsgpackHandler createMsgpackHandler() {

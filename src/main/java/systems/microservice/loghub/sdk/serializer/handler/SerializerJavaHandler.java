@@ -21,7 +21,6 @@ import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 import systems.microservice.loghub.sdk.serializer.SerializerOperation;
-import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 

@@ -17,9 +17,18 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
+import systems.microservice.loghub.sdk.serializer.Serializer;
+import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
+import systems.microservice.loghub.sdk.serializer.SerializerOperation;
+import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
+import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Serializable;
@@ -35,43 +44,72 @@ public class SerializerJavaHandler implements SerializerHandler, Serializable {
     public SerializerJavaHandler() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T read(byte[] array, Class<T> clazz) {
-        return null;
+        try {
+            try (ByteArrayInputStream ain = new ByteArrayInputStream(array)) {
+                ObjectInputStream oin = new ObjectInputStream(ain);
+                return (T) oin.readObject();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new SerializerException(Serializer.JAVA, SerializerOperation.READ, clazz, e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T read(InputStream input, Class<T> clazz) {
-        return null;
+        try {
+            ObjectInputStream oin = new ObjectInputStream(input);
+            return (T) oin.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new SerializerException(Serializer.JAVA, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.JAVA, SerializerOperation.READ));
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.JAVA, SerializerOperation.READ));
     }
 
     @Override
     public <T> byte[] write(T object) {
-        return new byte[0];
+        try {
+            ByteArrayOutputStream aout = new ByteArrayOutputStream(4096);
+            try (ByteArrayOutputStream aout1 = aout) {
+                ObjectOutputStream oout = new ObjectOutputStream(aout1);
+                oout.writeObject(object);
+            }
+            return aout.toByteArray();
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.JAVA, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
-        return null;
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(output);
+            oout.writeObject(object);
+            return output;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.JAVA, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> String writeS(T object) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.JAVA, SerializerOperation.WRITE));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.JAVA, SerializerOperation.WRITE));
     }
 }

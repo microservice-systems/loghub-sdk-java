@@ -31,7 +31,7 @@ public class SerializerException extends RuntimeException {
     protected final Class<?> clazz;
 
     public SerializerException(Serializer serializer, SerializerOperation operation, Class<?> clazz) {
-        super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("clazz", clazz)));
+        super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("clazz", clazz).getCanonicalName()));
 
         this.serializer = serializer;
         this.operation = operation;
@@ -39,7 +39,7 @@ public class SerializerException extends RuntimeException {
     }
 
     public SerializerException(Serializer serializer, SerializerOperation operation, Class<?> clazz, Throwable cause) {
-        super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("clazz", clazz)), cause);
+        super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("clazz", clazz).getCanonicalName()), cause);
 
         this.serializer = serializer;
         this.operation = operation;

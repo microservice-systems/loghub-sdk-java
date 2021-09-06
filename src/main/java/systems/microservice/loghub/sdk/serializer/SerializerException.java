@@ -30,6 +30,22 @@ public class SerializerException extends RuntimeException {
     protected final SerializerOperation operation;
     protected final Class<?> clazz;
 
+    public SerializerException(Serializer serializer, SerializerOperation operation, String message) {
+        super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("message", message)));
+
+        this.serializer = serializer;
+        this.operation = operation;
+        this.clazz = null;
+    }
+
+    public SerializerException(Serializer serializer, SerializerOperation operation, String message, Throwable cause) {
+        super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("message", message)), cause);
+
+        this.serializer = serializer;
+        this.operation = operation;
+        this.clazz = null;
+    }
+
     public SerializerException(Serializer serializer, SerializerOperation operation, Class<?> clazz) {
         super(String.format("[%s][%s]: %s", Argument.notNull("serializer", serializer), Argument.notNull("operation", operation), Argument.notNull("clazz", clazz).getCanonicalName()));
 

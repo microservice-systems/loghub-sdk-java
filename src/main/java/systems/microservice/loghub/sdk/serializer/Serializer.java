@@ -84,54 +84,86 @@ public enum Serializer {
         Argument.notNull("array", array);
         Argument.notNull("clazz", clazz);
 
-        return handler.read(array, clazz);
+        if (handler != null) {
+            return handler.read(array, clazz);
+        } else {
+            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> T read(InputStream input, Class<T> clazz) {
         Argument.notNull("input", input);
         Argument.notNull("clazz", clazz);
 
-        return handler.read(input, clazz);
+        if (handler != null) {
+            return handler.read(input, clazz);
+        } else {
+            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> T read(String string, Class<T> clazz) {
         Argument.notNull("string", string);
         Argument.notNull("clazz", clazz);
 
-        return handler.read(string, clazz);
+        if (handler != null) {
+            return handler.read(string, clazz);
+        } else {
+            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> T read(Reader reader, Class<T> clazz) {
         Argument.notNull("reader", reader);
         Argument.notNull("clazz", clazz);
 
-        return handler.read(reader, clazz);
+        if (handler != null) {
+            return handler.read(reader, clazz);
+        } else {
+            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> byte[] write(T object) {
         Argument.notNull("object", object);
 
-        return handler.write(object);
+        if (handler != null) {
+            return handler.write(object);
+        } else {
+            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> OutputStream write(T object, OutputStream output) {
         Argument.notNull("object", object);
         Argument.notNull("output", output);
 
-        return handler.write(object, output);
+        if (handler != null) {
+            return handler.write(object, output);
+        } else {
+            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> String writeS(T object) {
         Argument.notNull("object", object);
 
-        return handler.writeS(object);
+        if (handler != null) {
+            return handler.writeS(object);
+        } else {
+            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     public <T> Writer write(T object, Writer writer) {
         Argument.notNull("object", object);
         Argument.notNull("writer", writer);
 
-        return handler.write(object, writer);
+        if (handler != null) {
+            return handler.write(object, writer);
+        } else {
+            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+        }
     }
 
     private static SerializerJavaHandler createJavaHandler() {
@@ -139,38 +171,83 @@ public enum Serializer {
     }
 
     private static SerializerCborHandler createCborHandler() {
+        try {
+            Class.forName("com.fasterxml.jackson.dataformat.cbor.CBORFactory", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerCborHandler();
     }
 
     private static SerializerSmileHandler createSmileHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerSmileHandler();
     }
 
     private static SerializerIonHandler createIonHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerIonHandler();
     }
 
     private static SerializerBsonHandler createBsonHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerBsonHandler();
     }
 
     private static SerializerMsgpackHandler createMsgpackHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerMsgpackHandler();
     }
 
     private static SerializerVelocypackHandler createVelocypackHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerVelocypackHandler();
     }
 
     private static SerializerProtobufHandler createProtobufHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerProtobufHandler();
     }
 
     private static SerializerAvroHandler createAvroHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerAvroHandler();
     }
 
     private static SerializerPropertiesHandler createPropertiesHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerPropertiesHandler();
     }
 
@@ -179,6 +256,11 @@ public enum Serializer {
     }
 
     private static SerializerXmlHandler createXmlHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerXmlHandler();
     }
 
@@ -187,22 +269,47 @@ public enum Serializer {
     }
 
     private static SerializerJsonHandler createJsonHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerJsonHandler();
     }
 
     private static SerializerYamlHandler createYamlHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerYamlHandler();
     }
 
     private static SerializerTomlHandler createTomlHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerTomlHandler();
     }
 
     private static SerializerHalHandler createHalHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerHalHandler();
     }
 
     private static SerializerCsvHandler createCsvHandler() {
+        try {
+            Class.forName("", false, Serializer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
         return new SerializerCsvHandler();
     }
 }

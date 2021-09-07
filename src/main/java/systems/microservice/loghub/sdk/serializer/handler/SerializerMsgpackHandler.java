@@ -17,8 +17,17 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.msgpack.jackson.dataformat.MessagePackFactory;
+import systems.microservice.loghub.sdk.serializer.Serializer;
+import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
+import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -32,46 +41,66 @@ import java.io.Writer;
 public class SerializerMsgpackHandler implements SerializerHandler, Serializable {
     private static final long serialVersionUID = 1L;
 
+    protected final MessagePackFactory factory = new MessagePackFactory();
+    protected final ObjectMapper mapper = new ObjectMapper(factory).disable(JsonParser.Feature.AUTO_CLOSE_SOURCE).disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+
     public SerializerMsgpackHandler() {
     }
 
     @Override
     public <T> T read(byte[] array, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readValue(array, clazz);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.MSGPACK, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(InputStream input, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readValue(input, clazz);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.MSGPACK, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.MSGPACK, SerializerOperation.READ));
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.MSGPACK, SerializerOperation.READ));
     }
 
     @Override
     public <T> byte[] write(T object) {
-        return new byte[0];
+        try {
+            return mapper.writeValueAsBytes(object);
+        } catch (JsonProcessingException e) {
+            throw new SerializerException(Serializer.MSGPACK, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
-        return null;
+        try {
+            mapper.writeValue(output, object);
+            return output;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.MSGPACK, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> String writeS(T object) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.MSGPACK, SerializerOperation.WRITE));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.MSGPACK, SerializerOperation.WRITE));
     }
 }

@@ -17,13 +17,26 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.dataformat.protobuf.ProtobufFactory;
+import com.fasterxml.jackson.dataformat.protobuf.ProtobufMapper;
+import com.fasterxml.jackson.dataformat.protobuf.schema.ProtobufSchema;
+import systems.microservice.loghub.sdk.serializer.Serializer;
+import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
+import systems.microservice.loghub.sdk.serializer.SerializerOperation;
+import systems.microservice.loghub.sdk.util.MapUtil;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Dmitry Kotlyarov
@@ -32,46 +45,77 @@ import java.io.Writer;
 public class SerializerProtobufHandler implements SerializerHandler, Serializable {
     private static final long serialVersionUID = 1L;
 
+    protected final ProtobufFactory factory = new ProtobufFactory();
+    protected final ProtobufMapper mapper = (ProtobufMapper) new ProtobufMapper(factory).disable(JsonParser.Feature.AUTO_CLOSE_SOURCE).disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+    protected final ConcurrentHashMap<Class<?>, ProtobufSchema> schemas = new ConcurrentHashMap<>(256, 0.75f, 4);
+
     public SerializerProtobufHandler() {
+    }
+
+    protected <T> ProtobufSchema getSchema(Class<T> clazz) throws JsonMappingException {
+        ProtobufSchema s = schemas.get(clazz);
+        if (s == null) {
+            s = MapUtil.putIfAbsent(schemas, clazz, mapper.generateSchemaFor(clazz));
+        }
+        return s;
     }
 
     @Override
     public <T> T read(byte[] array, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readerFor(clazz).with(getSchema(clazz)).readValue(array);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(InputStream input, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readerFor(clazz).with(getSchema(clazz)).readValue(input);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.READ));
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.READ));
     }
 
     @Override
     public <T> byte[] write(T object) {
-        return new byte[0];
+        Class<?> c = object.getClass();
+        try {
+            return mapper.writer(getSchema(c)).writeValueAsBytes(object);
+        } catch (JsonProcessingException e) {
+            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.WRITE, c, e);
+        }
     }
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
-        return null;
+        Class<?> c = object.getClass();
+        try {
+            mapper.writer(getSchema(c)).writeValue(output, object);
+            return output;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.WRITE, c, e);
+        }
     }
 
     @Override
     public <T> String writeS(T object) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.WRITE));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.WRITE));
     }
 }

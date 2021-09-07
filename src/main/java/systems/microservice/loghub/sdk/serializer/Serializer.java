@@ -181,7 +181,7 @@ public enum Serializer {
 
     private static SerializerSmileHandler createSmileHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.smile.SmileFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -190,7 +190,7 @@ public enum Serializer {
 
     private static SerializerIonHandler createIonHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.ion.IonFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -199,7 +199,7 @@ public enum Serializer {
 
     private static SerializerBsonHandler createBsonHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("de.undercouch.bson4jackson.BsonFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -208,7 +208,7 @@ public enum Serializer {
 
     private static SerializerMsgpackHandler createMsgpackHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("org.msgpack.jackson.dataformat.MessagePackFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -217,7 +217,7 @@ public enum Serializer {
 
     private static SerializerVelocypackHandler createVelocypackHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.arangodb.jackson.dataformat.velocypack.VPackFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -226,7 +226,7 @@ public enum Serializer {
 
     private static SerializerProtobufHandler createProtobufHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.protobuf.ProtobufFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -235,7 +235,7 @@ public enum Serializer {
 
     private static SerializerAvroHandler createAvroHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.avro.AvroFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }

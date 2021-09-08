@@ -29,10 +29,10 @@ import java.io.Writer;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class SerializerPropertiesJavaHandler implements SerializerHandler, Serializable {
+public class SerializerPropsHandler implements SerializerHandler, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public SerializerPropertiesJavaHandler() {
+    public SerializerPropsHandler() {
     }
 
     @Override

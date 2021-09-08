@@ -19,9 +19,7 @@ package systems.microservice.loghub.sdk.util;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
@@ -33,8 +31,6 @@ import java.util.Properties;
  * @since 1.0
  */
 public final class PropertiesUtil {
-    public static final String APPLICATION_PROPERTIES = "application/properties";
-
     private PropertiesUtil() {
     }
 
@@ -91,17 +87,5 @@ public final class PropertiesUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static Properties deserialize(byte[] data, Properties defaults) {
-        Properties ps = new Properties(defaults);
-        try (ByteArrayInputStream d = new ByteArrayInputStream(data)) {
-            try (Reader r = new InputStreamReader(d, StandardCharsets.UTF_8)) {
-                ps.load(r);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return ps;
     }
 }

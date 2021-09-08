@@ -17,13 +17,24 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
+import systems.microservice.loghub.sdk.serializer.Serializer;
+import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
+import systems.microservice.loghub.sdk.serializer.SerializerOperation;
+import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
+import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 /**
  * @author Dmitry Kotlyarov
@@ -35,43 +46,104 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
     public SerializerPropertiesHandler() {
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T read(byte[] array, Class<T> clazz) {
-        return null;
+        if (!clazz.equals(Properties.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        }
+
+        try {
+            Properties ps = new Properties();
+            try (ByteArrayInputStream ain = new ByteArrayInputStream(array)) {
+                ps.load(new InputStreamReader(ain, StandardCharsets.UTF_8));
+            }
+            return (T) ps;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T read(InputStream input, Class<T> clazz) {
-        return null;
+        if (!clazz.equals(Properties.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        }
+
+        try {
+            Properties ps = new Properties();
+            ps.load(new InputStreamReader(input, StandardCharsets.UTF_8));
+            return (T) ps;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        return null;
+        if (!clazz.equals(Properties.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        }
+
+        try {
+            Properties ps = new Properties();
+            ps.load(new StringReader(string));
+            return (T) ps;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        return null;
+        if (!clazz.equals(Properties.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        }
+
+        try {
+            Properties ps = new Properties();
+            ps.load(reader);
+            return (T) ps;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> byte[] write(T object) {
-        return new byte[0];
+        try {
+            ByteArrayOutputStream aout = new ByteArrayOutputStream(4096);
+            try (ByteArrayOutputStream aout1 = aout) {
+                ObjectOutputStream oout = new ObjectOutputStream(aout1);
+                oout.writeObject(object);
+            }
+            return aout.toByteArray();
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
-        return null;
+        try {
+            ObjectOutputStream oout = new ObjectOutputStream(output);
+            oout.writeObject(object);
+            return output;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> String writeS(T object) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROPERTIES, SerializerOperation.WRITE));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        return null;
+        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROPERTIES, SerializerOperation.WRITE));
     }
 }

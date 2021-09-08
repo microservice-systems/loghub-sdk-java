@@ -29,10 +29,10 @@ import java.io.Writer;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class SerializerXmlDomHandler implements SerializerHandler, Serializable {
+public class SerializerDocumentHandler implements SerializerHandler, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public SerializerXmlDomHandler() {
+    public SerializerDocumentHandler() {
     }
 
     @Override

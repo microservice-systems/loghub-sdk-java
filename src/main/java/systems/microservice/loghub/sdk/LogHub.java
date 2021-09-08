@@ -139,7 +139,7 @@ public final class LogHub {
     }
 
     private static Map<String, String> createProperties() {
-        return Collections.unmodifiableMap(PropertiesUtil.toMap(ResourceUtil.findProperties(LogHub.class, "/loghub.properties", null)));
+        return Collections.unmodifiableMap(PropertiesUtil.toMap(ResourceUtil.findProperties(LogHub.class, "/loghub.properties")));
     }
 
     private static String createAccount(Map<String, String> properties) {

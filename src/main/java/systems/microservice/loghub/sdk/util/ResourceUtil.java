@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.sdk.serializer.Serializer;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +32,7 @@ public final class ResourceUtil {
     private ResourceUtil() {
     }
 
-    public static byte[] findData(Class clazz, String name) {
+    public static byte[] findData(Class<?> clazz, String name) {
         InputStream input = clazz.getResourceAsStream(name);
         if (input != null) {
             try (InputStream input1 = input) {
@@ -39,7 +41,7 @@ public final class ResourceUtil {
                 if (read == data.length) {
                     return data;
                 } else {
-                    throw new RuntimeException(String.format("Read %d bytes from resource '%s:%s' of size %d", read, clazz.getName(), name, data.length));
+                    throw new RuntimeException(String.format("Read %d bytes from resource '%s:%s' of size %d", read, clazz.getCanonicalName(), name, data.length));
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -49,16 +51,16 @@ public final class ResourceUtil {
         }
     }
 
-    public static byte[] getData(Class clazz, String name) {
+    public static byte[] getData(Class<?> clazz, String name) {
         byte[] d = findData(clazz, name);
         if (d != null) {
             return d;
         } else {
-            throw new RuntimeException(String.format("Resource '%s:%s' is not found", clazz.getName(), name));
+            throw new RuntimeException(String.format("Resource '%s:%s' is not found", clazz.getCanonicalName(), name));
         }
     }
 
-    public static String findString(Class clazz, String name) {
+    public static String findString(Class<?> clazz, String name) {
         byte[] d = findData(clazz, name);
         if (d != null) {
             return new String(d, StandardCharsets.UTF_8);
@@ -67,30 +69,30 @@ public final class ResourceUtil {
         }
     }
 
-    public static String getString(Class clazz, String name) {
+    public static String getString(Class<?> clazz, String name) {
         String s = findString(clazz, name);
         if (s != null) {
             return s;
         } else {
-            throw new RuntimeException(String.format("Resource '%s:%s' is not found", clazz.getName(), name));
+            throw new RuntimeException(String.format("Resource '%s:%s' is not found", clazz.getCanonicalName(), name));
         }
     }
 
-    public static Properties findProperties(Class clazz, String name, Properties defaults) {
+    public static Properties findProperties(Class<?> clazz, String name) {
         byte[] d = findData(clazz, name);
         if (d != null) {
-            return PropertiesUtil.deserialize(d, defaults);
+            return Serializer.PROPERTIES.read(d, Properties.class);
         } else {
             return null;
         }
     }
 
-    public static Properties getProperties(Class clazz, String name, Properties defaults) {
-        Properties ps = findProperties(clazz, name, defaults);
+    public static Properties getProperties(Class<?> clazz, String name) {
+        Properties ps = findProperties(clazz, name);
         if (ps != null) {
             return ps;
         } else {
-            throw new RuntimeException(String.format("Resource with properties '%s:%s' is not found", clazz.getName(), name));
+            throw new RuntimeException(String.format("Resource with properties '%s:%s' is not found", clazz.getCanonicalName(), name));
         }
     }
 }

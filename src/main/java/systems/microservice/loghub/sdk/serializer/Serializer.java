@@ -21,18 +21,18 @@ import systems.microservice.loghub.sdk.serializer.handler.SerializerAvroHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerBsonHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerCborHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerCsvHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerDocumentHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerHalHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerIonHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerJavaHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerJsonHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerMsgpackHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerPropertiesHandler;
-import systems.microservice.loghub.sdk.serializer.handler.SerializerPropertiesJavaHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerPropsHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerProtobufHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerSmileHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerTomlHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerVelocypackHandler;
-import systems.microservice.loghub.sdk.serializer.handler.SerializerXmlDomHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerXmlHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerYamlHandler;
 import systems.microservice.loghub.sdk.util.Argument;
@@ -56,10 +56,10 @@ public enum Serializer {
     VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", "com.arangodb:jackson-dataformat-velocypack", createVelocypackHandler()),
     PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", "com.fasterxml.jackson.dataformat:jackson-dataformat-protobuf", createProtobufHandler()),
     AVRO(SerializerFormat.BINARY, "application/avro", "avro", "com.fasterxml.jackson.dataformat:jackson-dataformat-avro", createAvroHandler()),
-    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", "com.fasterxml.jackson.dataformat:jackson-dataformat-properties", createPropertiesHandler()),
-    PROPERTIES_JAVA(SerializerFormat.TEXT, "application/properties-java", "properties", null, createPropertiesJavaHandler()),
+    PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", null, createPropertiesHandler()),
+    PROPS(SerializerFormat.TEXT, "application/properties", "properties", "com.fasterxml.jackson.dataformat:jackson-dataformat-properties", createPropsHandler()),
+    DOCUMENT(SerializerFormat.TEXT, "application/xml", "xml", null, createDocumentHandler()),
     XML(SerializerFormat.TEXT, "application/xml", "xml", "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", createXmlHandler()),
-    XML_DOM(SerializerFormat.TEXT, "application/xml-dom", "xml", null, createXmlDomHandler()),
     JSON(SerializerFormat.TEXT, "application/json", "json", "com.fasterxml.jackson.core:jackson-databind", createJsonHandler()),
     YAML(SerializerFormat.TEXT, "application/yaml", "yaml", "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", createYamlHandler()),
     TOML(SerializerFormat.TEXT, "application/toml", "toml", "com.fasterxml.jackson.dataformat:jackson-dataformat-toml", createTomlHandler()),
@@ -243,16 +243,20 @@ public enum Serializer {
     }
 
     private static SerializerPropertiesHandler createPropertiesHandler() {
+        return new SerializerPropertiesHandler();
+    }
+
+    private static SerializerPropsHandler createPropsHandler() {
         try {
             Class.forName("", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
-        return new SerializerPropertiesHandler();
+        return new SerializerPropsHandler();
     }
 
-    private static SerializerPropertiesJavaHandler createPropertiesJavaHandler() {
-        return new SerializerPropertiesJavaHandler();
+    private static SerializerDocumentHandler createDocumentHandler() {
+        return new SerializerDocumentHandler();
     }
 
     private static SerializerXmlHandler createXmlHandler() {
@@ -262,10 +266,6 @@ public enum Serializer {
             return null;
         }
         return new SerializerXmlHandler();
-    }
-
-    private static SerializerXmlDomHandler createXmlDomHandler() {
-        return new SerializerXmlDomHandler();
     }
 
     private static SerializerJsonHandler createJsonHandler() {

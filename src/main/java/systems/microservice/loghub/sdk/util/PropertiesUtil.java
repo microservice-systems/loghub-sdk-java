@@ -17,11 +17,6 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -67,25 +62,5 @@ public final class PropertiesUtil {
             }
         }
         return ps;
-    }
-
-    public static byte[] serialize(Properties properties, String comment, boolean xml) {
-        try {
-            ByteArrayOutputStream d = new ByteArrayOutputStream(16384);
-            try (ByteArrayOutputStream d1 = d) {
-                if (xml) {
-                    properties.storeToXML(d1, comment, "UTF-8");
-                } else {
-                    try (Writer w = new OutputStreamWriter(d1, StandardCharsets.UTF_8)) {
-                        try (BufferedWriter bw = new BufferedWriter(w)) {
-                            properties.store(bw, comment);
-                        }
-                    }
-                }
-            }
-            return d.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

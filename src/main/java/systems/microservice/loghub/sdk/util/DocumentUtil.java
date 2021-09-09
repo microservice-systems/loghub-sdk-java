@@ -18,22 +18,7 @@
 package systems.microservice.loghub.sdk.util;
 
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.IOException;
 
 /**
  * @author Dmitry Kotlyarov
@@ -64,34 +49,6 @@ public final class DocumentUtil {
             return a.getValue();
         } else {
             return defaultValue;
-        }
-    }
-
-    public static byte[] serialize(Document document) {
-        try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
-            Source s = new DOMSource(document);
-            ByteArrayOutputStream d = new ByteArrayOutputStream(65536);
-            try (ByteArrayOutputStream d1 = d) {
-                Result r = new StreamResult(d1);
-                t.transform(s, r);
-            }
-            return d.toByteArray();
-        } catch (IOException | TransformerException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static Document deserialize(byte[] data) {
-        try {
-            DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-            DocumentBuilder bld = f.newDocumentBuilder();
-            try (ByteArrayInputStream d = new ByteArrayInputStream(data)) {
-                InputSource is = new InputSource(d);
-                return bld.parse(is);
-            }
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

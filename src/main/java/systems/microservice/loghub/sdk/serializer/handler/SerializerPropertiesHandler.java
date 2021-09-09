@@ -23,12 +23,13 @@ import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
+import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.StringReader;
@@ -114,11 +115,15 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
 
     @Override
     public <T> byte[] write(T object) {
+        if (!(object instanceof Properties)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        }
+
         try {
+            Properties ps = (Properties) object;
             ByteArrayOutputStream aout = new ByteArrayOutputStream(4096);
             try (ByteArrayOutputStream aout1 = aout) {
-                ObjectOutputStream oout = new ObjectOutputStream(aout1);
-                oout.writeObject(object);
+                ps.store(new OutputStreamWriter(aout1, StandardCharsets.UTF_8), null);
             }
             return aout.toByteArray();
         } catch (IOException e) {
@@ -128,9 +133,13 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
+        if (!(object instanceof Properties)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        }
+
         try {
-            ObjectOutputStream oout = new ObjectOutputStream(output);
-            oout.writeObject(object);
+            Properties ps = (Properties) object;
+            ps.store(new OutputStreamWriter(output, StandardCharsets.UTF_8), null);
             return output;
         } catch (IOException e) {
             throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
@@ -139,11 +148,34 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
 
     @Override
     public <T> String writeS(T object) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROPERTIES, SerializerOperation.WRITE));
+        if (!(object instanceof Properties)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        }
+
+        try {
+            Properties ps = (Properties) object;
+            StringBuilderWriter sbw = new StringBuilderWriter(4096);
+            try (StringBuilderWriter sbw1 = sbw) {
+                ps.store(sbw1, null);
+            }
+            return sbw.toString();
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROPERTIES, SerializerOperation.WRITE));
+        if (!(object instanceof Properties)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        }
+
+        try {
+            Properties ps = (Properties) object;
+            ps.store(writer, null);
+            return writer;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 }

@@ -248,7 +248,7 @@ public enum Serializer {
 
     private static SerializerPropsHandler createPropsHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.javaprop.JavaPropsFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }

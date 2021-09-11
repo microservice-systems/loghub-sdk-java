@@ -261,7 +261,7 @@ public enum Serializer {
 
     private static SerializerXmlHandler createXmlHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.xml.XmlFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -270,7 +270,7 @@ public enum Serializer {
 
     private static SerializerJsonHandler createJsonHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.core.JsonFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }

@@ -279,7 +279,7 @@ public enum Serializer {
 
     private static SerializerYamlHandler createYamlHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.yaml.YAMLFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -288,7 +288,7 @@ public enum Serializer {
 
     private static SerializerTomlHandler createTomlHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.toml.TomlFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -297,7 +297,7 @@ public enum Serializer {
 
     private static SerializerHalHandler createHalHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("io.openapitools.jackson.dataformat.hal.HALMapper", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }
@@ -306,7 +306,7 @@ public enum Serializer {
 
     private static SerializerCsvHandler createCsvHandler() {
         try {
-            Class.forName("", false, Serializer.class.getClassLoader());
+            Class.forName("com.fasterxml.jackson.dataformat.csv.CsvFactory", false, Serializer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             return null;
         }

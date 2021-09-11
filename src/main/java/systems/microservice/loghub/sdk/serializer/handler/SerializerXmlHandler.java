@@ -17,8 +17,17 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlFactory;
+import systems.microservice.loghub.sdk.serializer.Serializer;
+import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
+import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -32,46 +41,83 @@ import java.io.Writer;
 public class SerializerXmlHandler implements SerializerHandler, Serializable {
     private static final long serialVersionUID = 1L;
 
+    protected final XmlFactory factory = new XmlFactory();
+    protected final ObjectMapper mapper = new ObjectMapper(factory).disable(JsonParser.Feature.AUTO_CLOSE_SOURCE).disable(JsonGenerator.Feature.AUTO_CLOSE_TARGET);
+
     public SerializerXmlHandler() {
     }
 
     @Override
     public <T> T read(byte[] array, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readValue(array, clazz);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(InputStream input, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readValue(input, clazz);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readValue(string, clazz);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        return null;
+        try {
+            return mapper.readValue(reader, clazz);
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @Override
     public <T> byte[] write(T object) {
-        return new byte[0];
+        try {
+            return mapper.writeValueAsBytes(object);
+        } catch (JsonProcessingException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
-        return null;
+        try {
+            mapper.writeValue(output, object);
+            return output;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> String writeS(T object) {
-        return null;
+        try {
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        return null;
+        try {
+            mapper.writeValue(writer, object);
+            return writer;
+        } catch (IOException e) {
+            throw new SerializerException(Serializer.XML, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 }

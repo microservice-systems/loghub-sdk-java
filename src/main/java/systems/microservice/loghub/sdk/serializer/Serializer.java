@@ -31,6 +31,7 @@ import systems.microservice.loghub.sdk.serializer.handler.SerializerPropertiesHa
 import systems.microservice.loghub.sdk.serializer.handler.SerializerPropsHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerProtobufHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerSmileHandler;
+import systems.microservice.loghub.sdk.serializer.handler.SerializerStringHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerTomlHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerVelocypackHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerXmlHandler;
@@ -56,6 +57,7 @@ public enum Serializer {
     VELOCYPACK(SerializerFormat.BINARY, "application/velocypack", "velocypack", "com.arangodb:jackson-dataformat-velocypack", createVelocypackHandler()),
     PROTOBUF(SerializerFormat.BINARY, "application/protobuf", "protobuf", "com.fasterxml.jackson.dataformat:jackson-dataformat-protobuf", createProtobufHandler()),
     AVRO(SerializerFormat.BINARY, "application/avro", "avro", "com.fasterxml.jackson.dataformat:jackson-dataformat-avro", createAvroHandler()),
+    STRING(SerializerFormat.TEXT, "text/plain", "txt", null, createStringHandler()),
     PROPERTIES(SerializerFormat.TEXT, "application/properties", "properties", null, createPropertiesHandler()),
     PROPS(SerializerFormat.TEXT, "application/properties", "properties", "com.fasterxml.jackson.dataformat:jackson-dataformat-properties", createPropsHandler()),
     DOCUMENT(SerializerFormat.TEXT, "application/xml", "xml", null, createDocumentHandler()),
@@ -240,6 +242,10 @@ public enum Serializer {
             return null;
         }
         return new SerializerAvroHandler();
+    }
+
+    private static SerializerStringHandler createStringHandler() {
+        return new SerializerStringHandler();
     }
 
     private static SerializerPropertiesHandler createPropertiesHandler() {

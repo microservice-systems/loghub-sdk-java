@@ -41,141 +41,116 @@ import java.util.Properties;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class SerializerTextHandler implements SerializerHandler, Serializable {
+public class SerializerStringHandler implements SerializerHandler, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public SerializerTextHandler() {
+    public SerializerStringHandler() {
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T read(byte[] array, Class<T> clazz) {
-        if (!clazz.equals(Properties.class)) {
-            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        if (!clazz.equals(String.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            Properties ps = new Properties();
-            try (ByteArrayInputStream ain = new ByteArrayInputStream(array)) {
-                ps.load(new InputStreamReader(ain, StandardCharsets.UTF_8));
-            }
-            return (T) ps;
-        } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
-        }
+        return (T) new String(array, StandardCharsets.UTF_8);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T read(InputStream input, Class<T> clazz) {
-        if (!clazz.equals(Properties.class)) {
-            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        if (!clazz.equals(String.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
         try {
-            Properties ps = new Properties();
+            String ps = new String();
             ps.load(new InputStreamReader(input, StandardCharsets.UTF_8));
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        if (!clazz.equals(Properties.class)) {
-            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        if (!clazz.equals(String.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
         try {
-            Properties ps = new Properties();
+            String ps = new String();
             ps.load(new StringReader(string));
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        if (!clazz.equals(Properties.class)) {
-            throw new IllegalArgumentException("Argument 'clazz' must be 'Properties.class'");
+        if (!clazz.equals(String.class)) {
+            throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
         try {
-            Properties ps = new Properties();
+            String ps = new String();
             ps.load(reader);
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
         }
     }
 
     @Override
     public <T> byte[] write(T object) {
-        if (!(object instanceof Properties)) {
-            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        if (!(object instanceof String)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        try {
-            Properties ps = (Properties) object;
-            ByteArrayOutputStream aout = new ByteArrayOutputStream(4096);
-            try (ByteArrayOutputStream aout1 = aout) {
-                ps.store(new OutputStreamWriter(aout1, StandardCharsets.UTF_8), null);
-            }
-            return aout.toByteArray();
-        } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        String s = (String) object;
+        return s.getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
     public <T> OutputStream write(T object, OutputStream output) {
-        if (!(object instanceof Properties)) {
-            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        if (!(object instanceof String)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
         try {
-            Properties ps = (Properties) object;
+            String ps = (String) object;
             ps.store(new OutputStreamWriter(output, StandardCharsets.UTF_8), null);
             return output;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
         }
     }
 
     @Override
     public <T> String writeS(T object) {
-        if (!(object instanceof Properties)) {
-            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        if (!(object instanceof String)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        try {
-            Properties ps = (Properties) object;
-            StringBuilderWriter sbw = new StringBuilderWriter(4096);
-            try (StringBuilderWriter sbw1 = sbw) {
-                ps.store(sbw1, null);
-            }
-            return sbw.toString();
-        } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        return (String) object;
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        if (!(object instanceof Properties)) {
-            throw new IllegalArgumentException("Argument 'object' must be an instance of 'Properties.class'");
+        if (!(object instanceof String)) {
+            throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
         try {
-            Properties ps = (Properties) object;
+            String ps = (String) object;
             ps.store(writer, null);
             return writer;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
         }
     }
 }

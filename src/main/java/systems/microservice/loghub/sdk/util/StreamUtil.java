@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -27,6 +28,34 @@ public final class StreamUtil {
     private StreamUtil() {
     }
 
+    private static int read(InputStream input, byte[] array, int offset, int length) throws IOException {
+        int c = 0;
+        for (int bc = input.read(array, offset, length); (length > 0) && (bc != -1); bc = input.read(array, offset, length)) {
+            c += bc;
+            offset += bc;
+            length -= bc;
+        }
+        return c;
+    }
+
     public static byte[] read(InputStream input) {
+        Argument.notNull("input", input);
+
+        int c = 0;
+        try {
+            byte[] a = new byte[4096];
+            for (int l = a.length, bc = read(input, a, 0, l); bc == l; bc = read(input, a, l, l)) {
+                l = a.length;
+                byte[] b = new byte[l * 2];
+                System.arraycopy(a, 0, b, 0, l);
+                a = b;
+                c += bc;
+            }
+            byte[] r = new byte[c];
+            System.arraycopy(a, 0, r, 0, c);
+            return r;
+        } catch (IOException e) {
+            throw new StreamException(StreamOperation.READ, c, e);
+        }
     }
 }

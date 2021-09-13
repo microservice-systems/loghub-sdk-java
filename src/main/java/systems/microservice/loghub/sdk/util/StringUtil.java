@@ -117,14 +117,6 @@ public final class StringUtil {
         return value1.substring(0, minLength);
     }
 
-    public static byte[] serialize(String string) {
-        return string.getBytes(StandardCharsets.UTF_8);
-    }
-
-    public static String deserialize(byte[] data) {
-        return new String(data, StandardCharsets.UTF_8);
-    }
-
     public static String load(String path, String defaultValue) {
         try {
             return new String(Files.readAllBytes(Paths.get(path)));

@@ -22,21 +22,13 @@ import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.stream.Stream;
-import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
-import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
-import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Serializable;
-import java.io.StringReader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 /**
  * @author Dmitry Kotlyarov
@@ -55,7 +47,11 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        return (T) new String(array, StandardCharsets.UTF_8);
+        try {
+            return (T) new String(array, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +61,11 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        return (T) Stream.readString(input);
+        try {
+            return (T) Stream.readString(input);
+        } catch (Exception e) {
+            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +75,11 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        return (T) string;
+        try {
+            return (T) string;
+        } catch (Exception e) {
+            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -86,10 +90,8 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
         }
 
         try {
-            String ps = new String();
-            ps.load(reader);
-            return (T) ps;
-        } catch (IOException e) {
+            return (T) Stream.readString(reader);
+        } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
         }
     }
@@ -100,8 +102,12 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        String s = (String) object;
-        return s.getBytes(StandardCharsets.UTF_8);
+        try {
+            String s = (String) object;
+            return s.getBytes(StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
@@ -111,10 +117,9 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
         }
 
         try {
-            String ps = (String) object;
-            ps.store(new OutputStreamWriter(output, StandardCharsets.UTF_8), null);
-            return output;
-        } catch (IOException e) {
+            String s = (String) object;
+            return Stream.writeString(s, output);
+        } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
         }
     }
@@ -125,7 +130,11 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        return (String) object;
+        try {
+            return (String) object;
+        } catch (Exception e) {
+            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
+        }
     }
 
     @Override
@@ -135,10 +144,9 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
         }
 
         try {
-            String ps = (String) object;
-            ps.store(writer, null);
-            return writer;
-        } catch (IOException e) {
+            String s = (String) object;
+            return Stream.writeString(s, writer);
+        } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
         }
     }

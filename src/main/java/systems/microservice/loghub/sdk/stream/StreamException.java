@@ -29,6 +29,20 @@ public class StreamException extends RuntimeException {
     protected final StreamOperation operation;
     protected final long position;
 
+    public StreamException(StreamOperation operation) {
+        super(String.format("[%s]", Argument.notNull("operation", operation)));
+
+        this.operation = operation;
+        this.position = -1;
+    }
+
+    public StreamException(StreamOperation operation, Throwable cause) {
+        super(String.format("[%s]", Argument.notNull("operation", operation)), cause);
+
+        this.operation = operation;
+        this.position = -1;
+    }
+
     public StreamException(StreamOperation operation, long position) {
         super(String.format("[%s]: at position %d", Argument.notNull("operation", operation), Argument.inRangeLong("position", position, 0L, Long.MAX_VALUE)));
 

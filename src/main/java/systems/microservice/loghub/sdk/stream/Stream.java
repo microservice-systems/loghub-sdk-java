@@ -21,7 +21,10 @@ import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -97,12 +100,65 @@ public final class Stream {
     public static String readString(InputStream input) {
         Argument.notNull("input", input);
 
-        return new String(readArray(input), StandardCharsets.UTF_8);
+        return readString(input, StandardCharsets.UTF_8);
+    }
+
+    public static String readString(InputStream input, Charset charset) {
+        Argument.notNull("input", input);
+        Argument.notNull("charset", charset);
+
+        return new String(readArray(input), charset);
     }
 
     public static String readString(Reader reader) {
         Argument.notNull("reader", reader);
 
         return new String(readArray(reader));
+    }
+
+    public static OutputStream writeArray(byte[] array, OutputStream output) {
+        Argument.notNull("array", array);
+        Argument.notNull("output", output);
+
+        try {
+            output.write(array);
+            return output;
+        } catch (IOException e) {
+            throw new StreamException(StreamOperation.WRITE, e);
+        }
+    }
+
+    public static Writer writeArray(char[] array, Writer writer) {
+        Argument.notNull("array", array);
+        Argument.notNull("writer", writer);
+
+        try {
+            writer.write(array);
+            return writer;
+        } catch (IOException e) {
+            throw new StreamException(StreamOperation.WRITE, e);
+        }
+    }
+
+    public static OutputStream writeString(String string, OutputStream output) {
+        Argument.notNull("string", string);
+        Argument.notNull("output", output);
+
+        return writeString(string, output, StandardCharsets.UTF_8);
+    }
+
+    public static OutputStream writeString(String string, OutputStream output, Charset charset) {
+        Argument.notNull("string", string);
+        Argument.notNull("output", output);
+        Argument.notNull("charset", charset);
+
+        return writeArray(string.getBytes(charset), output);
+    }
+
+    public static Writer writeString(String string, Writer writer) {
+        Argument.notNull("string", string);
+        Argument.notNull("writer", writer);
+
+        return writeArray(string.toCharArray(), writer);
     }
 }

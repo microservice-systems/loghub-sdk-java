@@ -21,6 +21,7 @@ import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 import systems.microservice.loghub.sdk.serializer.SerializerOperation;
+import systems.microservice.loghub.sdk.stream.Stream;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
@@ -64,13 +65,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            String ps = new String();
-            ps.load(new InputStreamReader(input, StandardCharsets.UTF_8));
-            return (T) ps;
-        } catch (IOException e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
-        }
+        return (T) Stream.readString(input);
     }
 
     @SuppressWarnings("unchecked")
@@ -80,13 +75,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            String ps = new String();
-            ps.load(new StringReader(string));
-            return (T) ps;
-        } catch (IOException e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
-        }
+        return (T) string;
     }
 
     @SuppressWarnings("unchecked")

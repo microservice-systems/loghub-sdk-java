@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.sdk.util;
+package systems.microservice.loghub.sdk.stream;
+
+import systems.microservice.loghub.sdk.util.Argument;
 
 /**
  * @author Dmitry Kotlyarov

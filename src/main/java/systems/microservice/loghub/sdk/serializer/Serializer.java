@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.serializer;
 
+import systems.microservice.loghub.sdk.serializer.handler.SerializerArrayHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerAvroHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerBsonHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerCborHandler;
@@ -48,6 +49,7 @@ import java.io.Writer;
  * @since 1.0
  */
 public enum Serializer {
+    ARRAY(SerializerFormat.BINARY, "application/data", "dat", null, createArrayHandler()),
     JAVA(SerializerFormat.BINARY, "application/java-serialized-object", "ser", null, createJavaHandler()),
     CBOR(SerializerFormat.BINARY, "application/cbor", "cbor", "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor", createCborHandler()),
     SMILE(SerializerFormat.BINARY, "application/smile", "smile", "com.fasterxml.jackson.dataformat:jackson-dataformat-smile", createSmileHandler()),
@@ -166,6 +168,10 @@ public enum Serializer {
         } else {
             throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
+    }
+
+    private static SerializerArrayHandler createArrayHandler() {
+        return new SerializerArrayHandler();
     }
 
     private static SerializerJavaHandler createJavaHandler() {

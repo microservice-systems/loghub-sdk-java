@@ -24,6 +24,7 @@ import java.util.Map;
  * @since 1.0
  */
 public interface StorageObject {
+    public Storage getStorage();
     public String getOwner();
     public String getKey();
     public String getVersion();

@@ -17,6 +17,10 @@
 
 package systems.microservice.loghub.sdk.storage;
 
+import systems.microservice.loghub.sdk.serializer.Serializer;
+
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -28,7 +32,14 @@ public interface StorageObject {
     public String getOwner();
     public String getKey();
     public String getVersion();
+    public InputStream getInputStream();
+    public byte[] getArray();
+    public String getString();
+    public <T> T getObject(Serializer serializer, Class<T> clazz);
+    public OutputStream download(OutputStream output);
     public Map<String, String> getMeta();
-    public long getSize();
+    public String getContentType();
+    public long getContentLength();
+    public long getCreateTime();
     public String getETag();
 }

@@ -17,8 +17,13 @@
 
 package systems.microservice.loghub.sdk.storage;
 
+import systems.microservice.loghub.sdk.stream.Stream;
+import systems.microservice.loghub.sdk.stream.StreamException;
 import systems.microservice.loghub.sdk.util.Argument;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.regex.Pattern;
@@ -126,4 +131,31 @@ public abstract class Storage implements Serializable {
         }
         return true;
     }
+
+    public abstract String getOwner(String key);
+    public abstract String getVersion(String key);
+
+    public byte[] getArray(String key) {
+        Argument.notNull("key", key);
+
+        try (InputStream in = getInputStream(key)) {
+            return Stream.readArray(in);
+        } catch (StreamException | IOException e) {
+            throw new StorageException(e);
+        }
+    }
+
+    public abstract InputStream getInputStream(String key);
+
+    public String getString(String key) {
+        Argument.notNull("key", key);
+
+        try (Reader r = getReader(key)) {
+            return Stream.readString(r);
+        } catch (StreamException | IOException e) {
+            throw new StorageException(e);
+        }
+    }
+
+    public abstract Reader getReader(String key);
 }

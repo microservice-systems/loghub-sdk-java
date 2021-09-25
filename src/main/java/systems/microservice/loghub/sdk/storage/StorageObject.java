@@ -28,13 +28,6 @@ import java.util.Map;
  * @since 1.0
  */
 public interface StorageObject {
-    public Storage getStorage();
-    public String getOwner();
-    public String getKey();
-    public String getVersion();
-    public InputStream getInputStream();
-    public byte[] getArray();
-    public String getString();
     public <T> T getObject(Serializer serializer, Class<T> clazz);
     public OutputStream download(OutputStream output);
     public Map<String, String> getMeta();

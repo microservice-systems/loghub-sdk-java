@@ -80,25 +80,25 @@ public abstract class Storage implements Serializable {
 
     public abstract Storage substorage(String prefix);
 
-    public Iterable<StorageObject> list(String prefix) {
+    public Iterable<String> list(String prefix) {
         return list(prefix, (StorageFilter) null);
     }
 
-    public Iterable<StorageObject> list(String prefix, Pattern filter) {
+    public Iterable<String> list(String prefix, Pattern filter) {
         if (filter != null) {
-            return list(prefix, (object) -> filter.matcher(object.getKey()).matches());
+            return list(prefix, (storage, key) -> filter.matcher(key).matches());
         } else {
             return list(prefix, (StorageFilter) null);
         }
     }
 
-    public abstract Iterable<StorageObject> list(String prefix, StorageFilter filter);
+    public abstract Iterable<String> list(String prefix, StorageFilter filter);
 
     public boolean contains(String key) {
         Argument.notNull("key", key);
 
-        for (StorageObject so : list(key)) {
-            if (key.equals(so.getKey())) {
+        for (String k : list(key)) {
+            if (key.equals(k)) {
                 return true;
             }
         }

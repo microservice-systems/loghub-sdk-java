@@ -17,10 +17,8 @@
 
 package systems.microservice.loghub.sdk.broker;
 
-import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.buffer.BufferReader;
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Tag;
 
 import java.io.Serializable;
@@ -32,7 +30,7 @@ import java.util.UUID;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class BrokerMessage<T> implements Serializable {
+public final class BrokerConsumerMessage<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final String topic;
@@ -45,10 +43,10 @@ public final class BrokerMessage<T> implements Serializable {
     public final Map<String, Tag> tags;
     public final ProducerInfo producerInfo;
     public final long sendTime;
-    public final BrokerConsumer consumer;
+    public final BrokerConsumer<T> consumer;
     public final long receiveTime;
 
-    BrokerMessage(BufferReader reader, String topic, Class<T> clazz, BrokerConsumer consumer) {
+    BrokerConsumerMessage(BufferReader reader, String topic, Class<T> clazz, BrokerConsumer<T> consumer) {
         this.topic = topic;
         this.id = reader.readUUID();
         this.key = reader.readStringRef();

@@ -17,12 +17,47 @@
 
 package systems.microservice.loghub.sdk.broker;
 
+import systems.microservice.loghub.sdk.storage.Storage;
+
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class BrokerProducer<T> implements Serializable {
+public class BrokerProducer<T> implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    protected final Storage storage;
+    protected final String topic;
+    protected final UUID id;
+
+    public BrokerProducer(Storage storage, String topic, UUID id) {
+        this.storage = storage;
+        this.topic = topic;
+        this.id = id;
+    }
+
+    protected static class Consumers implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        public final Consumer[] array;
+        public final Map<UUID, Consumer> map;
+
+        public Consumers(Storage storage, String topic) {
+            LinkedHashMap<UUID, Consumer> m = new LinkedHashMap<>(64);
+            for (String k : storage.list(String.format("/%s/consumer/list/", topic))) {
+            }
+            this.array = m.values().toArray(new Consumer[0]);
+            this.map = Collections.unmodifiableMap(m);
+        }
+    }
+
+    public static class Consumer implements Serializable {
+        private static final long serialVersionUID = 1L;
+    }
 }

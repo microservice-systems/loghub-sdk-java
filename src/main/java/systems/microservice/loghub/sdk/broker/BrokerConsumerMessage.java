@@ -30,7 +30,7 @@ import java.util.UUID;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class BrokerConsumerMessage<T> implements Serializable {
+public class BrokerConsumerMessage<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final String topic;
@@ -41,12 +41,12 @@ public final class BrokerConsumerMessage<T> implements Serializable {
     public final Class<T> clazz;
     public final T content;
     public final Map<String, Tag> tags;
-    public final ProducerInfo producerInfo;
+    public final Producer producer;
     public final long sendTime;
     public final BrokerConsumer<T> consumer;
     public final long receiveTime;
 
-    BrokerConsumerMessage(BufferReader reader, String topic, Class<T> clazz, BrokerConsumer<T> consumer) {
+    protected BrokerConsumerMessage(BufferReader reader, String topic, Class<T> clazz, BrokerConsumer<T> consumer) {
         this.topic = topic;
         this.id = reader.readUUID();
         this.key = reader.readStringRef();
@@ -55,13 +55,13 @@ public final class BrokerConsumerMessage<T> implements Serializable {
         this.clazz = clazz;
         this.content = serializer.read(reader.readByteArray(), clazz);
         this.tags = reader.readObjectMap(new LinkedHashMap<>(8), String.class, Tag.class);
-        this.producerInfo = new ProducerInfo(reader);
+        this.producer = new Producer(reader);
         this.sendTime = reader.readLong();
         this.consumer = consumer;
         this.receiveTime = System.currentTimeMillis();
     }
 
-    public static final class ProducerInfo implements Serializable {
+    public static class Producer implements Serializable {
         private static final long serialVersionUID = 1L;
 
         public final UUID id;
@@ -75,7 +75,7 @@ public final class BrokerConsumerMessage<T> implements Serializable {
         public final String hostName;
         public final String hostIP;
 
-        ProducerInfo(BufferReader reader) {
+        protected Producer(BufferReader reader) {
             this.id = reader.readUUID();
             this.name = reader.readStringRef();
             this.environment = reader.readStringRef();
@@ -88,14 +88,14 @@ public final class BrokerConsumerMessage<T> implements Serializable {
             this.hostIP = reader.readStringRef();
         }
 
-        public static final class Process implements Serializable {
+        public static class Process implements Serializable {
             private static final long serialVersionUID = 1L;
 
             public final UUID uuid;
             public final long id;
             public final long start;
 
-            Process(BufferReader reader) {
+            protected Process(BufferReader reader) {
                 this.uuid = reader.readUUID();
                 this.id = reader.readLong();
                 this.start = reader.readLong();

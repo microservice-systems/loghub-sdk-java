@@ -23,6 +23,6 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class BrokerConsumer<T> implements Serializable {
+public class BrokerConsumer<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 }

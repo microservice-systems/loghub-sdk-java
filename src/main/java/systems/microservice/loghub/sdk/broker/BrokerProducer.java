@@ -49,6 +49,22 @@ public class BrokerProducer<T> implements Serializable {
         this.consumers = new CachedProperty<>(60000L, () -> new ConsumerList(storage, topic));
     }
 
+    public Storage getStorage() {
+        return storage;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public UUID getID() {
+        return id;
+    }
+
+    public Map<UUID, Consumer> getConsumers() {
+        return consumers.get().map;
+    }
+
     protected static class ConsumerList implements Serializable {
         private static final long serialVersionUID = 1L;
 

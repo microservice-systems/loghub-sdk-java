@@ -17,7 +17,9 @@
 
 package systems.microservice.loghub.sdk.broker;
 
+import systems.microservice.loghub.sdk.property.CachedProperty;
 import systems.microservice.loghub.sdk.storage.Storage;
+import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -35,20 +37,28 @@ public class BrokerProducer<T> implements Serializable {
     protected final Storage storage;
     protected final String topic;
     protected final UUID id;
+    protected final CachedProperty<ConsumerList> consumers;
 
-    public BrokerProducer(Storage storage, String topic, UUID id) {
+    public BrokerProducer(Storage storage, String topic) {
+        Argument.notNull("storage", storage);
+        Argument.notNull("topic", topic);
+
         this.storage = storage;
         this.topic = topic;
-        this.id = id;
+        this.id = UUID.randomUUID();
+        this.consumers = new CachedProperty<>(60000L, () -> new ConsumerList(storage, topic));
     }
 
-    protected static class Consumers implements Serializable {
+    protected static class ConsumerList implements Serializable {
         private static final long serialVersionUID = 1L;
 
         public final Consumer[] array;
         public final Map<UUID, Consumer> map;
 
-        public Consumers(Storage storage, String topic) {
+        public ConsumerList(Storage storage, String topic) {
+            Argument.notNull("storage", storage);
+            Argument.notNull("topic", topic);
+
             LinkedHashMap<UUID, Consumer> m = new LinkedHashMap<>(64);
             for (String k : storage.list(String.format("/%s/consumer/list/", topic))) {
             }

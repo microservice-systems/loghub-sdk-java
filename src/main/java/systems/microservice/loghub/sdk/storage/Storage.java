@@ -84,6 +84,24 @@ public abstract class Storage implements Serializable {
 
     public abstract Storage substorage(String prefix);
 
+    public Iterable<String> find(String prefix) {
+        Argument.notNull("prefix", prefix);
+
+        return find(prefix, (StorageFilter) null);
+    }
+
+    public Iterable<String> find(String prefix, Pattern filter) {
+        Argument.notNull("prefix", prefix);
+
+        if (filter != null) {
+            return find(prefix, (storage, key) -> filter.matcher(key).matches());
+        } else {
+            return find(prefix, (StorageFilter) null);
+        }
+    }
+
+    public abstract Iterable<String> find(String prefix, StorageFilter filter);
+
     public Iterable<String> list(String prefix) {
         Argument.notNull("prefix", prefix);
 

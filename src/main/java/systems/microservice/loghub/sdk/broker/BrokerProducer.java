@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.broker;
 
+import systems.microservice.loghub.sdk.buffer.BufferException;
+import systems.microservice.loghub.sdk.buffer.BufferReader;
 import systems.microservice.loghub.sdk.property.CachedProperty;
 import systems.microservice.loghub.sdk.storage.Storage;
 import systems.microservice.loghub.sdk.util.Argument;
@@ -37,16 +39,23 @@ public class BrokerProducer<T> implements Serializable {
     protected final Storage storage;
     protected final String topic;
     protected final UUID id;
+    protected final long consumerTimeout;
     protected final CachedProperty<ConsumerList> consumers;
 
     public BrokerProducer(Storage storage, String topic) {
+        this(storage, topic, 60000L);
+    }
+
+    public BrokerProducer(Storage storage, String topic, long consumerTimeout) {
         Argument.notNull("storage", storage);
         Argument.notNull("topic", topic);
+        Argument.inRangeLong("consumerTimeout", consumerTimeout, 5000L, Long.MAX_VALUE);
 
         this.storage = storage;
         this.topic = topic;
         this.id = UUID.randomUUID();
-        this.consumers = new CachedProperty<>(60000L, () -> new ConsumerList(storage, topic));
+        this.consumerTimeout = consumerTimeout;
+        this.consumers = new CachedProperty<>(consumerTimeout, () -> new ConsumerList(storage, topic, consumerTimeout));
     }
 
     public Storage getStorage() {
@@ -61,6 +70,10 @@ public class BrokerProducer<T> implements Serializable {
         return id;
     }
 
+    public long getConsumerTimeout() {
+        return consumerTimeout;
+    }
+
     public Map<UUID, Consumer> getConsumers() {
         return consumers.get().map;
     }
@@ -71,13 +84,22 @@ public class BrokerProducer<T> implements Serializable {
         public final Consumer[] array;
         public final Map<UUID, Consumer> map;
 
-        public ConsumerList(Storage storage, String topic) {
+        protected ConsumerList(Storage storage, String topic, long consumerTimeout) {
             Argument.notNull("storage", storage);
             Argument.notNull("topic", topic);
+            Argument.inRangeLong("consumerTimeout", consumerTimeout, 5000L, Long.MAX_VALUE);
 
             LinkedHashMap<UUID, Consumer> m = new LinkedHashMap<>(64);
-            for (String k : storage.list(String.format("/%s/consumer/list/", topic))) {
+            String p = String.format("/%s/consumer/list/", topic);
+            long t = System.currentTimeMillis();
+            for (String k : storage.list(p)) {
+                UUID id = UUID.fromString(k);
+                Consumer c = new Consumer(new BufferReader(storage.getArray(p + id.toString())), id);
+                if (t < c.updateTime + consumerTimeout) {
+                    m.put(id, c);
+                }
             }
+
             this.array = m.values().toArray(new Consumer[0]);
             this.map = Collections.unmodifiableMap(m);
         }
@@ -85,5 +107,25 @@ public class BrokerProducer<T> implements Serializable {
 
     public static class Consumer implements Serializable {
         private static final long serialVersionUID = 1L;
+
+        public final UUID id;
+        public final String idString;
+        public final long createTime;
+        public final long updateTime;
+
+        protected Consumer(BufferReader reader, UUID id) {
+            Argument.notNull("reader", reader);
+            Argument.notNull("id", id);
+
+            byte v = reader.readVersion();
+            if (v == 1) {
+                this.id = id;
+                this.idString = id.toString();
+                this.createTime = reader.readLong();
+                this.updateTime = reader.readLong();
+            } else {
+                throw new BufferException(String.format("Illegal version '%d' of '%s' class", v, Consumer.class.getCanonicalName()));
+            }
+        }
     }
 }

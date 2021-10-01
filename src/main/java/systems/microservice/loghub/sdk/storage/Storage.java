@@ -18,7 +18,6 @@
 package systems.microservice.loghub.sdk.storage;
 
 import systems.microservice.loghub.sdk.stream.Stream;
-import systems.microservice.loghub.sdk.stream.StreamException;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.IOException;
@@ -160,9 +159,21 @@ public abstract class Storage implements Serializable {
     public byte[] getArray(String key) {
         Argument.notNull("key", key);
 
-        try (InputStream in = getInputStream(key)) {
+        return getArray(key, null);
+    }
+
+    public byte[] getArray(String key, Map<String, String> meta) {
+        Argument.notNull("key", key);
+
+        return getArray(key, meta, null);
+    }
+
+    public byte[] getArray(String key, Map<String, String> meta, Map<String, String> tags) {
+        Argument.notNull("key", key);
+
+        try (InputStream in = getInputStream(key, meta, tags)) {
             return Stream.readArray(in);
-        } catch (StreamException | IOException e) {
+        } catch (IOException e) {
             throw new StorageException(e);
         }
     }
@@ -184,9 +195,21 @@ public abstract class Storage implements Serializable {
     public String getString(String key) {
         Argument.notNull("key", key);
 
-        try (Reader r = getReader(key)) {
+        return getString(key, null);
+    }
+
+    public String getString(String key, Map<String, String> meta) {
+        Argument.notNull("key", key);
+
+        return getString(key, meta, null);
+    }
+
+    public String getString(String key, Map<String, String> meta, Map<String, String> tags) {
+        Argument.notNull("key", key);
+
+        try (Reader r = getReader(key, meta, tags)) {
             return Stream.readString(r);
-        } catch (StreamException | IOException e) {
+        } catch (IOException e) {
             throw new StorageException(e);
         }
     }

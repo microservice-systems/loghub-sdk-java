@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -166,7 +167,19 @@ public abstract class Storage implements Serializable {
         }
     }
 
-    public abstract InputStream getInputStream(String key);
+    public InputStream getInputStream(String key) {
+        Argument.notNull("key", key);
+
+        return getInputStream(key, null);
+    }
+
+    public InputStream getInputStream(String key, Map<String, String> meta) {
+        Argument.notNull("key", key);
+
+        return getInputStream(key, meta, null);
+    }
+
+    public abstract InputStream getInputStream(String key, Map<String, String> meta, Map<String, String> tags);
 
     public String getString(String key) {
         Argument.notNull("key", key);
@@ -178,5 +191,17 @@ public abstract class Storage implements Serializable {
         }
     }
 
-    public abstract Reader getReader(String key);
+    public Reader getReader(String key) {
+        Argument.notNull("key", key);
+
+        return getReader(key, null);
+    }
+
+    public Reader getReader(String key, Map<String, String> meta) {
+        Argument.notNull("key", key);
+
+        return getReader(key, meta, null);
+    }
+
+    public abstract Reader getReader(String key, Map<String, String> meta, Map<String, String> tags);
 }

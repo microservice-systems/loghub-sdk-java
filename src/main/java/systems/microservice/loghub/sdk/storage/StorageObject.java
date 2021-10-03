@@ -27,7 +27,6 @@ import java.util.Map;
  * @since 1.0
  */
 public interface StorageObject {
-    public <T> T getObject(Serializer serializer, Class<T> clazz);
     public OutputStream download(OutputStream output);
     public Map<String, String> getMeta();
     public String getContentType();

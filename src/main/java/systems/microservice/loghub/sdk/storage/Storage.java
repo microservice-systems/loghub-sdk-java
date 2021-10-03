@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.storage;
 
+import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.stream.Stream;
 import systems.microservice.loghub.sdk.util.Argument;
 
@@ -227,4 +228,32 @@ public abstract class Storage implements Serializable {
     }
 
     public abstract Reader getReader(String key, Map<String, String> meta, Map<String, String> tags);
+
+    public <T> T getObject(Serializer serializer, String key, Class<T> clazz) {
+        Argument.notNull("serializer", serializer);
+        Argument.notNull("key", key);
+        Argument.notNull("clazz", clazz);
+
+        return getObject(serializer, key, clazz, null);
+    }
+
+    public <T> T getObject(Serializer serializer, String key, Class<T> clazz, Map<String, String> meta) {
+        Argument.notNull("serializer", serializer);
+        Argument.notNull("key", key);
+        Argument.notNull("clazz", clazz);
+
+        return getObject(serializer, key, clazz, meta, null);
+    }
+
+    public <T> T getObject(Serializer serializer, String key, Class<T> clazz, Map<String, String> meta, Map<String, String> tags) {
+        Argument.notNull("serializer", serializer);
+        Argument.notNull("key", key);
+        Argument.notNull("clazz", clazz);
+
+        try (InputStream in = getInputStream(key, meta, tags)) {
+            return serializer.read(in, clazz);
+        } catch (IOException e) {
+            throw new StorageException(e);
+        }
+    }
 }

@@ -175,7 +175,7 @@ public abstract class Storage implements Serializable {
         try (InputStream in = getInputStream(key, meta, tags)) {
             return Stream.readArray(in);
         } catch (IOException e) {
-            throw new StorageException(e);
+            throw new StorageException(target, StorageOperation.GET, e);
         }
     }
 
@@ -211,7 +211,7 @@ public abstract class Storage implements Serializable {
         try (Reader r = getReader(key, meta, tags)) {
             return Stream.readString(r);
         } catch (IOException e) {
-            throw new StorageException(e);
+            throw new StorageException(target, StorageOperation.GET, e);
         }
     }
 
@@ -253,7 +253,7 @@ public abstract class Storage implements Serializable {
         try (InputStream in = getInputStream(key, meta, tags)) {
             return serializer.read(in, clazz);
         } catch (IOException e) {
-            throw new StorageException(e);
+            throw new StorageException(target, StorageOperation.GET, e);
         }
     }
 }

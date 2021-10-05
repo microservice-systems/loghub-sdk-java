@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.storage;
 
+import systems.microservice.loghub.sdk.util.Argument;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
@@ -24,22 +26,28 @@ package systems.microservice.loghub.sdk.storage;
 public class StorageException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public StorageException() {
+    protected final String target;
+    protected final StorageOperation operation;
+
+    public StorageException(String target, StorageOperation operation) {
+        super(String.format("[%s]: %s", Argument.notNull("operation", operation), Argument.notNull("target", target)));
+
+        this.target = target;
+        this.operation = operation;
     }
 
-    public StorageException(String message) {
-        super(message);
+    public StorageException(String target, StorageOperation operation, Throwable cause) {
+        super(String.format("[%s]: %s", Argument.notNull("operation", operation), Argument.notNull("target", target)), cause);
+
+        this.target = target;
+        this.operation = operation;
     }
 
-    public StorageException(String message, Throwable cause) {
-        super(message, cause);
+    public String getTarget() {
+        return target;
     }
 
-    public StorageException(Throwable cause) {
-        super(cause);
-    }
-
-    public StorageException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public StorageOperation getOperation() {
+        return operation;
     }
 }

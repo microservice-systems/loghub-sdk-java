@@ -30,14 +30,28 @@ public class StorageException extends RuntimeException {
     protected final StorageOperation operation;
 
     public StorageException(String target, StorageOperation operation) {
-        super(String.format("[%s]: %s", Argument.notNull("operation", operation), Argument.notNull("target", target)));
+        super(String.format("[%s][%s]", Argument.notNull("target", target), Argument.notNull("operation", operation)));
 
         this.target = target;
         this.operation = operation;
     }
 
     public StorageException(String target, StorageOperation operation, Throwable cause) {
-        super(String.format("[%s]: %s", Argument.notNull("operation", operation), Argument.notNull("target", target)), cause);
+        super(String.format("[%s][%s]", Argument.notNull("target", target), Argument.notNull("operation", operation)), cause);
+
+        this.target = target;
+        this.operation = operation;
+    }
+
+    public StorageException(String target, StorageOperation operation, String message) {
+        super(String.format("[%s][%s]: %s", Argument.notNull("target", target), Argument.notNull("operation", operation), Argument.notNull("message", message)));
+
+        this.target = target;
+        this.operation = operation;
+    }
+
+    public StorageException(String target, StorageOperation operation, String message, Throwable cause) {
+        super(String.format("[%s][%s]: %s", Argument.notNull("target", target), Argument.notNull("operation", operation), Argument.notNull("message", message)), cause);
 
         this.target = target;
         this.operation = operation;

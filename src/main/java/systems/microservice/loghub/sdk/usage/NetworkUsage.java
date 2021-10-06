@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.usage;
 
 import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.sdk.util.ValidationUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
 
 import java.io.Serializable;
@@ -152,7 +153,9 @@ public final class NetworkUsage implements Serializable {
     }
 
     public static void main(String[] args) {
-        UUID uuid = UUID.randomUUID();
-        System.out.println(uuid);
+        UUID id = UUID.randomUUID();
+        System.out.println(id);
+        boolean f = ValidationUtil.isID(id.toString().substring(0, 36).replace('f', 'b'));
+        System.out.println(f);
     }
 }

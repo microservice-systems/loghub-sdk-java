@@ -25,13 +25,11 @@ import java.util.regex.Pattern;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class SpellUtil {
+public final class ValidationUtil {
     private static final Pattern idPattern = Pattern.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
     private static final Pattern namePattern = Pattern.compile("^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$");
     private static final Pattern nameWithDotsPattern = Pattern.compile("^[a-z0-9][a-z0-9-.]{1,61}[a-z0-9]$");
-    private static final Pattern servicePattern = Pattern.compile("^[a-z0-9-._]{1,253}$");
-    private static final Pattern environmentPattern = Pattern.compile("^[a-z][a-z0-9-]{1,61}[a-z0-9]$");
-    private static final Pattern applicationPattern = Pattern.compile("^[a-z][a-z0-9-]{1,61}[a-z0-9]$");
+    private static final Pattern domainPattern = Pattern.compile("^[a-z0-9-._]{1,253}$");
     private static final Pattern versionPattern = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-._]{1,125}[a-zA-Z0-9]$");
     private static final Pattern revisionPattern = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-._]{1,125}[a-zA-Z0-9]$");
     private static final Pattern instancePattern = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9-._]{1,125}[a-zA-Z0-9]$");
@@ -40,7 +38,7 @@ public final class SpellUtil {
     private static final Pattern userPattern = Pattern.compile("^[a-z][a-z0-9-]{1,61}[a-z0-9]$");
     private static final Pattern emailPattern = Pattern.compile("^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$");
 
-    private SpellUtil() {
+    private ValidationUtil() {
     }
 
     public static boolean isID(String id) {
@@ -73,31 +71,11 @@ public final class SpellUtil {
         return false;
     }
 
-    public static boolean isService(String service) {
-        if (service != null) {
-            int l = service.length();
+    public static boolean isDomain(String domain) {
+        if (domain != null) {
+            int l = domain.length();
             if ((l >= 1) && (l <= 253)) {
-                return servicePattern.matcher(service).matches();
-            }
-        }
-        return false;
-    }
-
-    public static boolean isEnvironment(String environment) {
-        if (environment != null) {
-            int l = environment.length();
-            if ((l >= 3) && (l <= 63)) {
-                return environmentPattern.matcher(environment).matches();
-            }
-        }
-        return false;
-    }
-
-    public static boolean isApplication(String application) {
-        if (application != null) {
-            int l = application.length();
-            if ((l >= 3) && (l <= 63)) {
-                return applicationPattern.matcher(application).matches();
+                return domainPattern.matcher(domain).matches();
             }
         }
         return false;

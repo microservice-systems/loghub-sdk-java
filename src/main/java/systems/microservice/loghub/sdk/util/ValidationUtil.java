@@ -26,6 +26,9 @@ import java.util.regex.Pattern;
  * @since 1.0
  */
 public final class SpellUtil {
+    private static final Pattern idPattern = Pattern.compile("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
+    private static final Pattern namePattern = Pattern.compile("^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$");
+    private static final Pattern nameWithDotsPattern = Pattern.compile("^[a-z0-9][a-z0-9-.]{1,61}[a-z0-9]$");
     private static final Pattern servicePattern = Pattern.compile("^[a-z0-9-._]{1,253}$");
     private static final Pattern environmentPattern = Pattern.compile("^[a-z][a-z0-9-]{1,61}[a-z0-9]$");
     private static final Pattern applicationPattern = Pattern.compile("^[a-z][a-z0-9-]{1,61}[a-z0-9]$");
@@ -38,6 +41,36 @@ public final class SpellUtil {
     private static final Pattern emailPattern = Pattern.compile("^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$");
 
     private SpellUtil() {
+    }
+
+    public static boolean isID(String id) {
+        if (id != null) {
+            int l = id.length();
+            if (l == 36) {
+                return idPattern.matcher(id).matches();
+            }
+        }
+        return false;
+    }
+
+    public static boolean isName(String name) {
+        if (name != null) {
+            int l = name.length();
+            if ((l >= 3) && (l <= 63)) {
+                return namePattern.matcher(name).matches();
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNameWithDots(String name) {
+        if (name != null) {
+            int l = name.length();
+            if ((l >= 3) && (l <= 63)) {
+                return nameWithDotsPattern.matcher(name).matches();
+            }
+        }
+        return false;
     }
 
     public static boolean isService(String service) {

@@ -158,62 +158,79 @@ public final class Argument {
         }
     }
 
-    public static String service(String argument, String service) {
+    public static String id(String argument, String id) {
         Argument.notNull("argument", argument);
-        Argument.notNull("service", service);
+        Argument.notNull("id", id);
 
-        if (SpellUtil.isService(service)) {
-            return service;
+        if (ValidationUtil.isID(id)) {
+            return id;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a service", argument, service));
+            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an id", argument, id));
         }
     }
 
-    public static String serviceNullable(String argument, String service) {
+    public static String idNullable(String argument, String id) {
         Argument.notNull("argument", argument);
 
-        return (service != null) ? service(argument, service) : null;
+        return (id != null) ? id(argument, id) : null;
     }
 
-    public static String environment(String argument, String environment) {
+    public static String name(String argument, String name) {
         Argument.notNull("argument", argument);
-        Argument.notNull("environment", environment);
+        Argument.notNull("name", name);
 
-        if (SpellUtil.isEnvironment(environment)) {
-            return environment;
+        if (ValidationUtil.isName(name)) {
+            return name;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an environment", argument, environment));
+            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a name", argument, name));
         }
     }
 
-    public static String environmentNullable(String argument, String environment) {
+    public static String nameNullable(String argument, String name) {
         Argument.notNull("argument", argument);
 
-        return (environment != null) ? environment(argument, environment) : null;
+        return (name != null) ? name(argument, name) : null;
     }
 
-    public static String application(String argument, String application) {
+    public static String nameWithDots(String argument, String name) {
         Argument.notNull("argument", argument);
-        Argument.notNull("application", application);
+        Argument.notNull("name", name);
 
-        if (SpellUtil.isApplication(application)) {
-            return application;
+        if (ValidationUtil.isNameWithDots(name)) {
+            return name;
         } else {
-            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an application", argument, application));
+            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a name with dots", argument, name));
         }
     }
 
-    public static String applicationNullable(String argument, String application) {
+    public static String nameWithDotsNullable(String argument, String name) {
         Argument.notNull("argument", argument);
 
-        return (application != null) ? application(argument, application) : null;
+        return (name != null) ? nameWithDots(argument, name) : null;
+    }
+
+    public static String domain(String argument, String domain) {
+        Argument.notNull("argument", argument);
+        Argument.notNull("domain", domain);
+
+        if (ValidationUtil.isDomain(domain)) {
+            return domain;
+        } else {
+            throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a domain", argument, domain));
+        }
+    }
+
+    public static String domainNullable(String argument, String domain) {
+        Argument.notNull("argument", argument);
+
+        return (domain != null) ? domain(argument, domain) : null;
     }
 
     public static String version(String argument, String version) {
         Argument.notNull("argument", argument);
         Argument.notNull("version", version);
 
-        if (SpellUtil.isVersion(version)) {
+        if (ValidationUtil.isVersion(version)) {
             return version;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a version", argument, version));
@@ -230,7 +247,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("revision", revision);
 
-        if (SpellUtil.isRevision(revision)) {
+        if (ValidationUtil.isRevision(revision)) {
             return revision;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a revision", argument, revision));
@@ -247,7 +264,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("instance", instance);
 
-        if (SpellUtil.isInstance(instance)) {
+        if (ValidationUtil.isInstance(instance)) {
             return instance;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an instance", argument, instance));
@@ -264,7 +281,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("process", process);
 
-        if (SpellUtil.isProcess(process)) {
+        if (ValidationUtil.isProcess(process)) {
             return process;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a process", argument, process));
@@ -281,7 +298,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("secret", secret);
 
-        if (SpellUtil.isSecret(secret)) {
+        if (ValidationUtil.isSecret(secret)) {
             return secret;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not a secret", argument, secret));
@@ -298,7 +315,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("user", user);
 
-        if (SpellUtil.isUser(user)) {
+        if (ValidationUtil.isUser(user)) {
             return user;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an user", argument, user));
@@ -315,7 +332,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("url", url);
 
-        if (SpellUtil.isUrl(url)) {
+        if (ValidationUtil.isUrl(url)) {
             return url;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an url", argument, url));
@@ -332,7 +349,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("email", email);
 
-        if (SpellUtil.isEmail(email)) {
+        if (ValidationUtil.isEmail(email)) {
             return email;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an email", argument, email));

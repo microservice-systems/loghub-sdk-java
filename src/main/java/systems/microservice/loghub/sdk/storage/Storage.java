@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -292,4 +293,19 @@ public abstract class Storage implements Serializable {
             throw new StorageException(target, StorageOperation.GET, e);
         }
     }
+
+    public Map<String, String> getMeta(String key) {
+        Argument.notNull("key", key);
+
+        return getMeta(key, new LinkedHashMap<>(32));
+    }
+
+    public Map<String, String> getMeta(String key, Map<String, String> meta) {
+        Argument.notNull("key", key);
+        Argument.notNull("meta", meta);
+
+        return getMeta(key, meta, null);
+    }
+
+    public abstract Map<String, String> getMeta(String key, Map<String, String> meta, Map<String, String> tags);
 }

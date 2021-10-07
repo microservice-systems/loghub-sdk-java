@@ -37,28 +37,24 @@ import java.util.regex.Pattern;
 public abstract class Storage implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    protected final String target;
     protected final String type;
     protected final String bucket;
     protected final String prefix;
-    protected final String target;
-    protected final String endpoint;
-    protected final String accessKey;
 
     protected Storage(String type, String bucket, String prefix) {
-        this(type, bucket, prefix, null, null);
-    }
-
-    protected Storage(String type, String bucket, String prefix, String endpoint, String accessKey) {
         Argument.notNull("type", type);
         Argument.notNull("bucket", bucket);
         Argument.notNull("prefix", prefix);
 
+        this.target = String.format("%s://%s/%s", type, bucket, prefix);
         this.type = type;
         this.bucket = bucket;
         this.prefix = prefix;
-        this.target = String.format("%s://%s/%s", type, bucket, prefix);
-        this.endpoint = endpoint;
-        this.accessKey = accessKey;
+    }
+
+    public String getTarget() {
+        return target;
     }
 
     public String getType() {
@@ -71,18 +67,6 @@ public abstract class Storage implements Serializable {
 
     public String getPrefix() {
         return prefix;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public String getAccessKey() {
-        return accessKey;
     }
 
     public abstract Storage substorage(String prefix);

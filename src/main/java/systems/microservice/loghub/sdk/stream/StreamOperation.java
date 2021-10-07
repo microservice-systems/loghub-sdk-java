@@ -22,5 +22,5 @@ package systems.microservice.loghub.sdk.stream;
  * @since 1.0
  */
 public enum StreamOperation {
-    READ, WRITE
+    READ, WRITE, COPY
 }

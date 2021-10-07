@@ -47,11 +47,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            return (T) new String(array, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
-        }
+        return (T) new String(array, StandardCharsets.UTF_8);
     }
 
     @SuppressWarnings("unchecked")
@@ -61,11 +57,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            return (T) Stream.readS(input);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
-        }
+        return (T) Stream.readS(input);
     }
 
     @SuppressWarnings("unchecked")
@@ -75,11 +67,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            return (T) string;
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
-        }
+        return (T) string;
     }
 
     @SuppressWarnings("unchecked")
@@ -89,11 +77,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'clazz' must be 'String.class'");
         }
 
-        try {
-            return (T) Stream.readS(reader);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
-        }
+        return (T) Stream.readS(reader);
     }
 
     @Override
@@ -102,12 +86,8 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        try {
-            String s = (String) object;
-            return s.getBytes(StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        String s = (String) object;
+        return s.getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
@@ -116,12 +96,8 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        try {
-            String s = (String) object;
-            return Stream.writeS(s, output);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        String s = (String) object;
+        return Stream.writeS(s, output);
     }
 
     @Override
@@ -130,11 +106,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        try {
-            return (String) object;
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        return (String) object;
     }
 
     @Override
@@ -143,11 +115,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'String.class'");
         }
 
-        try {
-            String s = (String) object;
-            return Stream.writeS(s, writer);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        String s = (String) object;
+        return Stream.writeS(s, writer);
     }
 }

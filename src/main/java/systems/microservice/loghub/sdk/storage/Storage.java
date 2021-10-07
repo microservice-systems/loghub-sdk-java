@@ -308,4 +308,12 @@ public abstract class Storage implements Serializable {
     }
 
     public abstract Map<String, String> getMeta(String key, Map<String, String> meta, Map<String, String> tags);
+
+    public Map<String, String> getTags(String key) {
+        Argument.notNull("key", key);
+
+        return getTags(key, new LinkedHashMap<>(32));
+    }
+
+    public abstract Map<String, String> getTags(String key, Map<String, String> tags);
 }

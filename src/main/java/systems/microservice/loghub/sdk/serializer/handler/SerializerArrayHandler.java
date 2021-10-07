@@ -45,11 +45,7 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
             throw new IllegalArgumentException("Argument 'clazz' must be 'byte[].class'");
         }
 
-        try {
-            return (T) array.clone();
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.ARRAY, SerializerOperation.READ, clazz, e);
-        }
+        return (T) array.clone();
     }
 
     @Override
@@ -58,11 +54,7 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
             throw new IllegalArgumentException("Argument 'clazz' must be 'byte[].class'");
         }
 
-        try {
-            return (T) Stream.read(input);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.ARRAY, SerializerOperation.READ, clazz, e);
-        }
+        return (T) Stream.read(input);
     }
 
     @Override
@@ -81,12 +73,8 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'byte[].class'");
         }
 
-        try {
-            byte[] a = (byte[]) object;
-            return a.clone();
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.ARRAY, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        byte[] a = (byte[]) object;
+        return a.clone();
     }
 
     @Override
@@ -95,12 +83,8 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
             throw new IllegalArgumentException("Argument 'object' must be an instance of 'byte[].class'");
         }
 
-        try {
-            byte[] a = (byte[]) object;
-            return Stream.write(a, output);
-        } catch (Exception e) {
-            throw new SerializerException(Serializer.ARRAY, SerializerOperation.WRITE, object.getClass(), e);
-        }
+        byte[] a = (byte[]) object;
+        return Stream.write(a, output);
     }
 
     @Override

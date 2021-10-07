@@ -23,8 +23,10 @@ import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -252,6 +254,56 @@ public abstract class Storage implements Serializable {
 
         try (InputStream in = getInputStream(key, meta, tags)) {
             return serializer.read(in, clazz);
+        } catch (IOException e) {
+            throw new StorageException(target, StorageOperation.GET, e);
+        }
+    }
+
+    public OutputStream download(String key, OutputStream output) {
+        Argument.notNull("key", key);
+        Argument.notNull("output", output);
+
+        return download(key, output, null);
+    }
+
+    public OutputStream download(String key, OutputStream output, Map<String, String> meta) {
+        Argument.notNull("key", key);
+        Argument.notNull("output", output);
+
+        return download(key, output, meta, null);
+    }
+
+    public OutputStream download(String key, OutputStream output, Map<String, String> meta, Map<String, String> tags) {
+        Argument.notNull("key", key);
+        Argument.notNull("output", output);
+
+        try (InputStream in = getInputStream(key, meta, tags)) {
+            return Stream.copy(in, output);
+        } catch (IOException e) {
+            throw new StorageException(target, StorageOperation.GET, e);
+        }
+    }
+
+    public Writer download(String key, Writer writer) {
+        Argument.notNull("key", key);
+        Argument.notNull("writer", writer);
+
+        return download(key, writer, null);
+    }
+
+    public Writer download(String key, Writer writer, Map<String, String> meta) {
+        Argument.notNull("key", key);
+        Argument.notNull("writer", writer);
+
+        return download(key, writer, meta, null);
+    }
+
+    public Writer download(String key, Writer writer, Map<String, String> meta, Map<String, String> tags) {
+        Argument.notNull("key", key);
+        Argument.notNull("writer", writer);
+
+        try (Reader r = getReader(key, meta, tags)) {
+            return Stream.copy(r, writer);
         } catch (IOException e) {
             throw new StorageException(target, StorageOperation.GET, e);
         }

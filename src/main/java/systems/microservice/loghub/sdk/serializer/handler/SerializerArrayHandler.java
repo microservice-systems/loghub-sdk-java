@@ -59,7 +59,7 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
         }
 
         try {
-            return (T) Stream.readArray(input);
+            return (T) Stream.read(input);
         } catch (Exception e) {
             throw new SerializerException(Serializer.ARRAY, SerializerOperation.READ, clazz, e);
         }
@@ -97,7 +97,7 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
 
         try {
             byte[] a = (byte[]) object;
-            return Stream.writeArray(a, output);
+            return Stream.write(a, output);
         } catch (Exception e) {
             throw new SerializerException(Serializer.ARRAY, SerializerOperation.WRITE, object.getClass(), e);
         }

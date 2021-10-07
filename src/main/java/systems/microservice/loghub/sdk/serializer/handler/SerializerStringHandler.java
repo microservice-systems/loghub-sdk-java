@@ -62,7 +62,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
         }
 
         try {
-            return (T) Stream.readString(input);
+            return (T) Stream.readS(input);
         } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
         }
@@ -90,7 +90,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
         }
 
         try {
-            return (T) Stream.readString(reader);
+            return (T) Stream.readS(reader);
         } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.READ, clazz, e);
         }
@@ -118,7 +118,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
 
         try {
             String s = (String) object;
-            return Stream.writeString(s, output);
+            return Stream.writeS(s, output);
         } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
         }
@@ -145,7 +145,7 @@ public class SerializerStringHandler implements SerializerHandler, Serializable 
 
         try {
             String s = (String) object;
-            return Stream.writeString(s, writer);
+            return Stream.writeS(s, writer);
         } catch (Exception e) {
             throw new SerializerException(Serializer.STRING, SerializerOperation.WRITE, object.getClass(), e);
         }

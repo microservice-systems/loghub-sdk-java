@@ -55,7 +55,7 @@ public final class Stream {
         return c;
     }
 
-    public static byte[] readArray(InputStream input) {
+    public static byte[] read(InputStream input) {
         Argument.notNull("input", input);
 
         int c = 0;
@@ -76,7 +76,7 @@ public final class Stream {
         }
     }
 
-    public static char[] readArray(Reader reader) {
+    public static char[] read(Reader reader) {
         Argument.notNull("reader", reader);
 
         int c = 0;
@@ -97,26 +97,26 @@ public final class Stream {
         }
     }
 
-    public static String readString(InputStream input) {
+    public static String readS(InputStream input) {
         Argument.notNull("input", input);
 
-        return readString(input, StandardCharsets.UTF_8);
+        return readS(input, StandardCharsets.UTF_8);
     }
 
-    public static String readString(InputStream input, Charset charset) {
+    public static String readS(InputStream input, Charset charset) {
         Argument.notNull("input", input);
         Argument.notNull("charset", charset);
 
-        return new String(readArray(input), charset);
+        return new String(read(input), charset);
     }
 
-    public static String readString(Reader reader) {
+    public static String readS(Reader reader) {
         Argument.notNull("reader", reader);
 
-        return new String(readArray(reader));
+        return new String(read(reader));
     }
 
-    public static OutputStream writeArray(byte[] array, OutputStream output) {
+    public static OutputStream write(byte[] array, OutputStream output) {
         Argument.notNull("array", array);
         Argument.notNull("output", output);
 
@@ -128,7 +128,7 @@ public final class Stream {
         }
     }
 
-    public static Writer writeArray(char[] array, Writer writer) {
+    public static Writer write(char[] array, Writer writer) {
         Argument.notNull("array", array);
         Argument.notNull("writer", writer);
 
@@ -140,26 +140,26 @@ public final class Stream {
         }
     }
 
-    public static OutputStream writeString(String string, OutputStream output) {
+    public static OutputStream writeS(String string, OutputStream output) {
         Argument.notNull("string", string);
         Argument.notNull("output", output);
 
-        return writeString(string, output, StandardCharsets.UTF_8);
+        return writeS(string, output, StandardCharsets.UTF_8);
     }
 
-    public static OutputStream writeString(String string, OutputStream output, Charset charset) {
+    public static OutputStream writeS(String string, OutputStream output, Charset charset) {
         Argument.notNull("string", string);
         Argument.notNull("output", output);
         Argument.notNull("charset", charset);
 
-        return writeArray(string.getBytes(charset), output);
+        return write(string.getBytes(charset), output);
     }
 
-    public static Writer writeString(String string, Writer writer) {
+    public static Writer writeS(String string, Writer writer) {
         Argument.notNull("string", string);
         Argument.notNull("writer", writer);
 
-        return writeArray(string.toCharArray(), writer);
+        return write(string.toCharArray(), writer);
     }
 
     public static OutputStream copy(InputStream input, OutputStream output) {

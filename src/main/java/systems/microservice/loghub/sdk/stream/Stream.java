@@ -35,7 +35,7 @@ public final class Stream {
     private Stream() {
     }
 
-    private static int readBytes(InputStream input, byte[] array, int offset, int length) throws IOException {
+    private static int read(InputStream input, byte[] array, int offset, int length) throws IOException {
         int c = 0;
         for (int bc = input.read(array, offset, length); (length > 0) && (bc != -1); bc = input.read(array, offset, length)) {
             c += bc;
@@ -45,7 +45,7 @@ public final class Stream {
         return c;
     }
 
-    private static int readChars(Reader reader, char[] array, int offset, int length) throws IOException {
+    private static int read(Reader reader, char[] array, int offset, int length) throws IOException {
         int c = 0;
         for (int bc = reader.read(array, offset, length); (length > 0) && (bc != -1); bc = reader.read(array, offset, length)) {
             c += bc;
@@ -61,7 +61,7 @@ public final class Stream {
         int c = 0;
         try {
             byte[] a = new byte[4096];
-            for (int l = a.length, bc = readBytes(input, a, 0, l); bc == l; bc = readBytes(input, a, l, l)) {
+            for (int l = a.length, bc = read(input, a, 0, l); bc == l; bc = read(input, a, l, l)) {
                 l = a.length;
                 byte[] b = new byte[l * 2];
                 System.arraycopy(a, 0, b, 0, l);
@@ -82,7 +82,7 @@ public final class Stream {
         int c = 0;
         try {
             char[] a = new char[4096];
-            for (int l = a.length, bc = readChars(reader, a, 0, l); bc == l; bc = readChars(reader, a, l, l)) {
+            for (int l = a.length, bc = read(reader, a, 0, l); bc == l; bc = read(reader, a, l, l)) {
                 l = a.length;
                 char[] b = new char[l * 2];
                 System.arraycopy(a, 0, b, 0, l);
@@ -160,5 +160,39 @@ public final class Stream {
         Argument.notNull("writer", writer);
 
         return writeArray(string.toCharArray(), writer);
+    }
+
+    public static OutputStream copy(InputStream input, OutputStream output) {
+        Argument.notNull("input", input);
+        Argument.notNull("output", output);
+
+        long c = 0L;
+        try {
+            byte[] a = new byte[4096];
+            for (int l = a.length, bc = read(input, a, 0, l); bc == l; bc = read(input, a, 0, l)) {
+                output.write(a, 0, bc);
+                c += bc;
+            }
+            return output;
+        } catch (IOException e) {
+            throw new StreamException(StreamOperation.COPY, c, e);
+        }
+    }
+
+    public static Writer copy(Reader reader, Writer writer) {
+        Argument.notNull("reader", reader);
+        Argument.notNull("writer", writer);
+
+        long c = 0L;
+        try {
+            char[] a = new char[4096];
+            for (int l = a.length, bc = read(reader, a, 0, l); bc == l; bc = read(reader, a, 0, l)) {
+                writer.write(a, 0, bc);
+                c += bc;
+            }
+            return writer;
+        } catch (IOException e) {
+            throw new StreamException(StreamOperation.COPY, c, e);
+        }
     }
 }

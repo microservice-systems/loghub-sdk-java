@@ -216,23 +216,23 @@ public abstract class Storage implements Serializable {
 
     public abstract Reader getReader(String key, Map<String, String> meta, Map<String, String> tags);
 
-    public <T> T getObject(String key, Serializer serializer, Class<T> clazz) {
+    public <T> T get(String key, Serializer serializer, Class<T> clazz) {
         Argument.notNull("key", key);
         Argument.notNull("serializer", serializer);
         Argument.notNull("clazz", clazz);
 
-        return getObject(key, serializer, clazz, null);
+        return get(key, serializer, clazz, null);
     }
 
-    public <T> T getObject(String key, Serializer serializer, Class<T> clazz, Map<String, String> meta) {
+    public <T> T get(String key, Serializer serializer, Class<T> clazz, Map<String, String> meta) {
         Argument.notNull("key", key);
         Argument.notNull("serializer", serializer);
         Argument.notNull("clazz", clazz);
 
-        return getObject(key, serializer, clazz, meta, null);
+        return get(key, serializer, clazz, meta, null);
     }
 
-    public <T> T getObject(String key, Serializer serializer, Class<T> clazz, Map<String, String> meta, Map<String, String> tags) {
+    public <T> T get(String key, Serializer serializer, Class<T> clazz, Map<String, String> meta, Map<String, String> tags) {
         Argument.notNull("key", key);
         Argument.notNull("serializer", serializer);
         Argument.notNull("clazz", clazz);

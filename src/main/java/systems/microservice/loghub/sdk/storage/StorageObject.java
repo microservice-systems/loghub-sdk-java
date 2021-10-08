@@ -27,8 +27,6 @@ import java.util.Map;
  * @since 1.0
  */
 public interface StorageObject {
-    public OutputStream download(OutputStream output);
-    public Map<String, String> getMeta();
     public String getContentType();
     public long getContentLength();
     public long getCreateTime();

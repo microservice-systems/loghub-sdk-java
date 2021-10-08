@@ -17,10 +17,7 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
-import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.stream.Stream;
 
 import java.io.InputStream;

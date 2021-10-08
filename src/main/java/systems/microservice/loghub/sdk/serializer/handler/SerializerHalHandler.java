@@ -23,9 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.openapitools.jackson.dataformat.hal.HALMapper;
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +49,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
         try {
             return mapper.readValue(array, clazz);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -60,7 +58,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
         try {
             return mapper.readValue(input, clazz);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,7 +67,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
         try {
             return mapper.readValue(string, clazz);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -78,7 +76,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
         try {
             return mapper.readValue(reader, clazz);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -87,7 +85,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
         try {
             return mapper.writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -97,7 +95,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
             mapper.writeValue(output, object);
             return output;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -106,7 +104,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -116,7 +114,7 @@ public class SerializerHalHandler implements SerializerHandler, Serializable {
             mapper.writeValue(writer, object);
             return writer;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.HAL, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 }

@@ -23,9 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.undercouch.bson4jackson.BsonFactory;
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +50,7 @@ public class SerializerBsonHandler implements SerializerHandler, Serializable {
         try {
             return mapper.readValue(array, clazz);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.BSON, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -61,18 +59,18 @@ public class SerializerBsonHandler implements SerializerHandler, Serializable {
         try {
             return mapper.readValue(input, clazz);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.BSON, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.BSON, SerializerOperation.READ));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.BSON));
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.BSON, SerializerOperation.READ));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.BSON));
     }
 
     @Override
@@ -80,7 +78,7 @@ public class SerializerBsonHandler implements SerializerHandler, Serializable {
         try {
             return mapper.writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            throw new SerializerException(Serializer.BSON, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -90,17 +88,17 @@ public class SerializerBsonHandler implements SerializerHandler, Serializable {
             mapper.writeValue(output, object);
             return output;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.BSON, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public <T> String writeS(T object) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.BSON, SerializerOperation.WRITE));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.BSON));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.BSON, SerializerOperation.WRITE));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.BSON));
     }
 }

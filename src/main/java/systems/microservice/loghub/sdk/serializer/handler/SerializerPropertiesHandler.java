@@ -18,9 +18,7 @@
 package systems.microservice.loghub.sdk.serializer.handler;
 
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
@@ -61,7 +59,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             }
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,7 +75,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             ps.load(new InputStreamReader(input, StandardCharsets.UTF_8));
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -93,7 +91,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             ps.load(new StringReader(string));
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -109,7 +107,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             ps.load(reader);
             return (T) ps;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -127,7 +125,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             }
             return aout.toByteArray();
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -142,7 +140,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             ps.store(new OutputStreamWriter(output, StandardCharsets.UTF_8), null);
             return output;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -160,7 +158,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             }
             return sbw.toString();
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -175,7 +173,7 @@ public class SerializerPropertiesHandler implements SerializerHandler, Serializa
             ps.store(writer, null);
             return writer;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROPERTIES, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 }

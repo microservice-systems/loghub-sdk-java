@@ -91,7 +91,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.read(array, clazz);
         } else {
-            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -102,7 +102,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.read(input, clazz);
         } else {
-            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -113,7 +113,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.read(string, clazz);
         } else {
-            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -124,7 +124,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.read(reader, clazz);
         } else {
-            throw new SerializerException(this, SerializerOperation.READ, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -134,7 +134,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.write(object);
         } else {
-            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -145,7 +145,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.write(object, output);
         } else {
-            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -155,7 +155,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.writeS(object);
         } else {
-            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 
@@ -166,7 +166,7 @@ public enum Serializer {
         if (handler != null) {
             return handler.write(object, writer);
         } else {
-            throw new SerializerException(this, SerializerOperation.WRITE, String.format("To serialize %s please include '%s' dependency", this, this.dependency));
+            throw new RuntimeException(String.format("To serialize %s please include '%s' dependency", this, this.dependency));
         }
     }
 

@@ -21,9 +21,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
@@ -70,7 +68,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
                 return (T) bld.parse(new InputSource(ain));
             }
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -86,7 +84,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
             DocumentBuilder bld = f.newDocumentBuilder();
             return (T) bld.parse(new InputSource(input));
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -104,7 +102,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
                 return (T) bld.parse(new InputSource(r));
             }
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -120,7 +118,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
             DocumentBuilder bld = f.newDocumentBuilder();
             return (T) bld.parse(new InputSource(reader));
         } catch (IOException | ParserConfigurationException | SAXException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -141,7 +139,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
             }
             return aout.toByteArray();
         } catch (IOException | TransformerException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -159,7 +157,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
             t.transform(s, r);
             return output;
         } catch (TransformerException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -180,7 +178,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
             }
             return sbw.toString();
         } catch (TransformerException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -198,7 +196,7 @@ public class SerializerDocumentHandler implements SerializerHandler, Serializabl
             t.transform(s, r);
             return writer;
         } catch (TransformerException e) {
-            throw new SerializerException(Serializer.DOCUMENT, SerializerOperation.WRITE, object.getClass(), e);
+            throw new RuntimeException(e);
         }
     }
 }

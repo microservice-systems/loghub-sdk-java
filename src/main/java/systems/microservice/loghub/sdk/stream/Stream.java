@@ -72,7 +72,7 @@ public final class Stream {
             System.arraycopy(a, 0, r, 0, c);
             return r;
         } catch (IOException e) {
-            throw new StreamException(StreamOperation.READ, c, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -93,7 +93,7 @@ public final class Stream {
             System.arraycopy(a, 0, r, 0, c);
             return r;
         } catch (IOException e) {
-            throw new StreamException(StreamOperation.READ, c, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -124,7 +124,7 @@ public final class Stream {
             output.write(array);
             return output;
         } catch (IOException e) {
-            throw new StreamException(StreamOperation.WRITE, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -136,7 +136,7 @@ public final class Stream {
             writer.write(array);
             return writer;
         } catch (IOException e) {
-            throw new StreamException(StreamOperation.WRITE, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -175,7 +175,7 @@ public final class Stream {
             }
             return output;
         } catch (IOException e) {
-            throw new StreamException(StreamOperation.COPY, c, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -192,7 +192,7 @@ public final class Stream {
             }
             return writer;
         } catch (IOException e) {
-            throw new StreamException(StreamOperation.COPY, c, e);
+            throw new RuntimeException(e);
         }
     }
 }

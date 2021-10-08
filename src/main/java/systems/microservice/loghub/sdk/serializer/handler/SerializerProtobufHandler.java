@@ -25,9 +25,7 @@ import com.fasterxml.jackson.dataformat.protobuf.ProtobufFactory;
 import com.fasterxml.jackson.dataformat.protobuf.ProtobufMapper;
 import com.fasterxml.jackson.dataformat.protobuf.schema.ProtobufSchema;
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
 import java.io.IOException;
@@ -65,7 +63,7 @@ public class SerializerProtobufHandler implements SerializerHandler, Serializabl
         try {
             return mapper.readerFor(clazz).with(getSchema(clazz)).readValue(array);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -74,18 +72,18 @@ public class SerializerProtobufHandler implements SerializerHandler, Serializabl
         try {
             return mapper.readerFor(clazz).with(getSchema(clazz)).readValue(input);
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.READ, clazz, e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.READ));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.PROTOBUF));
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.READ));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.PROTOBUF));
     }
 
     @Override
@@ -94,7 +92,7 @@ public class SerializerProtobufHandler implements SerializerHandler, Serializabl
         try {
             return mapper.writer(getSchema(c)).writeValueAsBytes(object);
         } catch (JsonProcessingException e) {
-            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.WRITE, c, e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -105,17 +103,17 @@ public class SerializerProtobufHandler implements SerializerHandler, Serializabl
             mapper.writer(getSchema(c)).writeValue(output, object);
             return output;
         } catch (IOException e) {
-            throw new SerializerException(Serializer.PROTOBUF, SerializerOperation.WRITE, c, e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public <T> String writeS(T object) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.WRITE));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.PROTOBUF));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.PROTOBUF, SerializerOperation.WRITE));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.PROTOBUF));
     }
 }

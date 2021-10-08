@@ -18,9 +18,7 @@
 package systems.microservice.loghub.sdk.serializer.handler;
 
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.serializer.SerializerException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.serializer.SerializerOperation;
 import systems.microservice.loghub.sdk.stream.Stream;
 
 import java.io.InputStream;
@@ -59,12 +57,12 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
 
     @Override
     public <T> T read(String string, Class<T> clazz) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.ARRAY, SerializerOperation.READ));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.ARRAY));
     }
 
     @Override
     public <T> T read(Reader reader, Class<T> clazz) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.ARRAY, SerializerOperation.READ));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.ARRAY));
     }
 
     @Override
@@ -89,11 +87,11 @@ public class SerializerArrayHandler implements SerializerHandler, Serializable {
 
     @Override
     public <T> String writeS(T object) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.ARRAY, SerializerOperation.WRITE));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.ARRAY));
     }
 
     @Override
     public <T> Writer write(T object, Writer writer) {
-        throw new UnsupportedOperationException(String.format("[%s][%s]: Text format is not supported", Serializer.ARRAY, SerializerOperation.WRITE));
+        throw new UnsupportedOperationException(String.format("[%s]: Text format is not supported", Serializer.ARRAY));
     }
 }

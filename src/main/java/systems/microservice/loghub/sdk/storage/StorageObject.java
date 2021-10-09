@@ -17,11 +17,6 @@
 
 package systems.microservice.loghub.sdk.storage;
 
-import systems.microservice.loghub.sdk.serializer.Serializer;
-
-import java.io.OutputStream;
-import java.util.Map;
-
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0

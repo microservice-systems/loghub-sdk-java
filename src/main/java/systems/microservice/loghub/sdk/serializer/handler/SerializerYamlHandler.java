@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 
 import java.io.IOException;

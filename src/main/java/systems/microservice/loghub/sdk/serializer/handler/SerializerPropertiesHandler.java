@@ -17,7 +17,6 @@
 
 package systems.microservice.loghub.sdk.serializer.handler;
 
-import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;

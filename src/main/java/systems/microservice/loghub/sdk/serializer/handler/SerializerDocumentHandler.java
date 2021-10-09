@@ -20,7 +20,6 @@ package systems.microservice.loghub.sdk.serializer.handler;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
 import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
 import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;

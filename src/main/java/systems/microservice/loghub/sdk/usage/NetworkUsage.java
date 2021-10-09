@@ -18,8 +18,8 @@
 package systems.microservice.loghub.sdk.usage;
 
 import systems.microservice.loghub.sdk.util.Argument;
-import systems.microservice.loghub.sdk.util.ValidationUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
+import systems.microservice.loghub.sdk.util.ValidationUtil;
 
 import java.io.Serializable;
 import java.util.Collections;

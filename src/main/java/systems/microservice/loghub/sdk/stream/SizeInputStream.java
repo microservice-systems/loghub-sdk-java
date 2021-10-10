@@ -27,16 +27,16 @@ import java.io.InputStream;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class CountInputStream extends InputStream {
+public class SizeInputStream extends InputStream {
     protected final InputStream input;
     protected final String metric;
     protected long size;
 
-    public CountInputStream(InputStream input) {
+    public SizeInputStream(InputStream input) {
         this(input, null);
     }
 
-    public CountInputStream(InputStream input, String metric) {
+    public SizeInputStream(InputStream input, String metric) {
         Argument.notNull("input", input);
 
         this.input = input;

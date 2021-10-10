@@ -31,6 +31,8 @@ public class SizeInputStream extends InputStream {
     protected final InputStream input;
     protected final String metric;
     protected long size;
+    protected final long begin;
+    protected long end;
 
     public SizeInputStream(InputStream input) {
         this(input, null);
@@ -42,6 +44,8 @@ public class SizeInputStream extends InputStream {
         this.input = input;
         this.metric = metric;
         this.size = 0L;
+        this.begin = System.currentTimeMillis();
+        this.end = -1L;
     }
 
     public InputStream getInput() {
@@ -54,6 +58,14 @@ public class SizeInputStream extends InputStream {
 
     public long getSize() {
         return size;
+    }
+
+    public long getBegin() {
+        return begin;
+    }
+
+    public long getEnd() {
+        return end;
     }
 
     @Override
@@ -98,8 +110,10 @@ public class SizeInputStream extends InputStream {
         try {
             input.close();
         } finally {
+            end = System.currentTimeMillis();
             if (metric != null) {
-                MetricCollector.collect(metric, size, 0, "B");
+                MetricCollector.collect(String.format("%s.size", metric), size, 0, "B");
+                MetricCollector.collect(String.format("%s.time", metric), end - begin, 0, "ms");
             }
         }
     }

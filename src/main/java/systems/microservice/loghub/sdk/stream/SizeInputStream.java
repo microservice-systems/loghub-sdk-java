@@ -30,7 +30,7 @@ import java.io.InputStream;
 public class CountInputStream extends InputStream {
     protected final InputStream input;
     protected final String metric;
-    protected long count;
+    protected long size;
 
     public CountInputStream(InputStream input) {
         this(input, null);
@@ -41,7 +41,7 @@ public class CountInputStream extends InputStream {
 
         this.input = input;
         this.metric = metric;
-        this.count = 0L;
+        this.size = 0L;
     }
 
     public InputStream getInput() {
@@ -52,15 +52,15 @@ public class CountInputStream extends InputStream {
         return metric;
     }
 
-    public long getCount() {
-        return count;
+    public long getSize() {
+        return size;
     }
 
     @Override
     public int read() throws IOException {
         int b = input.read();
         if (b >= 0) {
-            count++;
+            size++;
         }
         return b;
     }
@@ -69,7 +69,7 @@ public class CountInputStream extends InputStream {
     public int read(byte[] b) throws IOException {
         int c = input.read(b);
         if (c >= 0) {
-            count += c;
+            size += c;
         }
         return c;
     }
@@ -78,7 +78,7 @@ public class CountInputStream extends InputStream {
     public int read(byte[] b, int off, int len) throws IOException {
         int c = input.read(b, off, len);
         if (c >= 0) {
-            count += c;
+            size += c;
         }
         return c;
     }
@@ -99,7 +99,7 @@ public class CountInputStream extends InputStream {
             input.close();
         } finally {
             if (metric != null) {
-                MetricCollector.collect(metric, count, 0, "B");
+                MetricCollector.collect(metric, size, 0, "B");
             }
         }
     }

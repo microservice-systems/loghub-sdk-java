@@ -17,9 +17,97 @@
 
 package systems.microservice.loghub.sdk.stream;
 
+import systems.microservice.loghub.sdk.metric.MetricCollector;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class SizeOutputStream {
+public class SizeOutputStream extends OutputStream {
+    protected final OutputStream output;
+    protected final String metric;
+    protected long size;
+    protected final long begin;
+    protected long end;
+
+    public SizeOutputStream(OutputStream output) {
+        this(output, null);
+    }
+
+    public SizeOutputStream(OutputStream output, String metric) {
+        this.output = output;
+        this.metric = metric;
+        this.size = 0L;
+        this.begin = System.currentTimeMillis();
+        this.end = -1L;
+    }
+
+    public OutputStream getOutput() {
+        return output;
+    }
+
+    public String getMetric() {
+        return metric;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public long getBegin() {
+        return begin;
+    }
+
+    public long getEnd() {
+        return end;
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+        if (output != null) {
+            output.write(b);
+        }
+        size++;
+    }
+
+    @Override
+    public void write(byte[] b) throws IOException {
+        if (output != null) {
+            output.write(b);
+        }
+        size += b.length;
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        if (output != null) {
+            output.write(b, off, len);
+        }
+        size += len;
+    }
+
+    @Override
+    public void flush() throws IOException {
+        if (output != null) {
+            output.flush();
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            if (output != null) {
+                output.close();
+            }
+        } finally {
+            end = System.currentTimeMillis();
+            if (metric != null) {
+                MetricCollector.collect(String.format("%s.size", metric), size, 0, "B");
+                MetricCollector.collect(String.format("%s.time", metric), end - begin, 0, "ms");
+            }
+        }
+    }
 }

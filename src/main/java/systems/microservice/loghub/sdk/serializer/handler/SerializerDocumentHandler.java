@@ -21,8 +21,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import systems.microservice.loghub.sdk.serializer.SerializerHandler;
-import systems.microservice.loghub.sdk.util.ByteArrayInputStream;
-import systems.microservice.loghub.sdk.util.ByteArrayOutputStream;
+import systems.microservice.loghub.sdk.stream.ByteArrayInputStream;
+import systems.microservice.loghub.sdk.stream.ByteArrayOutputStream;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
 
 import javax.xml.parsers.DocumentBuilder;

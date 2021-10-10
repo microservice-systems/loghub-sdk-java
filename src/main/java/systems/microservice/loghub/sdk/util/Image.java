@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.sdk.stream.ByteArrayOutputStream;
+
 import javax.imageio.ImageIO;
 import java.awt.AWTException;
 import java.awt.Rectangle;

@@ -17,6 +17,9 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.sdk.stream.ByteArrayInputStream;
+import systems.microservice.loghub.sdk.stream.ByteArrayOutputStream;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

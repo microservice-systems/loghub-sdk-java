@@ -447,7 +447,7 @@ public abstract class Storage {
         }
     }
 
-    public InputStream upload(String key, InputStream input, long contentLength, String contentType) {
+    public Storage upload(String key, InputStream input, long contentLength, String contentType) {
         Argument.notNull("key", key);
         Argument.notNull("input", input);
         Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
@@ -456,7 +456,7 @@ public abstract class Storage {
         return upload(key, input, contentLength, contentType, null);
     }
 
-    public InputStream upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta) {
+    public Storage upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta) {
         Argument.notNull("key", key);
         Argument.notNull("input", input);
         Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
@@ -465,7 +465,7 @@ public abstract class Storage {
         return upload(key, input, contentLength, contentType, meta, null);
     }
 
-    public InputStream upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
+    public Storage upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
         Argument.notNull("key", key);
         Argument.notNull("input", input);
         Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
@@ -473,57 +473,64 @@ public abstract class Storage {
 
         try (OutputStream out = openOutputStream(key, contentLength, contentType, meta, tags)) {
             Stream.copy(input, out);
-            return input;
+            return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Writer upload(String key, Writer writer) {
+    public Storage upload(String key, Reader reader, long contentLength, String contentType) {
         Argument.notNull("key", key);
-        Argument.notNull("writer", writer);
+        Argument.notNull("reader", reader);
+        Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Argument.notNull("contentType", contentType);
 
-        return upload(key, writer, null);
+        return upload(key, reader, contentLength, contentType, null);
     }
 
-    public Writer upload(String key, Writer writer, Map<String, String> meta) {
+    public Storage upload(String key, Reader reader, long contentLength, String contentType, Map<String, String> meta) {
         Argument.notNull("key", key);
-        Argument.notNull("writer", writer);
+        Argument.notNull("reader", reader);
+        Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Argument.notNull("contentType", contentType);
 
-        return upload(key, writer, meta, null);
+        return upload(key, reader, contentLength, contentType, meta, null);
     }
 
-    public Writer upload(String key, Writer writer, Map<String, String> meta, Map<String, String> tags) {
+    public Storage upload(String key, Reader reader, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
         Argument.notNull("key", key);
-        Argument.notNull("writer", writer);
+        Argument.notNull("reader", reader);
+        Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Argument.notNull("contentType", contentType);
 
-        try (Reader r = openReader(key, meta, tags)) {
-            return Stream.copy(r, writer);
+        try (Writer w = openWriter(key, contentLength, contentType, meta, tags)) {
+            Stream.copy(reader, w);
+            return this;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Map<String, String> putMeta(String key) {
+    public Storage putMeta(String key) {
         Argument.notNull("key", key);
 
         return putMeta(key, new LinkedHashMap<>(32));
     }
 
-    public Map<String, String> putMeta(String key, Map<String, String> meta) {
+    public Storage putMeta(String key, Map<String, String> meta) {
         Argument.notNull("key", key);
         Argument.notNull("meta", meta);
 
         return putMeta(key, meta, null);
     }
 
-    public abstract Map<String, String> putMeta(String key, Map<String, String> meta, Map<String, String> tags);
+    public abstract Storage putMeta(String key, Map<String, String> meta, Map<String, String> tags);
 
-    public Map<String, String> putTags(String key) {
+    public Storage putTags(String key) {
         Argument.notNull("key", key);
 
         return putTags(key, new LinkedHashMap<>(32));
     }
 
-    public abstract Map<String, String> putTags(String key, Map<String, String> tags);
+    public abstract Storage putTags(String key, Map<String, String> tags);
 }

@@ -447,26 +447,33 @@ public abstract class Storage {
         }
     }
 
-    public OutputStream upload(String key, OutputStream output) {
+    public InputStream upload(String key, InputStream input, long contentLength, String contentType) {
         Argument.notNull("key", key);
-        Argument.notNull("output", output);
+        Argument.notNull("input", input);
+        Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Argument.notNull("contentType", contentType);
 
-        return upload(key, output, null);
+        return upload(key, input, contentLength, contentType, null);
     }
 
-    public OutputStream upload(String key, OutputStream output, Map<String, String> meta) {
+    public InputStream upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta) {
         Argument.notNull("key", key);
-        Argument.notNull("output", output);
+        Argument.notNull("input", input);
+        Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Argument.notNull("contentType", contentType);
 
-        return upload(key, output, meta, null);
+        return upload(key, input, contentLength, contentType, meta, null);
     }
 
-    public OutputStream upload(String key, OutputStream output, Map<String, String> meta, Map<String, String> tags) {
+    public InputStream upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
         Argument.notNull("key", key);
-        Argument.notNull("output", output);
+        Argument.notNull("input", input);
+        Argument.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Argument.notNull("contentType", contentType);
 
-        try (InputStream in = openInputStream(key, meta, tags)) {
-            return Stream.copy(in, output);
+        try (OutputStream out = openOutputStream(key, contentLength, contentType, meta, tags)) {
+            Stream.copy(input, out);
+            return input;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

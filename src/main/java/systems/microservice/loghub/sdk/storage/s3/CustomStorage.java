@@ -17,9 +17,95 @@
 
 package systems.microservice.loghub.sdk.storage.s3;
 
+import io.minio.MinioClient;
+import systems.microservice.loghub.sdk.storage.Storage;
+import systems.microservice.loghub.sdk.storage.StorageFilter;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Map;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class CustomStorage {
+public class CustomStorage extends Storage {
+    protected final MinioClient minio;
+
+    public CustomStorage(CustomStorageConfig config) {
+        super(config);
+
+        this.minio = MinioClient.builder().endpoint(config.endpoint).credentials(config.accessKey, config.secretKey).build();
+    }
+
+    public MinioClient getMinio() {
+        return minio;
+    }
+
+    @Override
+    public Storage substorage(String prefix) {
+        return null;
+    }
+
+    @Override
+    public Iterable<String> find(String prefix, StorageFilter filter) {
+        return null;
+    }
+
+    @Override
+    public Iterable<String> list(String prefix, StorageFilter filter) {
+        return null;
+    }
+
+    @Override
+    public String getOwner(String key) {
+        return null;
+    }
+
+    @Override
+    public String getVersion(String key) {
+        return null;
+    }
+
+    @Override
+    public InputStream openInputStream(String key, Map<String, String> meta, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public Reader openReader(String key, Map<String, String> meta, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> getMeta(String key, Map<String, String> meta, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public Map<String, String> getTags(String key, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public OutputStream openOutputStream(String key, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public Writer openWriter(String key, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public Storage putMeta(String key, Map<String, String> meta, Map<String, String> tags) {
+        return null;
+    }
+
+    @Override
+    public Storage putTags(String key, Map<String, String> tags) {
+        return null;
+    }
 }

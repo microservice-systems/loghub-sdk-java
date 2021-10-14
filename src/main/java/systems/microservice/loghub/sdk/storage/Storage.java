@@ -40,15 +40,13 @@ public abstract class Storage {
     protected final String bucket;
     protected final String prefix;
 
-    protected Storage(String type, String bucket, String prefix) {
-        Argument.notNull("type", type);
-        Argument.notNull("bucket", bucket);
-        Argument.notNull("prefix", prefix);
+    protected Storage(StorageConfig config) {
+        Argument.notNull("config", config);
 
-        this.target = String.format("%s://%s/%s", type, bucket, prefix);
-        this.type = type;
-        this.bucket = bucket;
-        this.prefix = prefix;
+        this.target = config.target;
+        this.type = config.type;
+        this.bucket = config.bucket;
+        this.prefix = config.prefix;
     }
 
     public String getTarget() {

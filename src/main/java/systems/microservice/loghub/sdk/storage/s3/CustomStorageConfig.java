@@ -39,12 +39,12 @@ public class CustomStorageConfig extends StorageConfig {
     public CustomStorageConfig(URL target) {
         super(target);
 
-        Map<String, String> qps = URLUtil.getQueryParameters(target);
+        Map<String, String> qps = URLUtil.getParameters(target);
         String ui = Argument.notNull("userInfo", target.getUserInfo());
 
         this.endpoint = Argument.notNull("endpoint", qps.get("endpoint"));
-        this.accessKey = ui.substring(0, ui.indexOf(':'));
-        this.secretKey = ui.substring(ui.indexOf(':') + 1);
+        this.accessKey = URLUtil.getUser(target);
+        this.secretKey = URLUtil.getPassword(target);
     }
 
     public CustomStorageConfig(String type, String bucket, String prefix, String endpoint, String accessKey, String secretKey) {

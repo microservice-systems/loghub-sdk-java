@@ -58,7 +58,7 @@ public abstract class StorageConfig implements Serializable {
     public static StorageConfig create(String target) {
         Argument.notNull("target", target);
 
-        return create(URLUtil.createURL(target));
+        return create(URLUtil.create(target));
     }
 
     public static StorageConfig create(URL target) {

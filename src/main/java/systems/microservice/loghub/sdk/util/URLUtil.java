@@ -31,7 +31,7 @@ public final class URLUtil {
     private URLUtil() {
     }
 
-    public static URL createURL(String url) {
+    public static URL create(String url) {
         Argument.notNull("url", url);
 
         try {
@@ -41,7 +41,62 @@ public final class URLUtil {
         }
     }
 
-    public static Map<String, String> getQueryParameters(URL url) {
+    public static String getUser(URL url) {
+        Argument.notNull("url", url);
+
+        String ui = url.getUserInfo();
+        if (ui != null) {
+            int i = ui.indexOf(':');
+            if (i >= 0) {
+                return ui.substring(0, i);
+            } else {
+                return ui;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public static String getPassword(URL url) {
+        Argument.notNull("url", url);
+
+        String ui = url.getUserInfo();
+        if (ui != null) {
+            int i = ui.indexOf(':');
+            if (i >= 0) {
+                return ui.substring(i + 1);
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public static String getParameter(URL url, String parameter) {
+        Argument.notNull("url", url);
+        Argument.notNull("parameter", parameter);
+
+        String q = url.getQuery();
+        if (q != null) {
+            String[] qs = q.split("&");
+            for (String qp : qs) {
+                String[] qps = qp.split("=");
+                if (qps.length == 2) {
+                    if (qps[0].equals(parameter)) {
+                        return qps[1];
+                    }
+                } else if (qps.length == 1) {
+                    if (qps[0].equals(parameter)) {
+                        return "";
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Map<String, String> getParameters(URL url) {
         Argument.notNull("url", url);
 
         String q = url.getQuery();

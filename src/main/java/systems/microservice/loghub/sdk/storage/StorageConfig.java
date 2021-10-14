@@ -36,12 +36,6 @@ public abstract class StorageConfig implements Serializable {
     public final String bucket;
     public final String prefix;
 
-    protected StorageConfig(URL target) {
-        this(Argument.notNull("target", target).getProtocol(),
-             Argument.notNull("target", target).getHost(),
-             Argument.notNull("target", target).getPath());
-    }
-
     protected StorageConfig(String type, String bucket, String prefix) {
         Argument.notNull("type", type);
         Argument.notNull("bucket", bucket);

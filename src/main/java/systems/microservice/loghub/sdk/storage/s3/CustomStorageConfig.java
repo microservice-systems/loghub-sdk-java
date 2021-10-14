@@ -23,7 +23,6 @@ import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.URLUtil;
 
 import java.net.URL;
-import java.util.Map;
 
 /**
  * @author Dmitry Kotlyarov
@@ -37,18 +36,15 @@ public class CustomStorageConfig extends StorageConfig {
     public final String secretKey;
 
     public CustomStorageConfig(URL target) {
-        super(target);
-
-        Map<String, String> qps = URLUtil.getParameters(target);
-        String ui = Argument.notNull("userInfo", target.getUserInfo());
-
-        this.endpoint = Argument.notNull("endpoint", qps.get("endpoint"));
-        this.accessKey = URLUtil.getUser(target);
-        this.secretKey = URLUtil.getPassword(target);
+        this(Argument.notNull("target", target).getHost(),
+             Argument.notNull("target", target).getPath(),
+             URLUtil.getParameter(target, "endpoint"),
+             URLUtil.getUser(target),
+             URLUtil.getPassword(target));
     }
 
-    public CustomStorageConfig(String type, String bucket, String prefix, String endpoint, String accessKey, String secretKey) {
-        super(type, bucket, prefix);
+    public CustomStorageConfig(String bucket, String prefix, String endpoint, String accessKey, String secretKey) {
+        super("s3", bucket, prefix);
 
         Argument.notNull("endpoint", endpoint);
         Argument.notNull("accessKey", accessKey);

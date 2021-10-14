@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,7 +31,19 @@ public final class URLUtil {
     private URLUtil() {
     }
 
+    public static URL createURL(String url) {
+        Argument.notNull("url", url);
+
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Map<String, String> getQueryParameters(URL url) {
+        Argument.notNull("url", url);
+
         String q = url.getQuery();
         if (q != null) {
             String[] qs = q.split("&");

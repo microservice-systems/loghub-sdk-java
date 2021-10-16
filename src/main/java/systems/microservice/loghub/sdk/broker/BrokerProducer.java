@@ -21,6 +21,7 @@ import systems.microservice.loghub.sdk.buffer.BufferException;
 import systems.microservice.loghub.sdk.buffer.BufferReader;
 import systems.microservice.loghub.sdk.property.CachedProperty;
 import systems.microservice.loghub.sdk.storage.Storage;
+import systems.microservice.loghub.sdk.storage.StorageObject;
 import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
@@ -92,8 +93,8 @@ public class BrokerProducer<T> implements Serializable {
             LinkedHashMap<UUID, Consumer> m = new LinkedHashMap<>(64);
             String p = String.format("/%s/consumer/list/", topic);
             long t = System.currentTimeMillis();
-            for (String k : storage.list(p)) {
-                UUID id = UUID.fromString(k);
+            for (StorageObject so : storage.list(p)) {
+                UUID id = UUID.fromString(so.getKey());
                 Consumer c = new Consumer(new BufferReader(storage.getArray(p + id.toString())), id);
                 if (t < c.updateTime + consumerTimeout) {
                     m.put(id, c);

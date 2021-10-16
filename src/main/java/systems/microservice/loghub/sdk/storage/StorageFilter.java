@@ -23,5 +23,5 @@ package systems.microservice.loghub.sdk.storage;
  */
 @FunctionalInterface
 public interface StorageFilter {
-    public boolean filter(Storage storage, String key);
+    public boolean filter(StorageObject storageObject);
 }

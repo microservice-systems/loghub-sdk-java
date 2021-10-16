@@ -67,47 +67,47 @@ public abstract class Storage {
 
     public abstract Storage substorage(String prefix);
 
-    public Iterable<String> find(String prefix) {
+    public Iterable<StorageObject> find(String prefix) {
         Argument.notNull("prefix", prefix);
 
         return find(prefix, (StorageFilter) null);
     }
 
-    public Iterable<String> find(String prefix, Pattern filter) {
+    public Iterable<StorageObject> find(String prefix, Pattern filter) {
         Argument.notNull("prefix", prefix);
 
         if (filter != null) {
-            return find(prefix, (storage, key) -> filter.matcher(key).matches());
+            return find(prefix, (storageObject) -> filter.matcher(storageObject.getKey()).matches());
         } else {
             return find(prefix, (StorageFilter) null);
         }
     }
 
-    public abstract Iterable<String> find(String prefix, StorageFilter filter);
+    public abstract Iterable<StorageObject> find(String prefix, StorageFilter filter);
 
-    public Iterable<String> list(String prefix) {
+    public Iterable<StorageObject> list(String prefix) {
         Argument.notNull("prefix", prefix);
 
         return list(prefix, (StorageFilter) null);
     }
 
-    public Iterable<String> list(String prefix, Pattern filter) {
+    public Iterable<StorageObject> list(String prefix, Pattern filter) {
         Argument.notNull("prefix", prefix);
 
         if (filter != null) {
-            return list(prefix, (storage, key) -> filter.matcher(key).matches());
+            return list(prefix, (storageObject) -> filter.matcher(storageObject.getKey()).matches());
         } else {
             return list(prefix, (StorageFilter) null);
         }
     }
 
-    public abstract Iterable<String> list(String prefix, StorageFilter filter);
+    public abstract Iterable<StorageObject> list(String prefix, StorageFilter filter);
 
     public boolean contains(String key) {
         Argument.notNull("key", key);
 
-        for (String k : list(key)) {
-            if (key.equals(k)) {
+        for (StorageObject so : list(key)) {
+            if (so.getKey().equals(key)) {
                 return true;
             }
         }

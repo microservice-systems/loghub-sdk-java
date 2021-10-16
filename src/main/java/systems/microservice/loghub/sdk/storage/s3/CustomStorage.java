@@ -20,6 +20,7 @@ package systems.microservice.loghub.sdk.storage.s3;
 import io.minio.MinioClient;
 import systems.microservice.loghub.sdk.storage.Storage;
 import systems.microservice.loghub.sdk.storage.StorageFilter;
+import systems.microservice.loghub.sdk.storage.StorageObject;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,12 +51,12 @@ public class CustomStorage extends Storage {
     }
 
     @Override
-    public Iterable<String> find(String prefix, StorageFilter filter) {
+    public Iterable<StorageObject> find(String prefix, StorageFilter filter) {
         return null;
     }
 
     @Override
-    public Iterable<String> list(String prefix, StorageFilter filter) {
+    public Iterable<StorageObject> list(String prefix, StorageFilter filter) {
         return null;
     }
 

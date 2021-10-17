@@ -33,12 +33,12 @@ public enum Cloud {
     SCP("scp", "Selectel Cloud Platform", "https://selectel.ru/services/cloud/"),
     YC("yc", "Yandex Cloud", "https://cloud.yandex.ru");
 
-    public final String code;
+    public final String key;
     public final String name;
     public final String url;
 
-    Cloud(String code, String name, String url) {
-        this.code = code;
+    Cloud(String key, String name, String url) {
+        this.key = key;
         this.name = name;
         this.url = url;
     }

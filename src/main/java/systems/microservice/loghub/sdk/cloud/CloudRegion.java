@@ -46,12 +46,12 @@ public enum CloudRegion {
     YC_RU_CENTRAL1(Cloud.YC, "ru-central1", "Russia (Vladimir, Ryazan, Moscow regions)");
 
     public final Cloud cloud;
-    public final String code;
+    public final String key;
     public final String name;
 
-    CloudRegion(Cloud cloud, String code, String name) {
+    CloudRegion(Cloud cloud, String key, String name) {
         this.cloud = cloud;
-        this.code = code;
+        this.key = key;
         this.name = name;
     }
 }

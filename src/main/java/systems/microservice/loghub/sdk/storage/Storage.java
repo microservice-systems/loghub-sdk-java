@@ -77,7 +77,7 @@ public abstract class Storage {
         Argument.notNull("prefix", prefix);
 
         if (filter != null) {
-            return find(prefix, (storageObject) -> filter.matcher(storageObject.getKey()).matches());
+            return find(prefix, (object) -> filter.matcher(object.getKey()).matches());
         } else {
             return find(prefix, (StorageFilter) null);
         }
@@ -95,7 +95,7 @@ public abstract class Storage {
         Argument.notNull("prefix", prefix);
 
         if (filter != null) {
-            return list(prefix, (storageObject) -> filter.matcher(storageObject.getKey()).matches());
+            return list(prefix, (object) -> filter.matcher(object.getKey()).matches());
         } else {
             return list(prefix, (StorageFilter) null);
         }
@@ -106,8 +106,8 @@ public abstract class Storage {
     public boolean contains(String key) {
         Argument.notNull("key", key);
 
-        for (StorageObject so : list(key)) {
-            if (so.getKey().equals(key)) {
+        for (StorageObject o : list(key)) {
+            if (o.getKey().equals(key)) {
                 return true;
             }
         }

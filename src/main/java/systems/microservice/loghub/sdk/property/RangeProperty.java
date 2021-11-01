@@ -17,9 +17,9 @@
 
 package systems.microservice.loghub.sdk.property;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.Config;
-import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.Serializable;
@@ -45,15 +45,15 @@ public class RangeProperty<T extends Comparable<T>> implements Property<T>, Seri
     }
 
     public RangeProperty(String group, String key, Class<T> clazz, boolean nullable, boolean secure, T defaultValue, Range<T> rangeValues, String unit) {
-        Argument.notNull("group", group);
-        Argument.notNull("key", key);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("group", group);
+        Validation.notNull("key", key);
+        Validation.notNull("clazz", clazz);
         if (!nullable) {
             if (defaultValue == null) {
                 throw new IllegalArgumentException(String.format("Default value is null for non nullable property '%s'", key));
             }
         }
-        Argument.notNull("rangeValues", rangeValues);
+        Validation.notNull("rangeValues", rangeValues);
 
         T v = Config.getProperty(group, key, clazz, nullable, secure, defaultValue, rangeValues, unit);
 

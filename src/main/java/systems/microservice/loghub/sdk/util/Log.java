@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.LogHub;
 
 import java.io.Serializable;
@@ -33,11 +34,11 @@ public class Log implements Serializable {
 
     @SuppressWarnings("rawtypes")
     public Log(Class logger) {
-        this(Argument.notNull("logger", logger).getCanonicalName());
+        this(Validation.notNull("logger", logger).getCanonicalName());
     }
 
     public Log(String logger) {
-        this.logger = Argument.notNull("logger", logger);
+        this.logger = Validation.notNull("logger", logger);
     }
 
     public String getLogger() {

@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.connector.Validation;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
@@ -32,7 +34,7 @@ public final class URLUtil {
     }
 
     public static URL create(String url) {
-        Argument.notNull("url", url);
+        Validation.notNull("url", url);
 
         try {
             return new URL(url);
@@ -42,7 +44,7 @@ public final class URLUtil {
     }
 
     public static String getUser(URL url) {
-        Argument.notNull("url", url);
+        Validation.notNull("url", url);
 
         String ui = url.getUserInfo();
         if (ui != null) {
@@ -58,7 +60,7 @@ public final class URLUtil {
     }
 
     public static String getPassword(URL url) {
-        Argument.notNull("url", url);
+        Validation.notNull("url", url);
 
         String ui = url.getUserInfo();
         if (ui != null) {
@@ -74,8 +76,8 @@ public final class URLUtil {
     }
 
     public static String getParameter(URL url, String parameter) {
-        Argument.notNull("url", url);
-        Argument.notNull("parameter", parameter);
+        Validation.notNull("url", url);
+        Validation.notNull("parameter", parameter);
 
         String q = url.getQuery();
         if (q != null) {
@@ -97,7 +99,7 @@ public final class URLUtil {
     }
 
     public static Map<String, String> getParameters(URL url) {
-        Argument.notNull("url", url);
+        Validation.notNull("url", url);
 
         String q = url.getQuery();
         if (q != null) {

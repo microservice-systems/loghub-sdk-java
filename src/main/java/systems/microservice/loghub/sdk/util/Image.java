@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.stream.ByteArrayOutputStream;
 
 import javax.imageio.ImageIO;
@@ -39,15 +40,15 @@ public final class Image implements Serializable {
     public final String contentType;
 
     public Image(byte[] content, String contentType) {
-        Argument.notNull("content", content);
-        Argument.notNull("contentType", contentType);
+        Validation.notNull("content", content);
+        Validation.notNull("contentType", contentType);
 
         this.content = content;
         this.contentType = contentType;
     }
 
     public static String getContentType(String format) {
-        Argument.notNull("format", format);
+        Validation.notNull("format", format);
 
         if (format.equals("jpeg")) {
             return "image/jpeg";
@@ -67,7 +68,7 @@ public final class Image implements Serializable {
     }
 
     public static Image takeScreenshot(String format) {
-        Argument.notNull("format", format);
+        Validation.notNull("format", format);
 
         try {
             Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());

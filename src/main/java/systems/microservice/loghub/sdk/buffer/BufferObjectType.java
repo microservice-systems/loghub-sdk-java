@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.buffer;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Color;
 import systems.microservice.loghub.sdk.util.Image;
@@ -189,7 +189,7 @@ public enum BufferObjectType {
     }
 
     public static BufferObjectType getObjectType(Class clazz) {
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("clazz", clazz);
 
         return classObjectTypes.get(clazz);
     }

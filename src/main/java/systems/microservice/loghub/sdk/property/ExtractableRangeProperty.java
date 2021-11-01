@@ -17,11 +17,11 @@
 
 package systems.microservice.loghub.sdk.property;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
-import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Range;
 
 import java.io.Serializable;
@@ -49,17 +49,17 @@ public class ExtractableRangeProperty<I extends Comparable<I>, O> implements Pro
     }
 
     public ExtractableRangeProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, Range<I> rangeValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
-        Argument.notNull("group", group);
-        Argument.notNull("key", key);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("group", group);
+        Validation.notNull("key", key);
+        Validation.notNull("clazz", clazz);
         if (!nullable) {
             if (defaultValue == null) {
                 throw new IllegalArgumentException(String.format("Default value is null for non nullable property '%s'", key));
             }
         }
-        Argument.notNull("rangeValues", rangeValues);
-        Argument.notNull("outputClass", outputClass);
-        Argument.notNull("extractor", extractor);
+        Validation.notNull("rangeValues", rangeValues);
+        Validation.notNull("outputClass", outputClass);
+        Validation.notNull("extractor", extractor);
 
         O ev = Config.getProperty(group, key, clazz, nullable, secure, defaultValue, rangeValues, unit, outputClass, extractor);
 

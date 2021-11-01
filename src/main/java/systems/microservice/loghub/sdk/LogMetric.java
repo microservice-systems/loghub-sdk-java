@@ -17,8 +17,8 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.metric.MetricCollector;
-import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
 
@@ -34,9 +34,9 @@ public class LogMetric implements Serializable {
     protected final String unit;
 
     public LogMetric(String name, int point, String unit) {
-        Argument.notNull("name", name);
-        Argument.inRangeInt("point", point, 0, 14);
-        Argument.notNull("unit", unit);
+        Validation.notNull("name", name);
+        Validation.inRangeInt("point", point, 0, 14);
+        Validation.notNull("unit", unit);
 
         this.name = name;
         this.point = point;

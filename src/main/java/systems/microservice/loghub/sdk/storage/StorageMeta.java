@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.storage;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 
 import java.util.Map;
 
@@ -30,7 +30,7 @@ public final class StorageMeta {
     }
 
     public static long getContentLength(Map<String, String> meta) {
-        Argument.notNull("meta", meta);
+        Validation.notNull("meta", meta);
 
         String cl = meta.get("Content-Length");
         if (cl != null) {
@@ -41,7 +41,7 @@ public final class StorageMeta {
     }
 
     public static String getContentType(Map<String, String> meta) {
-        Argument.notNull("meta", meta);
+        Validation.notNull("meta", meta);
 
         String ct = meta.get("Content-Type");
         if (ct != null) {
@@ -52,7 +52,7 @@ public final class StorageMeta {
     }
 
     public static long getContentTime(Map<String, String> meta) {
-        Argument.notNull("meta", meta);
+        Validation.notNull("meta", meta);
 
         String ct = meta.get("Content-Time");
         if (ct != null) {
@@ -63,7 +63,7 @@ public final class StorageMeta {
     }
 
     public static String getETag(Map<String, String> meta) {
-        Argument.notNull("meta", meta);
+        Validation.notNull("meta", meta);
 
         String et = meta.get("ETag");
         if (et != null) {

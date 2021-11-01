@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.connector.Validation;
+
 import java.io.Serializable;
 
 /**
@@ -30,8 +32,8 @@ public final class Blob implements Serializable {
     public final String contentType;
 
     public Blob(byte[] content, String contentType) {
-        Argument.notNull("content", content);
-        Argument.notNull("contentType", contentType);
+        Validation.notNull("content", content);
+        Validation.notNull("contentType", contentType);
 
         this.content = content;
         this.contentType = contentType;

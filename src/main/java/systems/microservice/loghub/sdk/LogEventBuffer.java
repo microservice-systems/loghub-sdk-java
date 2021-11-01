@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.usage.CPUUsage;
 import systems.microservice.loghub.sdk.usage.ClassUsage;
@@ -25,7 +26,6 @@ import systems.microservice.loghub.sdk.usage.DiskUsage;
 import systems.microservice.loghub.sdk.usage.GCUsage;
 import systems.microservice.loghub.sdk.usage.MemoryUsage;
 import systems.microservice.loghub.sdk.usage.ThreadUsage;
-import systems.microservice.loghub.sdk.util.Argument;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.StringBuilderWriter;
@@ -90,8 +90,8 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeTag(byte[] buffer, int index, String key, Object value, String unit) {
-        Argument.notNull("key", key);
-        Argument.notNull("value", value);
+        Validation.notNull("key", key);
+        Validation.notNull("value", value);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -116,9 +116,9 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeImage(byte[] buffer, int index, String key, byte[] content, String contentType) {
-        Argument.notNull("key", key);
-        Argument.notNull("content", content);
-        Argument.notNull("contentType", contentType);
+        Validation.notNull("key", key);
+        Validation.notNull("content", content);
+        Validation.notNull("contentType", contentType);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -138,9 +138,9 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeBlob(byte[] buffer, int index, String key, byte[] content, String contentType) {
-        Argument.notNull("key", key);
-        Argument.notNull("content", content);
-        Argument.notNull("contentType", contentType);
+        Validation.notNull("key", key);
+        Validation.notNull("content", content);
+        Validation.notNull("contentType", contentType);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);

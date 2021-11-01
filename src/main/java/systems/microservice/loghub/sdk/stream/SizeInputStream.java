@@ -17,8 +17,8 @@
 
 package systems.microservice.loghub.sdk.stream;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.metric.MetricCollector;
-import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +39,7 @@ public class SizeInputStream extends InputStream {
     }
 
     public SizeInputStream(InputStream input, String metric) {
-        Argument.notNull("input", input);
+        Validation.notNull("input", input);
 
         this.input = input;
         this.metric = metric;

@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.LogHub;
 import systems.microservice.loghub.sdk.LogLevel;
 import systems.microservice.loghub.sdk.metric.MetricCollector;
@@ -42,16 +43,16 @@ public class Code implements AutoCloseable, Serializable {
     public long end;
 
     public Code(Log logger, String name, Tag... tags) {
-        this(Argument.notNull("logger", logger).getLogger(), name, tags);
+        this(Validation.notNull("logger", logger).getLogger(), name, tags);
     }
 
     public Code(Class logger, String name, Tag... tags) {
-        this(Argument.notNull("logger", logger).getCanonicalName(), name, tags);
+        this(Validation.notNull("logger", logger).getCanonicalName(), name, tags);
     }
 
     public Code(String logger, String name, Tag... tags) {
-        Argument.notNull("logger", logger);
-        Argument.notNull("name", name);
+        Validation.notNull("logger", logger);
+        Validation.notNull("name", name);
 
         this.logger = logger;
         this.name = name;

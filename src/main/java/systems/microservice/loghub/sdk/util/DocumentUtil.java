@@ -19,6 +19,7 @@ package systems.microservice.loghub.sdk.util;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import systems.microservice.loghub.connector.Validation;
 
 /**
  * @author Dmitry Kotlyarov
@@ -29,8 +30,8 @@ public final class DocumentUtil {
     }
 
     public static String getAttribute(Element element, String attribute) {
-        Argument.notNull("element", element);
-        Argument.notNull("attribute", attribute);
+        Validation.notNull("element", element);
+        Validation.notNull("attribute", attribute);
 
         Attr a = element.getAttributeNode(attribute);
         if (a != null) {
@@ -41,8 +42,8 @@ public final class DocumentUtil {
     }
 
     public static String getAttribute(Element element, String attribute, String defaultValue) {
-        Argument.notNull("element", element);
-        Argument.notNull("attribute", attribute);
+        Validation.notNull("element", element);
+        Validation.notNull("attribute", attribute);
 
         Attr a = element.getAttributeNode(attribute);
         if (a != null) {

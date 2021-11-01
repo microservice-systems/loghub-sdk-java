@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Image;
 import systems.microservice.loghub.sdk.util.PropertiesUtil;
@@ -429,7 +429,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.inRangeInt("loghub.event.flush.size", Integer.parseInt(efs), 0, Integer.MAX_VALUE);
+        return Validation.inRangeInt("loghub.event.flush.size", Integer.parseInt(efs), 0, Integer.MAX_VALUE);
     }
 
     private static long createEventFlushSpan(Map<String, String> properties) {
@@ -443,7 +443,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 86400000L);
+        return Validation.inRangeLong("loghub.event.flush.span", Long.parseLong(efs), 3000L, 86400000L);
     }
 
     private static boolean createEventCompressionEnabled(Map<String, String> properties) {
@@ -471,7 +471,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.inRangeLong("loghub.event.persistence.size", Long.parseLong(eps), 0L, Long.MAX_VALUE);
+        return Validation.inRangeLong("loghub.event.persistence.size", Long.parseLong(eps), 0L, Long.MAX_VALUE);
     }
 
     private static int createEventFlushRetryCount(Map<String, String> properties) {
@@ -485,7 +485,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.inRangeInt("loghub.event.flush.retry.count", Integer.parseInt(efrc), 1, Integer.MAX_VALUE);
+        return Validation.inRangeInt("loghub.event.flush.retry.count", Integer.parseInt(efrc), 1, Integer.MAX_VALUE);
     }
 
     private static long createEventFlushRetryDelay(Map<String, String> properties) {
@@ -499,7 +499,7 @@ public final class LogHub {
                 }
             }
         }
-        return Argument.inRangeLong("loghub.event.flush.retry.delay", Long.parseLong(efrd), 0L, 86400000L);
+        return Validation.inRangeLong("loghub.event.flush.retry.delay", Long.parseLong(efrd), 0L, 86400000L);
     }
 
     private static boolean createUncaughtExceptionHandler(Map<String, String> properties) {
@@ -933,8 +933,8 @@ public final class LogHub {
 
     protected static void info(Class logger, String message) {
         if (info) {
-            Argument.notNull("logger", logger);
-            Argument.notNull("message", message);
+            Validation.notNull("logger", logger);
+            Validation.notNull("message", message);
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
             System.out.println(String.format("%s [%s] [%s] INFO - %s", t, Thread.currentThread().getName(), logger.getCanonicalName(), message));
@@ -943,8 +943,8 @@ public final class LogHub {
 
     protected static void debug(Class logger, String message) {
         if (debug) {
-            Argument.notNull("logger", logger);
-            Argument.notNull("message", message);
+            Validation.notNull("logger", logger);
+            Validation.notNull("message", message);
 
             String t = String.format("%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL", System.currentTimeMillis());
             System.out.println(String.format("%s [%s] [%s] DEBUG - %s", t, Thread.currentThread().getName(), logger.getCanonicalName(), message));

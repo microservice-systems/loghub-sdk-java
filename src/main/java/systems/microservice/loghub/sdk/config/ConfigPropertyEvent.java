@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 
 import java.io.Serializable;
 
@@ -34,7 +34,7 @@ public class ConfigPropertyEvent implements Serializable {
     public final long time;
 
     public ConfigPropertyEvent(ConfigProperty oldProperty, ConfigProperty newProperty) {
-        Argument.notNull("newProperty", newProperty);
+        Validation.notNull("newProperty", newProperty);
         if (oldProperty != null) {
             if (!newProperty.key.equals(oldProperty.key)) {
                 throw new IllegalArgumentException(String.format("New property key '%s' is not equal to old property key '%s'", newProperty.key, oldProperty.key));

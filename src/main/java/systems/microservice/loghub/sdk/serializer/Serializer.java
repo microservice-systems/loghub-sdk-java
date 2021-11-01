@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.sdk.serializer;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerArrayHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerAvroHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerBsonHandler;
@@ -37,7 +38,6 @@ import systems.microservice.loghub.sdk.serializer.handler.SerializerTomlHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerVelocypackHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerXmlHandler;
 import systems.microservice.loghub.sdk.serializer.handler.SerializerYamlHandler;
-import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -85,8 +85,8 @@ public enum Serializer {
     }
 
     public <T> T read(byte[] array, Class<T> clazz) {
-        Argument.notNull("array", array);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("array", array);
+        Validation.notNull("clazz", clazz);
 
         if (handler != null) {
             return handler.read(array, clazz);
@@ -96,8 +96,8 @@ public enum Serializer {
     }
 
     public <T> T read(InputStream input, Class<T> clazz) {
-        Argument.notNull("input", input);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("input", input);
+        Validation.notNull("clazz", clazz);
 
         if (handler != null) {
             return handler.read(input, clazz);
@@ -107,8 +107,8 @@ public enum Serializer {
     }
 
     public <T> T read(String string, Class<T> clazz) {
-        Argument.notNull("string", string);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("string", string);
+        Validation.notNull("clazz", clazz);
 
         if (handler != null) {
             return handler.read(string, clazz);
@@ -118,8 +118,8 @@ public enum Serializer {
     }
 
     public <T> T read(Reader reader, Class<T> clazz) {
-        Argument.notNull("reader", reader);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("reader", reader);
+        Validation.notNull("clazz", clazz);
 
         if (handler != null) {
             return handler.read(reader, clazz);
@@ -129,7 +129,7 @@ public enum Serializer {
     }
 
     public <T> byte[] write(T object) {
-        Argument.notNull("object", object);
+        Validation.notNull("object", object);
 
         if (handler != null) {
             return handler.write(object);
@@ -139,8 +139,8 @@ public enum Serializer {
     }
 
     public <T> OutputStream write(T object, OutputStream output) {
-        Argument.notNull("object", object);
-        Argument.notNull("output", output);
+        Validation.notNull("object", object);
+        Validation.notNull("output", output);
 
         if (handler != null) {
             return handler.write(object, output);
@@ -150,7 +150,7 @@ public enum Serializer {
     }
 
     public <T> String writeS(T object) {
-        Argument.notNull("object", object);
+        Validation.notNull("object", object);
 
         if (handler != null) {
             return handler.writeS(object);
@@ -160,8 +160,8 @@ public enum Serializer {
     }
 
     public <T> Writer write(T object, Writer writer) {
-        Argument.notNull("object", object);
-        Argument.notNull("writer", writer);
+        Validation.notNull("object", object);
+        Validation.notNull("writer", writer);
 
         if (handler != null) {
             return handler.write(object, writer);

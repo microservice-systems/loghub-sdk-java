@@ -17,9 +17,9 @@
 
 package systems.microservice.loghub.sdk.property;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.Config;
-import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
 
@@ -44,15 +44,15 @@ public class PossibleProperty<T> implements Property<T>, Serializable {
     }
 
     public PossibleProperty(String group, String key, Class<T> clazz, boolean nullable, boolean secure, T defaultValue, T[] possibleValues, String unit) {
-        Argument.notNull("group", group);
-        Argument.notNull("key", key);
-        Argument.notNull("clazz", clazz);
+        Validation.notNull("group", group);
+        Validation.notNull("key", key);
+        Validation.notNull("clazz", clazz);
         if (!nullable) {
             if (defaultValue == null) {
                 throw new IllegalArgumentException(String.format("Default value is null for non nullable property '%s'", key));
             }
         }
-        Argument.notNull("possibleValues", possibleValues);
+        Validation.notNull("possibleValues", possibleValues);
 
         T v = Config.getProperty(group, key, clazz, nullable, secure, defaultValue, possibleValues, unit);
 

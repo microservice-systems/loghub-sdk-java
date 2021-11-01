@@ -17,11 +17,11 @@
 
 package systems.microservice.loghub.sdk.api.central.service;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.api.central.model.Organization;
 import systems.microservice.loghub.sdk.http.HttpClient;
 import systems.microservice.loghub.sdk.http.HttpException;
 import systems.microservice.loghub.sdk.serializer.Serializer;
-import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,9 +41,9 @@ public class OrganizationService {
     }
 
     public OrganizationService(HttpClient client, Serializer contentSerializer, Serializer acceptSerializer) {
-        Argument.notNull("client", client);
-        Argument.notNull("contentSerializer", contentSerializer);
-        Argument.notNull("acceptSerializer", acceptSerializer);
+        Validation.notNull("client", client);
+        Validation.notNull("contentSerializer", contentSerializer);
+        Validation.notNull("acceptSerializer", acceptSerializer);
 
         this.client = client;
         this.contentSerializer = contentSerializer;
@@ -63,7 +63,7 @@ public class OrganizationService {
     }
 
     public Organization get(String id) {
-        Argument.notNull("id", id);
+        Validation.notNull("id", id);
 
         try {
             HttpURLConnection conn = client.get("/loghub/api/central/organization", null, acceptSerializer.contentType);

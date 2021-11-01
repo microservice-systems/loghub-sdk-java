@@ -17,6 +17,8 @@
 
 package systems.microservice.loghub.sdk.util;
 
+import systems.microservice.loghub.connector.Validation;
+
 import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public final class ThreadInfo implements Serializable {
     }
 
     public Tag getTag(String key) {
-        Argument.notNull("key", key);
+        Validation.notNull("key", key);
 
         ArrayList<Tag> ts = tags.get(key);
         if (ts != null) {
@@ -57,7 +59,7 @@ public final class ThreadInfo implements Serializable {
     }
 
     public Tag addTag(Tag tag) {
-        Argument.notNull("tag", tag);
+        Validation.notNull("tag", tag);
 
         ArrayList<Tag> ts = tags.get(tag.key);
         if (ts == null) {
@@ -77,7 +79,7 @@ public final class ThreadInfo implements Serializable {
     }
 
     public Tag removeTag(String key) {
-        Argument.notNull("key", key);
+        Validation.notNull("key", key);
 
         ArrayList<Tag> ts = tags.get(key);
         if (ts != null) {

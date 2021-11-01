@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.buffer;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.util.Blob;
 import systems.microservice.loghub.sdk.util.Color;
 import systems.microservice.loghub.sdk.util.Image;
@@ -115,32 +115,32 @@ public final class BufferWriter {
     }
 
     public static int writeUUID(byte[] buffer, int index, UUID value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         index = writeLong(buffer, index, value.getMostSignificantBits());
         return writeLong(buffer, index, value.getLeastSignificantBits());
     }
 
     public static int writeBigInteger(byte[] buffer, int index, BigInteger value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         return writeByteArray(buffer, index, value.toByteArray());
     }
 
     public static int writeBigDecimal(byte[] buffer, int index, BigDecimal value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         return writeString(buffer, index, value.toString());
     }
 
     public static int writeDate(byte[] buffer, int index, Date value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         return writeLong(buffer, index, value.getTime());
     }
 
     public static int writeColor(byte[] buffer, int index, Color value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         index = writeByte(buffer, index, (byte) (value.r - ((short) 128)));
         index = writeByte(buffer, index, (byte) (value.g - ((short) 128)));
@@ -149,7 +149,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int ci = value.length();
         index = writeLength(buffer, index, ci);
@@ -160,7 +160,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -195,7 +195,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -236,7 +236,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2, String param3) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -283,7 +283,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2, String param3, String param4) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -336,7 +336,7 @@ public final class BufferWriter {
     }
 
     public static int writeString(byte[] buffer, int index, String value, String param1, String param2, String param3, String param4, String param5) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
         if (param1 == null) {
             param1 = "null";
         }
@@ -395,26 +395,26 @@ public final class BufferWriter {
     }
 
     public static int writePattern(byte[] buffer, int index, Pattern value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         return writeString(buffer, index, value.pattern());
     }
 
     public static int writeURL(byte[] buffer, int index, URL value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         return writeString(buffer, index, value.toExternalForm());
     }
 
     public static <T extends Comparable<T>> int writeRange(byte[] buffer, int index, Range<T> value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         index = writeObject(buffer, index, value.min);
         return writeObject(buffer, index, value.max);
     }
 
     public static int writeTag(byte[] buffer, int index, Tag value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         index = writeString(buffer, index, value.key);
         index = writeObject(buffer, index, value.value);
@@ -422,21 +422,21 @@ public final class BufferWriter {
     }
 
     public static int writeImage(byte[] buffer, int index, Image value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         index = writeByteArray(buffer, index, value.content);
         return writeString(buffer, index, value.contentType);
     }
 
     public static int writeBlob(byte[] buffer, int index, Blob value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         index = writeByteArray(buffer, index, value.content);
         return writeString(buffer, index, value.contentType);
     }
 
     public static int writeBooleanArray(byte[] buffer, int index, boolean[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -447,7 +447,7 @@ public final class BufferWriter {
     }
 
     public static int writeByteArray(byte[] buffer, int index, byte[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -458,7 +458,7 @@ public final class BufferWriter {
     }
 
     public static int writeCharArray(byte[] buffer, int index, char[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -469,7 +469,7 @@ public final class BufferWriter {
     }
 
     public static int writeShortArray(byte[] buffer, int index, short[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -480,7 +480,7 @@ public final class BufferWriter {
     }
 
     public static int writeIntArray(byte[] buffer, int index, int[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -491,7 +491,7 @@ public final class BufferWriter {
     }
 
     public static int writeLongArray(byte[] buffer, int index, long[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -502,7 +502,7 @@ public final class BufferWriter {
     }
 
     public static int writeFloatArray(byte[] buffer, int index, float[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -513,7 +513,7 @@ public final class BufferWriter {
     }
 
     public static int writeDoubleArray(byte[] buffer, int index, double[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -524,7 +524,7 @@ public final class BufferWriter {
     }
 
     public static int writeUUIDArray(byte[] buffer, int index, UUID[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -535,7 +535,7 @@ public final class BufferWriter {
     }
 
     public static int writeBigIntegerArray(byte[] buffer, int index, BigInteger[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -546,7 +546,7 @@ public final class BufferWriter {
     }
 
     public static int writeBigDecimalArray(byte[] buffer, int index, BigDecimal[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -557,7 +557,7 @@ public final class BufferWriter {
     }
 
     public static int writeDateArray(byte[] buffer, int index, Date[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -568,7 +568,7 @@ public final class BufferWriter {
     }
 
     public static int writeColorArray(byte[] buffer, int index, Color[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -579,7 +579,7 @@ public final class BufferWriter {
     }
 
     public static int writeStringArray(byte[] buffer, int index, String[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -590,7 +590,7 @@ public final class BufferWriter {
     }
 
     public static int writePatternArray(byte[] buffer, int index, Pattern[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -601,7 +601,7 @@ public final class BufferWriter {
     }
 
     public static int writeURLArray(byte[] buffer, int index, URL[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -613,7 +613,7 @@ public final class BufferWriter {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static int writeRangeArray(byte[] buffer, int index, Range[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -624,7 +624,7 @@ public final class BufferWriter {
     }
 
     public static int writeTagArray(byte[] buffer, int index, Tag[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -635,7 +635,7 @@ public final class BufferWriter {
     }
 
     public static int writeImageArray(byte[] buffer, int index, Image[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -646,7 +646,7 @@ public final class BufferWriter {
     }
 
     public static int writeBlobArray(byte[] buffer, int index, Blob[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -1064,7 +1064,7 @@ public final class BufferWriter {
 
     @SuppressWarnings("rawtypes")
     public static int writeObject(byte[] buffer, int index, Object value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         Class c = value.getClass();
         BufferObjectType ot = BufferObjectType.getObjectType(c);
@@ -1086,7 +1086,7 @@ public final class BufferWriter {
     }
 
     public static int writeObjectArray(byte[] buffer, int index, Object[] value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.length;
         index = writeLength(buffer, index, l);
@@ -1107,7 +1107,7 @@ public final class BufferWriter {
 
     @SuppressWarnings("rawtypes")
     public static int writeObjectCollection(byte[] buffer, int index, Collection value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.size();
         index = writeLength(buffer, index, l);
@@ -1129,7 +1129,7 @@ public final class BufferWriter {
 
     @SuppressWarnings("rawtypes")
     public static int writeObjectMap(byte[] buffer, int index, Map value) {
-        Argument.notNull("value", value);
+        Validation.notNull("value", value);
 
         int l = value.size();
         index = writeLength(buffer, index, l);

@@ -17,9 +17,8 @@
 
 package systems.microservice.loghub.sdk.usage;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.util.StringUtil;
-import systems.microservice.loghub.sdk.util.ValidationUtil;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -112,9 +111,9 @@ public final class NetworkUsage implements Serializable {
         public final Transmit transmit;
 
         public Interface(String name, Receive receive, Transmit transmit) {
-            Argument.notNull("name", name);
-            Argument.notNull("receive", receive);
-            Argument.notNull("transmit", transmit);
+            Validation.notNull("name", name);
+            Validation.notNull("receive", receive);
+            Validation.notNull("transmit", transmit);
 
             this.name = name;
             this.receive = receive;
@@ -128,8 +127,8 @@ public final class NetworkUsage implements Serializable {
             public final long packets;
 
             public Receive(long bytes, long packets) {
-                Argument.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
-                Argument.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
+                Validation.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
+                Validation.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
 
                 this.bytes = bytes;
                 this.packets = packets;
@@ -143,8 +142,8 @@ public final class NetworkUsage implements Serializable {
             public final long packets;
 
             public Transmit(long bytes, long packets) {
-                Argument.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
-                Argument.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
+                Validation.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
+                Validation.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
 
                 this.bytes = bytes;
                 this.packets = packets;
@@ -155,7 +154,7 @@ public final class NetworkUsage implements Serializable {
     public static void main(String[] args) {
         UUID id = UUID.randomUUID();
         System.out.println(id);
-        boolean f = ValidationUtil.isId(id.toString().substring(0, 36).replace('f', 'b'));
+        boolean f = Validation.isId(id.toString().substring(0, 36).replace('f', 'b'));
         System.out.println(f);
     }
 }

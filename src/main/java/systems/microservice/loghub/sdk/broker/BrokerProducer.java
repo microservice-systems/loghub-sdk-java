@@ -17,12 +17,12 @@
 
 package systems.microservice.loghub.sdk.broker;
 
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.buffer.BufferException;
 import systems.microservice.loghub.sdk.buffer.BufferReader;
 import systems.microservice.loghub.sdk.property.CachedProperty;
 import systems.microservice.loghub.sdk.storage.Storage;
 import systems.microservice.loghub.sdk.storage.StorageObject;
-import systems.microservice.loghub.sdk.util.Argument;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -48,9 +48,9 @@ public class BrokerProducer<T> implements Serializable {
     }
 
     public BrokerProducer(Storage storage, String topic, long consumerTimeout) {
-        Argument.notNull("storage", storage);
-        Argument.notNull("topic", topic);
-        Argument.inRangeLong("consumerTimeout", consumerTimeout, 5000L, Long.MAX_VALUE);
+        Validation.notNull("storage", storage);
+        Validation.notNull("topic", topic);
+        Validation.inRangeLong("consumerTimeout", consumerTimeout, 5000L, Long.MAX_VALUE);
 
         this.storage = storage;
         this.topic = topic;
@@ -86,9 +86,9 @@ public class BrokerProducer<T> implements Serializable {
         public final Map<UUID, Consumer> map;
 
         protected ConsumerList(Storage storage, String topic, long consumerTimeout) {
-            Argument.notNull("storage", storage);
-            Argument.notNull("topic", topic);
-            Argument.inRangeLong("consumerTimeout", consumerTimeout, 5000L, Long.MAX_VALUE);
+            Validation.notNull("storage", storage);
+            Validation.notNull("topic", topic);
+            Validation.inRangeLong("consumerTimeout", consumerTimeout, 5000L, Long.MAX_VALUE);
 
             LinkedHashMap<UUID, Consumer> m = new LinkedHashMap<>(64);
             String p = String.format("/%s/consumer/list/", topic);
@@ -115,8 +115,8 @@ public class BrokerProducer<T> implements Serializable {
         public final long updateTime;
 
         protected Consumer(BufferReader reader, UUID id) {
-            Argument.notNull("reader", reader);
-            Argument.notNull("id", id);
+            Validation.notNull("reader", reader);
+            Validation.notNull("id", id);
 
             byte v = reader.readVersion();
             if (v == 1) {

@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.storage;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 import systems.microservice.loghub.sdk.util.URLUtil;
 
 import java.io.Serializable;
@@ -37,9 +37,9 @@ public abstract class StorageConfig implements Serializable {
     public final String prefix;
 
     protected StorageConfig(String type, String bucket, String prefix) {
-        Argument.notNull("type", type);
-        Argument.notNull("bucket", bucket);
-        Argument.notNull("prefix", prefix);
+        Validation.notNull("type", type);
+        Validation.notNull("bucket", bucket);
+        Validation.notNull("prefix", prefix);
 
         this.target = String.format("%s://%s/%s", type, bucket, prefix);
         this.type = type;
@@ -50,13 +50,13 @@ public abstract class StorageConfig implements Serializable {
     public abstract Storage createStorage();
 
     public static StorageConfig create(String target) {
-        Argument.notNull("target", target);
+        Validation.notNull("target", target);
 
         return create(URLUtil.create(target));
     }
 
     public static StorageConfig create(URL target) {
-        Argument.notNull("target", target);
+        Validation.notNull("target", target);
 
         try {
             Class<?> c = Class.forName(String.format("systems.microservice.loghub.sdk.storage.%s.CustomStorageConfig", target.getProtocol()));

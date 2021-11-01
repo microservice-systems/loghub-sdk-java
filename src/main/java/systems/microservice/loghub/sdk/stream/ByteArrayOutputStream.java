@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.stream;
 
-import systems.microservice.loghub.sdk.util.Argument;
+import systems.microservice.loghub.connector.Validation;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,7 +39,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public ByteArrayOutputStream(int size) {
-        Argument.inRangeInt("size", size, 0, Integer.MAX_VALUE);
+        Validation.inRangeInt("size", size, 0, Integer.MAX_VALUE);
 
         this.buffer = new byte[size];
         this.count = 0;
@@ -79,7 +79,7 @@ public class ByteArrayOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        Argument.notNull("b", b);
+        Validation.notNull("b", b);
         if ((off < 0) || (off > b.length) || (len < 0) || ((off + len) - b.length > 0)) {
             throw new IndexOutOfBoundsException();
         }
@@ -90,7 +90,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public void writeTo(OutputStream out) throws IOException {
-        Argument.notNull("out", out);
+        Validation.notNull("out", out);
 
         out.write(buffer, 0, count);
     }
@@ -113,7 +113,7 @@ public class ByteArrayOutputStream extends OutputStream {
     }
 
     public String toString(String charsetName) {
-        Argument.notNull("charsetName", charsetName);
+        Validation.notNull("charsetName", charsetName);
 
         try {
             return new String(buffer, 0, count, charsetName);

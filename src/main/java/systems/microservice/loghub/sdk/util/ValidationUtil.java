@@ -41,7 +41,7 @@ public final class ValidationUtil {
     private ValidationUtil() {
     }
 
-    public static boolean isID(String id) {
+    public static boolean isId(String id) {
         if (id != null) {
             int l = id.length();
             if (l == 36) {

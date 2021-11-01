@@ -155,7 +155,7 @@ public final class NetworkUsage implements Serializable {
     public static void main(String[] args) {
         UUID id = UUID.randomUUID();
         System.out.println(id);
-        boolean f = ValidationUtil.isID(id.toString().substring(0, 36).replace('f', 'b'));
+        boolean f = ValidationUtil.isId(id.toString().substring(0, 36).replace('f', 'b'));
         System.out.println(f);
     }
 }

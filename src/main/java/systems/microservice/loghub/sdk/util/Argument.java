@@ -162,7 +162,7 @@ public final class Argument {
         Argument.notNull("argument", argument);
         Argument.notNull("id", id);
 
-        if (ValidationUtil.isID(id)) {
+        if (ValidationUtil.isId(id)) {
             return id;
         } else {
             throw new IllegalArgumentException(String.format("Argument '%s' is '%s' not an id", argument, id));

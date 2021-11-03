@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 
 import java.io.Serializable;
 
@@ -32,27 +32,27 @@ public final class Range<T extends Comparable<T>> implements Serializable {
     public final T max;
 
     public Range(T min, T max) {
-        Validation.notNull("min", min);
-        Validation.notNull("max", max);
+        Validator.notNull("min", min);
+        Validator.notNull("max", max);
 
         this.min = min;
         this.max = max;
     }
 
     public boolean isLeft(T value) {
-        Validation.notNull("value", value);
+        Validator.notNull("value", value);
 
         return value.compareTo(min) < 0;
     }
 
     public boolean isIn(T value) {
-        Validation.notNull("value", value);
+        Validator.notNull("value", value);
 
         return (value.compareTo(min) >= 0) && (value.compareTo(max) <= 0);
     }
 
     public boolean isRight(T value) {
-        Validation.notNull("value", value);
+        Validator.notNull("value", value);
 
         return value.compareTo(max) > 0;
     }

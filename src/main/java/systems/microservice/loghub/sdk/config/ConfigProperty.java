@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.util.Range;
 
@@ -63,14 +63,14 @@ public final class ConfigProperty implements Serializable {
                           URL url,
                           String user,
                           String commit) {
-        Validation.notNull("group", group);
-        Validation.notNull("key", key);
-        Validation.notNull("type", type);
-        Validation.notNull("value", value);
-        Validation.notNull("defaultValue", defaultValue);
-        Validation.notNull("unit", unit);
-        Validation.notNull("description", description);
-        Validation.notNull("url", url);
+        Validator.notNull("group", group);
+        Validator.notNull("key", key);
+        Validator.notNull("type", type);
+        Validator.notNull("value", value);
+        Validator.notNull("defaultValue", defaultValue);
+        Validator.notNull("unit", unit);
+        Validator.notNull("description", description);
+        Validator.notNull("url", url);
 
         this.uuid = UUID.randomUUID();
         this.group = group;

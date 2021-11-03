@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 
 import java.lang.reflect.Field;
 
@@ -30,8 +30,8 @@ public final class ReflectUtil {
     }
 
     public static void set(Object object, Field field, Object value) {
-        Validation.notNull("object", object);
-        Validation.notNull("field", field);
+        Validator.notNull("object", object);
+        Validator.notNull("field", field);
 
         try {
             field.set(object, value);
@@ -41,8 +41,8 @@ public final class ReflectUtil {
     }
 
     public static Field makeAccessible(Class clazz, String field) {
-        Validation.notNull("clazz", clazz);
-        Validation.notNull("field", field);
+        Validator.notNull("clazz", clazz);
+        Validator.notNull("field", field);
 
         try {
             Field f = clazz.getDeclaredField(field);

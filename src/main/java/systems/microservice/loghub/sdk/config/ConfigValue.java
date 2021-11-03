@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.util.MapUtil;
 
@@ -40,7 +40,7 @@ public final class ConfigValue implements Comparable<ConfigValue>, Serializable 
     private final transient ConcurrentHashMap<Class, Object> objects;
 
     public ConfigValue(Class clazz, Object object) {
-        Validation.notNull("clazz", clazz);
+        Validator.notNull("clazz", clazz);
 
         this.clazz = clazz;
         this.object = object;
@@ -58,8 +58,8 @@ public final class ConfigValue implements Comparable<ConfigValue>, Serializable 
 
     @SuppressWarnings("unchecked")
     public <I, O> O get(Class<O> outputClass, ConfigExtractor<I, O> extractor) {
-        Validation.notNull("outputClass", outputClass);
-        Validation.notNull("extractor", extractor);
+        Validator.notNull("outputClass", outputClass);
+        Validator.notNull("extractor", extractor);
 
         if (object != null) {
             Object o = objects.get(outputClass);

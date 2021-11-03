@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.buffer.BufferWriter;
 import systems.microservice.loghub.sdk.usage.CPUUsage;
 import systems.microservice.loghub.sdk.usage.ClassUsage;
@@ -90,8 +90,8 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeTag(byte[] buffer, int index, String key, Object value, String unit) {
-        Validation.notNull("key", key);
-        Validation.notNull("value", value);
+        Validator.notNull("key", key);
+        Validator.notNull("value", value);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -116,9 +116,9 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeImage(byte[] buffer, int index, String key, byte[] content, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("content", content);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("content", content);
+        Validator.notNull("contentType", contentType);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);
@@ -138,9 +138,9 @@ final class LogEventBuffer implements LogTagWriter, LogImageWriter, LogBlobWrite
 
     @Override
     public int writeBlob(byte[] buffer, int index, String key, byte[] content, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("content", content);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("content", content);
+        Validator.notNull("contentType", contentType);
 
         index = BufferWriter.writeBoolean(buffer, index, true);
         index = BufferWriter.writeVersion(buffer, index, (byte) 1);

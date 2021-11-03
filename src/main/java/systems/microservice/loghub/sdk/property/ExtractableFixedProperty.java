@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.property;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
@@ -41,8 +41,8 @@ public class ExtractableFixedProperty<I, O> implements Property<O>, Serializable
     }
 
     public ExtractableFixedProperty(I value, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
-        Validation.notNull("outputClass", outputClass);
-        Validation.notNull("extractor", extractor);
+        Validator.notNull("outputClass", outputClass);
+        Validator.notNull("extractor", extractor);
 
         O ev = extractor.extract(value, outputClass);
 

@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.storage.s3;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.storage.Storage;
 import systems.microservice.loghub.sdk.storage.StorageConfig;
 import systems.microservice.loghub.sdk.util.URLUtil;
@@ -36,8 +36,8 @@ public class CustomStorageConfig extends StorageConfig {
     public final String secretKey;
 
     public CustomStorageConfig(URL target) {
-        this(Validation.notNull("target", target).getHost(),
-             Validation.notNull("target", target).getPath(),
+        this(Validator.notNull("target", target).getHost(),
+             Validator.notNull("target", target).getPath(),
              URLUtil.getParameter(target, "endpoint"),
              URLUtil.getUser(target),
              URLUtil.getPassword(target));
@@ -46,9 +46,9 @@ public class CustomStorageConfig extends StorageConfig {
     public CustomStorageConfig(String bucket, String prefix, String endpoint, String accessKey, String secretKey) {
         super("s3", bucket, prefix);
 
-        Validation.notNull("endpoint", endpoint);
-        Validation.notNull("accessKey", accessKey);
-        Validation.notNull("secretKey", secretKey);
+        Validator.notNull("endpoint", endpoint);
+        Validator.notNull("accessKey", accessKey);
+        Validator.notNull("secretKey", secretKey);
 
         this.endpoint = endpoint;
         this.accessKey = accessKey;

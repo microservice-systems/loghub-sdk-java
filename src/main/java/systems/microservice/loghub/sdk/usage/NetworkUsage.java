@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.usage;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.util.StringUtil;
 
 import java.io.Serializable;
@@ -111,9 +111,9 @@ public final class NetworkUsage implements Serializable {
         public final Transmit transmit;
 
         public Interface(String name, Receive receive, Transmit transmit) {
-            Validation.notNull("name", name);
-            Validation.notNull("receive", receive);
-            Validation.notNull("transmit", transmit);
+            Validator.notNull("name", name);
+            Validator.notNull("receive", receive);
+            Validator.notNull("transmit", transmit);
 
             this.name = name;
             this.receive = receive;
@@ -127,8 +127,8 @@ public final class NetworkUsage implements Serializable {
             public final long packets;
 
             public Receive(long bytes, long packets) {
-                Validation.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
-                Validation.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
+                Validator.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
+                Validator.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
 
                 this.bytes = bytes;
                 this.packets = packets;
@@ -142,8 +142,8 @@ public final class NetworkUsage implements Serializable {
             public final long packets;
 
             public Transmit(long bytes, long packets) {
-                Validation.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
-                Validation.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
+                Validator.inRangeLong("bytes", bytes, 0L, Long.MAX_VALUE);
+                Validator.inRangeLong("packets", packets, 0L, Long.MAX_VALUE);
 
                 this.bytes = bytes;
                 this.packets = packets;
@@ -154,7 +154,7 @@ public final class NetworkUsage implements Serializable {
     public static void main(String[] args) {
         UUID id = UUID.randomUUID();
         System.out.println(id);
-        boolean f = Validation.isId(id.toString().substring(0, 36).replace('f', 'b'));
+        boolean f = Validator.isId(id.toString().substring(0, 36).replace('f', 'b'));
         System.out.println(f);
     }
 }

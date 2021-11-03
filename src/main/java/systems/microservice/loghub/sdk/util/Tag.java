@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 
 import java.io.Serializable;
 
@@ -37,8 +37,8 @@ public final class Tag implements Serializable {
     }
 
     public Tag(String key, Object value, String unit) {
-        Validation.notNull("key", key);
-        Validation.notNull("value", value);
+        Validator.notNull("key", key);
+        Validator.notNull("value", value);
 
         this.key = key;
         this.value = value;

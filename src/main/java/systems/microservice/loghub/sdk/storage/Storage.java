@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.storage;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.serializer.Serializer;
 import systems.microservice.loghub.sdk.stream.Stream;
 
@@ -41,7 +41,7 @@ public abstract class Storage {
     protected final String prefix;
 
     protected Storage(StorageConfig config) {
-        Validation.notNull("config", config);
+        Validator.notNull("config", config);
 
         this.target = config.target;
         this.type = config.type;
@@ -68,13 +68,13 @@ public abstract class Storage {
     public abstract Storage substorage(String prefix);
 
     public Iterable<StorageObject> find(String prefix) {
-        Validation.notNull("prefix", prefix);
+        Validator.notNull("prefix", prefix);
 
         return find(prefix, (StorageFilter) null);
     }
 
     public Iterable<StorageObject> find(String prefix, Pattern filter) {
-        Validation.notNull("prefix", prefix);
+        Validator.notNull("prefix", prefix);
 
         if (filter != null) {
             return find(prefix, (object) -> filter.matcher(object.getKey()).matches());
@@ -86,13 +86,13 @@ public abstract class Storage {
     public abstract Iterable<StorageObject> find(String prefix, StorageFilter filter);
 
     public Iterable<StorageObject> list(String prefix) {
-        Validation.notNull("prefix", prefix);
+        Validator.notNull("prefix", prefix);
 
         return list(prefix, (StorageFilter) null);
     }
 
     public Iterable<StorageObject> list(String prefix, Pattern filter) {
-        Validation.notNull("prefix", prefix);
+        Validator.notNull("prefix", prefix);
 
         if (filter != null) {
             return list(prefix, (object) -> filter.matcher(object.getKey()).matches());
@@ -104,7 +104,7 @@ public abstract class Storage {
     public abstract Iterable<StorageObject> list(String prefix, StorageFilter filter);
 
     public boolean contains(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         for (StorageObject o : list(key)) {
             if (o.getKey().equals(key)) {
@@ -115,7 +115,7 @@ public abstract class Storage {
     }
 
     public boolean containsAll(String... keys) {
-        Validation.notNull("keys", keys);
+        Validator.notNull("keys", keys);
 
         for (String key : keys) {
             if (!contains(key)) {
@@ -126,7 +126,7 @@ public abstract class Storage {
     }
 
     public boolean containsAll(Iterable<String> keys) {
-        Validation.notNull("keys", keys);
+        Validator.notNull("keys", keys);
 
         for (String key : keys) {
             if (!contains(key)) {
@@ -140,19 +140,19 @@ public abstract class Storage {
     public abstract String getVersion(String key);
 
     public byte[] getArray(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return getArray(key, null);
     }
 
     public byte[] getArray(String key, Map<String, String> meta) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return getArray(key, meta, null);
     }
 
     public byte[] getArray(String key, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         try (InputStream in = openInputStream(key, meta, tags)) {
             return Stream.read(in);
@@ -162,13 +162,13 @@ public abstract class Storage {
     }
 
     public InputStream openInputStream(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return openInputStream(key, null);
     }
 
     public InputStream openInputStream(String key, Map<String, String> meta) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return openInputStream(key, meta, null);
     }
@@ -176,19 +176,19 @@ public abstract class Storage {
     public abstract InputStream openInputStream(String key, Map<String, String> meta, Map<String, String> tags);
 
     public String getString(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return getString(key, null);
     }
 
     public String getString(String key, Map<String, String> meta) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return getString(key, meta, null);
     }
 
     public String getString(String key, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         try (Reader r = openReader(key, meta, tags)) {
             return Stream.readS(r);
@@ -198,13 +198,13 @@ public abstract class Storage {
     }
 
     public Reader openReader(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return openReader(key, null);
     }
 
     public Reader openReader(String key, Map<String, String> meta) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return openReader(key, meta, null);
     }
@@ -212,25 +212,25 @@ public abstract class Storage {
     public abstract Reader openReader(String key, Map<String, String> meta, Map<String, String> tags);
 
     public <T> T get(String key, Serializer serializer, Class<T> clazz) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("clazz", clazz);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("clazz", clazz);
 
         return get(key, serializer, clazz, null);
     }
 
     public <T> T get(String key, Serializer serializer, Class<T> clazz, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("clazz", clazz);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("clazz", clazz);
 
         return get(key, serializer, clazz, meta, null);
     }
 
     public <T> T get(String key, Serializer serializer, Class<T> clazz, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("clazz", clazz);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("clazz", clazz);
 
         try (InputStream in = openInputStream(key, meta, tags)) {
             return serializer.read(in, clazz);
@@ -240,22 +240,22 @@ public abstract class Storage {
     }
 
     public OutputStream download(String key, OutputStream output) {
-        Validation.notNull("key", key);
-        Validation.notNull("output", output);
+        Validator.notNull("key", key);
+        Validator.notNull("output", output);
 
         return download(key, output, null);
     }
 
     public OutputStream download(String key, OutputStream output, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("output", output);
+        Validator.notNull("key", key);
+        Validator.notNull("output", output);
 
         return download(key, output, meta, null);
     }
 
     public OutputStream download(String key, OutputStream output, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("output", output);
+        Validator.notNull("key", key);
+        Validator.notNull("output", output);
 
         try (InputStream in = openInputStream(key, meta, tags)) {
             return Stream.copy(in, output);
@@ -265,22 +265,22 @@ public abstract class Storage {
     }
 
     public Writer download(String key, Writer writer) {
-        Validation.notNull("key", key);
-        Validation.notNull("writer", writer);
+        Validator.notNull("key", key);
+        Validator.notNull("writer", writer);
 
         return download(key, writer, null);
     }
 
     public Writer download(String key, Writer writer, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("writer", writer);
+        Validator.notNull("key", key);
+        Validator.notNull("writer", writer);
 
         return download(key, writer, meta, null);
     }
 
     public Writer download(String key, Writer writer, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("writer", writer);
+        Validator.notNull("key", key);
+        Validator.notNull("writer", writer);
 
         try (Reader r = openReader(key, meta, tags)) {
             return Stream.copy(r, writer);
@@ -290,14 +290,14 @@ public abstract class Storage {
     }
 
     public Map<String, String> getMeta(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return getMeta(key, new LinkedHashMap<>(32));
     }
 
     public Map<String, String> getMeta(String key, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("meta", meta);
+        Validator.notNull("key", key);
+        Validator.notNull("meta", meta);
 
         return getMeta(key, meta, null);
     }
@@ -305,7 +305,7 @@ public abstract class Storage {
     public abstract Map<String, String> getMeta(String key, Map<String, String> meta, Map<String, String> tags);
 
     public Map<String, String> getTags(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return getTags(key, new LinkedHashMap<>(32));
     }
@@ -313,25 +313,25 @@ public abstract class Storage {
     public abstract Map<String, String> getTags(String key, Map<String, String> tags);
 
     public Storage putArray(String key, byte[] array, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("array", array);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("array", array);
+        Validator.notNull("contentType", contentType);
 
         return putArray(key, array, contentType, null);
     }
 
     public Storage putArray(String key, byte[] array, String contentType, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("array", array);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("array", array);
+        Validator.notNull("contentType", contentType);
 
         return putArray(key, array, contentType, meta, null);
     }
 
     public Storage putArray(String key, byte[] array, String contentType, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("array", array);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("array", array);
+        Validator.notNull("contentType", contentType);
 
         try (OutputStream out = openOutputStream(key, array.length, contentType, meta, tags)) {
             Stream.write(array, out);
@@ -342,17 +342,17 @@ public abstract class Storage {
     }
 
     public OutputStream openOutputStream(String key, long contentLength, String contentType) {
-        Validation.notNull("key", key);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return openOutputStream(key, contentLength, contentType, null);
     }
 
     public OutputStream openOutputStream(String key, long contentLength, String contentType, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return openOutputStream(key, contentLength, contentType, meta, null);
     }
@@ -360,25 +360,25 @@ public abstract class Storage {
     public abstract OutputStream openOutputStream(String key, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags);
 
     public Storage putString(String key, String string, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("string", string);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("string", string);
+        Validator.notNull("contentType", contentType);
 
         return putString(key, string, contentType, null);
     }
 
     public Storage putString(String key, String string, String contentType, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("string", string);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("string", string);
+        Validator.notNull("contentType", contentType);
 
         return putString(key, string, contentType, meta, null);
     }
 
     public Storage putString(String key, String string, String contentType, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("string", string);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("string", string);
+        Validator.notNull("contentType", contentType);
 
         char[] a = string.toCharArray();
         try (Writer w = openWriter(key, a.length * 2, contentType, meta, tags)) {
@@ -390,17 +390,17 @@ public abstract class Storage {
     }
 
     public Writer openWriter(String key, long contentLength, String contentType) {
-        Validation.notNull("key", key);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return openWriter(key, contentLength, contentType, null);
     }
 
     public Writer openWriter(String key, long contentLength, String contentType, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return openWriter(key, contentLength, contentType, meta, null);
     }
@@ -408,33 +408,33 @@ public abstract class Storage {
     public abstract Writer openWriter(String key, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags);
 
     public <T> Storage put(String key, Serializer serializer, T object) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("object", object);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("object", object);
 
         return put(key, serializer, object, null);
     }
 
     public <T> Storage put(String key, Serializer serializer, T object, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("object", object);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("object", object);
 
         return put(key, serializer, object, meta, null);
     }
 
     public <T> Storage put(String key, Serializer serializer, T object, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("object", object);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("object", object);
 
         return put(key, serializer, object, meta, tags, null);
     }
 
     public <T> Storage put(String key, Serializer serializer, T object, Map<String, String> meta, Map<String, String> tags, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("serializer", serializer);
-        Validation.notNull("object", object);
+        Validator.notNull("key", key);
+        Validator.notNull("serializer", serializer);
+        Validator.notNull("object", object);
 
         byte[] a = serializer.write(object);
         try (OutputStream out = openOutputStream(key, a.length, (contentType == null) ? serializer.contentType : contentType, meta, tags)) {
@@ -446,28 +446,28 @@ public abstract class Storage {
     }
 
     public Storage upload(String key, InputStream input, long contentLength, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("input", input);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("input", input);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return upload(key, input, contentLength, contentType, null);
     }
 
     public Storage upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("input", input);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("input", input);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return upload(key, input, contentLength, contentType, meta, null);
     }
 
     public Storage upload(String key, InputStream input, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("input", input);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("input", input);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         try (OutputStream out = openOutputStream(key, contentLength, contentType, meta, tags)) {
             Stream.copy(input, out);
@@ -478,28 +478,28 @@ public abstract class Storage {
     }
 
     public Storage upload(String key, Reader reader, long contentLength, String contentType) {
-        Validation.notNull("key", key);
-        Validation.notNull("reader", reader);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("reader", reader);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return upload(key, reader, contentLength, contentType, null);
     }
 
     public Storage upload(String key, Reader reader, long contentLength, String contentType, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("reader", reader);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("reader", reader);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         return upload(key, reader, contentLength, contentType, meta, null);
     }
 
     public Storage upload(String key, Reader reader, long contentLength, String contentType, Map<String, String> meta, Map<String, String> tags) {
-        Validation.notNull("key", key);
-        Validation.notNull("reader", reader);
-        Validation.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
-        Validation.notNull("contentType", contentType);
+        Validator.notNull("key", key);
+        Validator.notNull("reader", reader);
+        Validator.inRangeLong("contentLength", contentLength, 0L, Long.MAX_VALUE);
+        Validator.notNull("contentType", contentType);
 
         try (Writer w = openWriter(key, contentLength, contentType, meta, tags)) {
             Stream.copy(reader, w);
@@ -510,14 +510,14 @@ public abstract class Storage {
     }
 
     public Storage putMeta(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return putMeta(key, new LinkedHashMap<>(32));
     }
 
     public Storage putMeta(String key, Map<String, String> meta) {
-        Validation.notNull("key", key);
-        Validation.notNull("meta", meta);
+        Validator.notNull("key", key);
+        Validator.notNull("meta", meta);
 
         return putMeta(key, meta, null);
     }
@@ -525,7 +525,7 @@ public abstract class Storage {
     public abstract Storage putMeta(String key, Map<String, String> meta, Map<String, String> tags);
 
     public Storage putTags(String key) {
-        Validation.notNull("key", key);
+        Validator.notNull("key", key);
 
         return putTags(key, new LinkedHashMap<>(32));
     }

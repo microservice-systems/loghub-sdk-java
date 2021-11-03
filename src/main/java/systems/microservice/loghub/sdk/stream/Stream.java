@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.stream;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +56,7 @@ public final class Stream {
     }
 
     public static byte[] read(InputStream input) {
-        Validation.notNull("input", input);
+        Validator.notNull("input", input);
 
         int c = 0;
         try {
@@ -77,7 +77,7 @@ public final class Stream {
     }
 
     public static char[] read(Reader reader) {
-        Validation.notNull("reader", reader);
+        Validator.notNull("reader", reader);
 
         int c = 0;
         try {
@@ -98,27 +98,27 @@ public final class Stream {
     }
 
     public static String readS(InputStream input) {
-        Validation.notNull("input", input);
+        Validator.notNull("input", input);
 
         return readS(input, StandardCharsets.UTF_8);
     }
 
     public static String readS(InputStream input, Charset charset) {
-        Validation.notNull("input", input);
-        Validation.notNull("charset", charset);
+        Validator.notNull("input", input);
+        Validator.notNull("charset", charset);
 
         return new String(read(input), charset);
     }
 
     public static String readS(Reader reader) {
-        Validation.notNull("reader", reader);
+        Validator.notNull("reader", reader);
 
         return new String(read(reader));
     }
 
     public static OutputStream write(byte[] array, OutputStream output) {
-        Validation.notNull("array", array);
-        Validation.notNull("output", output);
+        Validator.notNull("array", array);
+        Validator.notNull("output", output);
 
         try {
             output.write(array);
@@ -129,8 +129,8 @@ public final class Stream {
     }
 
     public static Writer write(char[] array, Writer writer) {
-        Validation.notNull("array", array);
-        Validation.notNull("writer", writer);
+        Validator.notNull("array", array);
+        Validator.notNull("writer", writer);
 
         try {
             writer.write(array);
@@ -141,30 +141,30 @@ public final class Stream {
     }
 
     public static OutputStream writeS(String string, OutputStream output) {
-        Validation.notNull("string", string);
-        Validation.notNull("output", output);
+        Validator.notNull("string", string);
+        Validator.notNull("output", output);
 
         return writeS(string, output, StandardCharsets.UTF_8);
     }
 
     public static OutputStream writeS(String string, OutputStream output, Charset charset) {
-        Validation.notNull("string", string);
-        Validation.notNull("output", output);
-        Validation.notNull("charset", charset);
+        Validator.notNull("string", string);
+        Validator.notNull("output", output);
+        Validator.notNull("charset", charset);
 
         return write(string.getBytes(charset), output);
     }
 
     public static Writer writeS(String string, Writer writer) {
-        Validation.notNull("string", string);
-        Validation.notNull("writer", writer);
+        Validator.notNull("string", string);
+        Validator.notNull("writer", writer);
 
         return write(string.toCharArray(), writer);
     }
 
     public static OutputStream copy(InputStream input, OutputStream output) {
-        Validation.notNull("input", input);
-        Validation.notNull("output", output);
+        Validator.notNull("input", input);
+        Validator.notNull("output", output);
 
         long c = 0L;
         try {
@@ -180,8 +180,8 @@ public final class Stream {
     }
 
     public static Writer copy(Reader reader, Writer writer) {
-        Validation.notNull("reader", reader);
-        Validation.notNull("writer", writer);
+        Validator.notNull("reader", reader);
+        Validator.notNull("writer", writer);
 
         long c = 0L;
         try {

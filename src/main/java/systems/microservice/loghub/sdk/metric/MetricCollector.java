@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.metric;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.LogHub;
 
 /**
@@ -43,9 +43,9 @@ public final class MetricCollector {
     }
 
     public static void collect(String name, long count, long value, int point, String unit) {
-        Validation.notNull("name", name);
-        Validation.inRangeLong("count", count, 0L, Long.MAX_VALUE);
-        Validation.inRangeInt("point", point, 0, 14);
+        Validator.notNull("name", name);
+        Validator.inRangeLong("count", count, 0L, Long.MAX_VALUE);
+        Validator.inRangeInt("point", point, 0, 14);
     }
 
     public static void collectInRange(String name, long value, long min, long max, int point) {

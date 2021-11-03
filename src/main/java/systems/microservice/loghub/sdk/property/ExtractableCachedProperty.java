@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.property;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
 import systems.microservice.loghub.sdk.config.extractor.ConfigValueOfExtractor;
@@ -50,10 +50,10 @@ public class ExtractableCachedProperty<I, O> implements Property<O>, Serializabl
     }
 
     public ExtractableCachedProperty(long timeout, Class<O> outputClass, ConfigExtractor<I, O> extractor, Eval<I> eval) {
-        Validation.inRangeLong("timeout", timeout, 0L, Long.MAX_VALUE);
-        Validation.notNull("outputClass", outputClass);
-        Validation.notNull("extractor", extractor);
-        Validation.notNull("eval", eval);
+        Validator.inRangeLong("timeout", timeout, 0L, Long.MAX_VALUE);
+        Validator.notNull("outputClass", outputClass);
+        Validator.notNull("extractor", extractor);
+        Validator.notNull("eval", eval);
 
         I v = eval.eval();
         O ev = extractor.extract(v, outputClass);

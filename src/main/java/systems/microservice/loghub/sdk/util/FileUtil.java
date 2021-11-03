@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,9 +34,9 @@ public final class FileUtil {
     }
 
     public static void storeString(String directory, String file, String value) {
-        Validation.notNull("directory", directory);
-        Validation.notNull("file", file);
-        Validation.notNull("value", value);
+        Validator.notNull("directory", directory);
+        Validator.notNull("file", file);
+        Validator.notNull("value", value);
 
         try {
             Files.createDirectories(Paths.get(directory));

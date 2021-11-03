@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.http.client;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.http.HttpClient;
 import systems.microservice.loghub.sdk.property.NullProperty;
@@ -58,10 +58,10 @@ public class HttpDefaultClient implements HttpClient, Serializable {
     }
 
     public HttpDefaultClient(Property<URL> url, Property<String> user, Property<String> password, Property<Integer> connectTimeout) {
-        Validation.notNull("url", url);
-        Validation.notNull("user", user);
-        Validation.notNull("password", password);
-        Validation.notNull("connectTimeout", connectTimeout);
+        Validator.notNull("url", url);
+        Validator.notNull("user", user);
+        Validator.notNull("password", password);
+        Validator.notNull("connectTimeout", connectTimeout);
 
         this.url = url;
         this.user = user;
@@ -94,7 +94,7 @@ public class HttpDefaultClient implements HttpClient, Serializable {
     }
 
     protected HttpURLConnection createConnection(String spec, String method, String contentType, String acceptType) throws IOException {
-        Validation.notNull("method", method);
+        Validator.notNull("method", method);
 
         HttpURLConnection conn = (spec != null) ? (HttpURLConnection) new URL(url.get(), spec).openConnection() : (HttpURLConnection) url.get().openConnection();
         conn.setRequestMethod(method);

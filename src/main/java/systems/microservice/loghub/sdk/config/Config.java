@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.config;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.util.MapUtil;
 import systems.microservice.loghub.sdk.util.Range;
 
@@ -73,7 +73,7 @@ public final class Config implements Serializable {
     }
 
     public Config(Collection<ConfigProperty> properties, ConfigProperty property, String comment, URL url, String user, String commit) {
-        Validation.notNull("properties", properties);
+        Validator.notNull("properties", properties);
 
         this.uuid = UUID.randomUUID();
         this.properties = createProperties(properties, property);
@@ -105,7 +105,7 @@ public final class Config implements Serializable {
     }
 
     private static Config setConfig(Config config) {
-        Validation.notNull("config", config);
+        Validator.notNull("config", config);
 
         ThreadConfig tc = threadConfig.get();
         if (tc.config != null) {
@@ -152,7 +152,7 @@ public final class Config implements Serializable {
     }
 
     public static List<ConfigPropertyEvent> applyConfig(Config config) {
-        Validation.notNull("config", config);
+        Validator.notNull("config", config);
 
         lock.lock();
         try {
@@ -236,8 +236,8 @@ public final class Config implements Serializable {
     }
 
     public static void addPropertyValidator(String key, ConfigPropertyValidator validator) {
-        Validation.notNull("key", key);
-        Validation.notNull("validator", validator);
+        Validator.notNull("key", key);
+        Validator.notNull("validator", validator);
 
         Set<ConfigPropertyValidator> pvs = propertyValidators.get(key);
         if (pvs == null) {
@@ -247,8 +247,8 @@ public final class Config implements Serializable {
     }
 
     public static void removePropertyValidator(String key, ConfigPropertyValidator validator) {
-        Validation.notNull("key", key);
-        Validation.notNull("validator", validator);
+        Validator.notNull("key", key);
+        Validator.notNull("validator", validator);
 
         Set<ConfigPropertyValidator> pvs = propertyValidators.get(key);
         if (pvs != null) {
@@ -257,8 +257,8 @@ public final class Config implements Serializable {
     }
 
     public static void addPropertyListener(String key, ConfigPropertyListener listener) {
-        Validation.notNull("key", key);
-        Validation.notNull("listener", listener);
+        Validator.notNull("key", key);
+        Validator.notNull("listener", listener);
 
         Set<ConfigPropertyListener> pls = propertyListeners.get(key);
         if (pls == null) {
@@ -268,8 +268,8 @@ public final class Config implements Serializable {
     }
 
     public static void removePropertyListener(String key, ConfigPropertyListener listener) {
-        Validation.notNull("key", key);
-        Validation.notNull("listener", listener);
+        Validator.notNull("key", key);
+        Validator.notNull("listener", listener);
 
         Set<ConfigPropertyListener> pls = propertyListeners.get(key);
         if (pls != null) {

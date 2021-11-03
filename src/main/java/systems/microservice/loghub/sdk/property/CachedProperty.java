@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.property;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.util.Eval;
 
@@ -45,8 +45,8 @@ public class CachedProperty<T> implements Property<T>, Serializable {
     }
 
     public CachedProperty(long timeout, Eval<T> eval) {
-        Validation.inRangeLong("timeout", timeout, 0L, Long.MAX_VALUE);
-        Validation.notNull("eval", eval);
+        Validator.inRangeLong("timeout", timeout, 0L, Long.MAX_VALUE);
+        Validator.notNull("eval", eval);
 
         T v = eval.eval();
 

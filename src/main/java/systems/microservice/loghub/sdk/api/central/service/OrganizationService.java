@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.api.central.service;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.api.central.model.Organization;
 import systems.microservice.loghub.sdk.http.HttpClient;
 import systems.microservice.loghub.sdk.http.HttpException;
@@ -41,9 +41,9 @@ public class OrganizationService {
     }
 
     public OrganizationService(HttpClient client, Serializer contentSerializer, Serializer acceptSerializer) {
-        Validation.notNull("client", client);
-        Validation.notNull("contentSerializer", contentSerializer);
-        Validation.notNull("acceptSerializer", acceptSerializer);
+        Validator.notNull("client", client);
+        Validator.notNull("contentSerializer", contentSerializer);
+        Validator.notNull("acceptSerializer", acceptSerializer);
 
         this.client = client;
         this.contentSerializer = contentSerializer;
@@ -63,7 +63,7 @@ public class OrganizationService {
     }
 
     public Organization get(String id) {
-        Validation.notNull("id", id);
+        Validator.notNull("id", id);
 
         try {
             HttpURLConnection conn = client.get("/loghub/api/central/organization", null, acceptSerializer.contentType);

@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.util;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 
 import java.io.Serializable;
 
@@ -34,10 +34,10 @@ public final class Color implements Serializable {
     public final short a;
 
     public Color(short r, short g, short b, short a) {
-        Validation.inRangeShort("r", r, (short) 0, (short) 255);
-        Validation.inRangeShort("g", g, (short) 0, (short) 255);
-        Validation.inRangeShort("b", b, (short) 0, (short) 255);
-        Validation.inRangeShort("a", a, (short) 0, (short) 255);
+        Validator.inRangeShort("r", r, (short) 0, (short) 255);
+        Validator.inRangeShort("g", g, (short) 0, (short) 255);
+        Validator.inRangeShort("b", b, (short) 0, (short) 255);
+        Validator.inRangeShort("a", a, (short) 0, (short) 255);
 
         this.r = r;
         this.g = g;

@@ -17,7 +17,7 @@
 
 package systems.microservice.loghub.sdk.property;
 
-import systems.microservice.loghub.connector.Validation;
+import systems.microservice.loghub.facade.Validator;
 import systems.microservice.loghub.sdk.Property;
 import systems.microservice.loghub.sdk.config.Config;
 import systems.microservice.loghub.sdk.config.ConfigExtractor;
@@ -48,17 +48,17 @@ public class ExtractablePossibleProperty<I, O> implements Property<O>, Serializa
     }
 
     public ExtractablePossibleProperty(String group, String key, Class<I> clazz, boolean nullable, boolean secure, I defaultValue, I[] possibleValues, String unit, Class<O> outputClass, ConfigExtractor<I, O> extractor) {
-        Validation.notNull("group", group);
-        Validation.notNull("key", key);
-        Validation.notNull("clazz", clazz);
+        Validator.notNull("group", group);
+        Validator.notNull("key", key);
+        Validator.notNull("clazz", clazz);
         if (!nullable) {
             if (defaultValue == null) {
                 throw new IllegalArgumentException(String.format("Default value is null for non nullable property '%s'", key));
             }
         }
-        Validation.notNull("possibleValues", possibleValues);
-        Validation.notNull("outputClass", outputClass);
-        Validation.notNull("extractor", extractor);
+        Validator.notNull("possibleValues", possibleValues);
+        Validator.notNull("outputClass", outputClass);
+        Validator.notNull("extractor", extractor);
 
         O ev = Config.getProperty(group, key, clazz, nullable, secure, defaultValue, possibleValues, unit, outputClass, extractor);
 

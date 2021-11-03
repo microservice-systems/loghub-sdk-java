@@ -18,6 +18,7 @@
 package systems.microservice.loghub.sdk.usage;
 
 import systems.microservice.loghub.facade.Validator;
+import systems.microservice.loghub.sdk.util.SecretUtil;
 import systems.microservice.loghub.sdk.util.StringUtil;
 
 import java.io.Serializable;
@@ -156,5 +157,6 @@ public final class NetworkUsage implements Serializable {
         System.out.println(id);
         boolean f = Validator.isId(id.toString().substring(0, 36).replace('f', 'b'));
         System.out.println(f);
+        System.out.println(SecretUtil.randomSecret());
     }
 }

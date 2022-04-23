@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.event;
+package systems.microservice.loghub.event;
 
 import java.io.Serializable;
 

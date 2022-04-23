@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.config;
+package systems.microservice.loghub.config;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.io;
+package systems.microservice.loghub.io;
 
-import systems.microservice.loghub.facade.config.Validator;
+import systems.microservice.loghub.config.Validator;
 
 import java.io.IOException;
 import java.io.InputStream;

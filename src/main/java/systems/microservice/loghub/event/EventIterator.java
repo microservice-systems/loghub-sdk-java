@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.event;
+package systems.microservice.loghub.event;
 
-import systems.microservice.loghub.facade.Order;
+import systems.microservice.loghub.Order;
 
 import java.util.Iterator;
 

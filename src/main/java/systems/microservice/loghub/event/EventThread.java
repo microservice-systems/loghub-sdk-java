@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.event;
+package systems.microservice.loghub.event;
 
-import systems.microservice.loghub.facade.io.FormatInputStream;
+import systems.microservice.loghub.io.FormatInputStream;
 
 import java.io.Serializable;
 import java.util.UUID;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.config;
+package systems.microservice.loghub.config;
 
 import java.net.MalformedURLException;
 import java.net.URL;

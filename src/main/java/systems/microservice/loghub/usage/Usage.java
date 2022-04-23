@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.usage;
+package systems.microservice.loghub.usage;
 
 /**
  * @author Dmitry Kotlyarov

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.facade.util;
+package systems.microservice.loghub.util;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

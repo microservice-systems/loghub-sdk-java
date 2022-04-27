@@ -26,9 +26,9 @@ import java.io.InputStream;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class ArrayInputStream extends InputStream {
-    protected final byte[] array;
-    protected int index;
+public final class ArrayInputStream extends InputStream {
+    private final byte[] array;
+    private int index;
 
     public ArrayInputStream(byte[] array) {
         Validator.notNull("array", array);
@@ -53,5 +53,7 @@ public class ArrayInputStream extends InputStream {
     @Override
     public void close() throws IOException {
         index = 0;
+
+        super.close();
     }
 }

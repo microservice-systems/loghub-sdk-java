@@ -61,6 +61,12 @@ public final class ArrayOutputStream extends OutputStream {
         return index;
     }
 
+    public byte[] createArraySizedCopy() {
+        byte[] a = new byte[index];
+        System.arraycopy(array, 0, a, 0, a.length);
+        return a;
+    }
+
     @Override
     public void write(int b) throws IOException {
         if (index >= array.length) {

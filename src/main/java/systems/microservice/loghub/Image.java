@@ -18,7 +18,7 @@
 package systems.microservice.loghub;
 
 import systems.microservice.loghub.config.Validator;
-import systems.microservice.loghub.io.ByteArrayOutputStream;
+import systems.microservice.loghub.io.ArrayOutputStream;
 
 import javax.imageio.ImageIO;
 import java.awt.AWTException;
@@ -76,9 +76,9 @@ public final class Image implements Serializable {
         try {
             Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage bi = new Robot().createScreenCapture(r);
-            try (ByteArrayOutputStream out = new ByteArrayOutputStream(131072)) {
+            try (ArrayOutputStream out = new ArrayOutputStream(131072, 131072)) {
                 if (ImageIO.write(bi, format, out)) {
-                    return new Image(out.toByteArray(), getContentType(format));
+                    return new Image(out.createArraySizedCopy(), getContentType(format));
                 } else {
                     throw new IllegalArgumentException(String.format("Image IO format '%s' is not found", format));
                 }

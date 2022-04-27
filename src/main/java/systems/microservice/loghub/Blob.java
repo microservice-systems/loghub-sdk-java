@@ -29,7 +29,7 @@ import java.util.UUID;
 public final class Blob implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public final UUID guid;
+    public final UUID id;
     public final byte[] content;
     public final String contentType;
 
@@ -37,7 +37,7 @@ public final class Blob implements Serializable {
         Validator.notNull("content", content);
         Validator.notNull("contentType", contentType);
 
-        this.guid = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.content = content;
         this.contentType = contentType;
     }

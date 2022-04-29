@@ -94,7 +94,7 @@ public final class Facade {
 
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
-                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                            String message) {
         Validator.inRangeLong("time", time, 0L, Long.MAX_VALUE);
         Validator.notNull("input", input);
@@ -112,7 +112,7 @@ public final class Facade {
                     for (int i = 0, ci = cs.length; i < ci; ++i) {
                         cs[i].log(time, eventNumber.getAndIncrement(), input,
                                   clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags, image, blob,
+                                  level, logger, type, exception, tag, tags,
                                   message);
                     }
                 } finally {
@@ -124,7 +124,7 @@ public final class Facade {
 
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
-                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                            String message, Object param1) {
         Validator.inRangeLong("time", time, 0L, Long.MAX_VALUE);
         Validator.notNull("input", input);
@@ -142,7 +142,7 @@ public final class Facade {
                     for (int i = 0, ci = cs.length; i < ci; ++i) {
                         cs[i].log(time, eventNumber.getAndIncrement(), input,
                                   clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags, image, blob,
+                                  level, logger, type, exception, tag, tags,
                                   message, param1);
                     }
                 } finally {
@@ -154,7 +154,7 @@ public final class Facade {
 
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
-                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                            String message, Object param1, Object param2) {
         Validator.inRangeLong("time", time, 0L, Long.MAX_VALUE);
         Validator.notNull("input", input);
@@ -172,7 +172,7 @@ public final class Facade {
                     for (int i = 0, ci = cs.length; i < ci; ++i) {
                         cs[i].log(time, eventNumber.getAndIncrement(), input,
                                   clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags, image, blob,
+                                  level, logger, type, exception, tag, tags,
                                   message, param1, param2);
                     }
                 } finally {
@@ -184,7 +184,7 @@ public final class Facade {
 
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
-                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                            String message, Object param1, Object param2, Object param3) {
         Validator.inRangeLong("time", time, 0L, Long.MAX_VALUE);
         Validator.notNull("input", input);
@@ -202,7 +202,7 @@ public final class Facade {
                     for (int i = 0, ci = cs.length; i < ci; ++i) {
                         cs[i].log(time, eventNumber.getAndIncrement(), input,
                                   clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags, image, blob,
+                                  level, logger, type, exception, tag, tags,
                                   message, param1, param2, param3);
                     }
                 } finally {
@@ -214,7 +214,7 @@ public final class Facade {
 
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
-                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                            String message, Object param1, Object param2, Object param3, Object param4) {
         Validator.inRangeLong("time", time, 0L, Long.MAX_VALUE);
         Validator.notNull("input", input);
@@ -232,7 +232,7 @@ public final class Facade {
                     for (int i = 0, ci = cs.length; i < ci; ++i) {
                         cs[i].log(time, eventNumber.getAndIncrement(), input,
                                   clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags, image, blob,
+                                  level, logger, type, exception, tag, tags,
                                   message, param1, param2, param3, param4);
                     }
                 } finally {
@@ -244,7 +244,7 @@ public final class Facade {
 
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
-                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                           Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                            String message, Object param1, Object param2, Object param3, Object param4, Object param5) {
         Validator.inRangeLong("time", time, 0L, Long.MAX_VALUE);
         Validator.notNull("input", input);
@@ -262,7 +262,7 @@ public final class Facade {
                     for (int i = 0, ci = cs.length; i < ci; ++i) {
                         cs[i].log(time, eventNumber.getAndIncrement(), input,
                                   clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags, image, blob,
+                                  level, logger, type, exception, tag, tags,
                                   message, param1, param2, param3, param4, param5);
                     }
                 } finally {

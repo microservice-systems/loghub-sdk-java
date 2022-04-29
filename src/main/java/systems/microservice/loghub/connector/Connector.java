@@ -34,27 +34,27 @@ public interface Connector {
     public boolean isEnabled(Level level);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,
-                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                     String message);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,
-                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                     String message, Object param1);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,
-                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                     String message, Object param1, Object param2);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,
-                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                     String message, Object param1, Object param2, Object param3);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,
-                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                     String message, Object param1, Object param2, Object param3, Object param4);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,
-                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob,
+                    Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
                     String message, Object param1, Object param2, Object param3, Object param4, Object param5);
     public void collect(String metric, long count, long value, int precision, String unit);
 }

@@ -25,11 +25,13 @@ import java.util.Map;
  * @since 1.0
  */
 public enum Level {
-    ERROR((byte) 1),
-    WARN((byte) 2),
-    INFO((byte) 3),
-    DEBUG((byte) 4),
-    TRACE((byte) 5);
+    NONE((byte) 0),
+    ERROR((byte) 10),
+    WARN((byte) 20),
+    INFO((byte) 30),
+    DEBUG((byte) 40),
+    TRACE((byte) 50),
+    ALL(Byte.MAX_VALUE);
 
     private static final Map<Byte, Level> levels = createLevels();
 
@@ -41,11 +43,13 @@ public enum Level {
 
     private static Map<Byte, Level> createLevels() {
         Map<Byte, Level> ls = new HashMap<>(8);
+        ls.put(NONE.id, NONE);
         ls.put(ERROR.id, ERROR);
         ls.put(WARN.id, WARN);
         ls.put(INFO.id, INFO);
         ls.put(DEBUG.id, DEBUG);
         ls.put(TRACE.id, TRACE);
+        ls.put(ALL.id, ALL);
         return ls;
     }
 

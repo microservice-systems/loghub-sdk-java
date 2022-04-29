@@ -17,6 +17,7 @@
 
 package systems.microservice.loghub.event;
 
+import systems.microservice.loghub.Platform;
 import systems.microservice.loghub.io.FormatInputStream;
 
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import java.io.Serializable;
 public final class EventSource implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    public final Platform platform;
     public final String input;
     public final String clazz;
     public final String method;
@@ -36,6 +38,7 @@ public final class EventSource implements Serializable {
     public final int line;
 
     public EventSource(FormatInputStream input) {
+        this.platform = null;
         this.input = null;
         this.clazz = null;
         this.method = null;
@@ -44,7 +47,8 @@ public final class EventSource implements Serializable {
         this.line = 0;
     }
 
-    public EventSource(String input, String clazz, String method, String statement, String file, int line) {
+    public EventSource(Platform platform, String input, String clazz, String method, String statement, String file, int line) {
+        this.platform = platform;
         this.input = input;
         this.clazz = clazz;
         this.method = method;

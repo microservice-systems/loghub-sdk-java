@@ -33,7 +33,7 @@ public final class InputEvent implements Serializable {
     public final Tag tag;
     public final Tag[] tags;
 
-    public InputEvent(Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags) {
+    InputEvent(Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags) {
         this.level = level;
         this.logger = logger;
         this.type = type;

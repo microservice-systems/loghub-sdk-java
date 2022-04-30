@@ -28,7 +28,12 @@ import java.io.Serializable;
 public class LogHub implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    protected final String logger;
+    public final String logger;
+    public final InputEvent error;
+    public final InputEvent warn;
+    public final InputEvent info;
+    public final InputEvent debug;
+    public final InputEvent trace;
 
     public LogHub(Class<?> logger) {
         this(Validator.notNull("logger", logger).getCanonicalName());
@@ -36,9 +41,10 @@ public class LogHub implements Serializable {
 
     public LogHub(String logger) {
         this.logger = Validator.notNull("logger", logger);
-    }
-
-    public String getLogger() {
-        return logger;
+        this.error = new InputEvent(Level.ERROR, logger, Type.DEFAULT, null, null, null);
+        this.warn = new InputEvent(Level.WARN, logger, Type.DEFAULT, null, null, null);
+        this.info = new InputEvent(Level.INFO, logger, Type.DEFAULT, null, null, null);
+        this.debug = new InputEvent(Level.DEBUG, logger, Type.DEFAULT, null, null, null);
+        this.trace = new InputEvent(Level.TRACE, logger, Type.DEFAULT, null, null, null);
     }
 }

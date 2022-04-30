@@ -30,7 +30,6 @@ import systems.microservice.loghub.Type;
  */
 public interface Connector {
     public String getInfo();
-    public boolean isEnabled();
     public boolean isEnabled(Level level);
     public void log(long time, long number, Input input,
                     String clazz, String method, String statement, String file, int line,

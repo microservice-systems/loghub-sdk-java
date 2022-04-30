@@ -19,6 +19,7 @@ package systems.microservice.loghub;
 
 import systems.microservice.loghub.config.Validator;
 import systems.microservice.loghub.connector.Connector;
+import systems.microservice.loghub.connector.ConnectorFactory;
 
 import java.util.ArrayList;
 import java.util.ServiceLoader;
@@ -38,38 +39,23 @@ public final class Facade {
 
     private static Connector[] createConnectors() {
         ArrayList<Connector> cs = new ArrayList<>(16);
-        ServiceLoader<Connector> sl = ServiceLoader.load(Connector.class);
-        for (Connector c : sl) {
-            if (c != null) {
-                cs.add(c);
-                System.out.println(String.format("[LOGHUB-FACADE-JAVA]: Connector '%s' is initialized: %s", c.getClass().getCanonicalName(), c.getInfo()));
-            } else {
-                throw new RuntimeException("Connector returned by service provider is null");
+        ServiceLoader<ConnectorFactory> sl = ServiceLoader.load(ConnectorFactory.class);
+        for (ConnectorFactory cf : sl) {
+            if (cf != null) {
+                if (cf.isEnabled()) {
+                    Connector c = cf.createConnector();
+                    if (c != null) {
+                        cs.add(c);
+                        System.out.println(String.format("[LOGHUB-SDK-JAVA]: Connector '%s' is initialized: %s", c.getClass().getCanonicalName(), c.getInfo()));
+                    }
+                }
             }
         }
-        return cs.toArray(new Connector[cs.size()]);
+        return cs.toArray(new Connector[0]);
     }
 
     public static boolean isInside() {
         return threadInfo.get().inside;
-    }
-
-    public static boolean isEnabled() {
-        ThreadInfo ti = threadInfo.get();
-        if (!ti.inside) {
-            ti.inside = true;
-            try {
-                Connector[] cs = connectors;
-                for (int i = 0, ci = cs.length; i < ci; ++i) {
-                    if (cs[i].isEnabled()) {
-                        return true;
-                    }
-                }
-            } finally {
-                ti.inside = false;
-            }
-        }
-        return false;
     }
 
     public static boolean isEnabled(Level level) {

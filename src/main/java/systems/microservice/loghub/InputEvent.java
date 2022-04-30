@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class Event implements Serializable {
+public final class InputEvent implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public final Level level;
@@ -32,17 +32,13 @@ public class Event implements Serializable {
     public final Throwable exception;
     public final Tag tag;
     public final Tag[] tags;
-    public final Image image;
-    public final Blob blob;
 
-    public Event(Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags, Image image, Blob blob) {
+    public InputEvent(Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags) {
         this.level = level;
         this.logger = logger;
         this.type = type;
         this.exception = exception;
         this.tag = tag;
         this.tags = tags;
-        this.image = image;
-        this.blob = blob;
     }
 }

@@ -49,8 +49,6 @@ public final class Event implements Serializable {
     public final EventUsage usage;
     public final EventConfig config;
     public final EventInfo info;
-    public final Image image;
-    public final Blob blob;
 
     public Event(FormatInputStream input) {
         this.id = null;
@@ -67,11 +65,9 @@ public final class Event implements Serializable {
         this.usage = null;
         this.config = null;
         this.info = null;
-        this.image = null;
-        this.blob = null;
     }
 
-    public Event(UUID id, long time, Level level, String logger, Type type, String message, EventSource source, EventException exception, Map<String, Tag> tags, EventThread thread, EventProcess process, EventUsage usage, EventConfig config, EventInfo info, Image image, Blob blob) {
+    public Event(UUID id, long time, Level level, String logger, Type type, String message, EventSource source, EventException exception, Map<String, Tag> tags, EventThread thread, EventProcess process, EventUsage usage, EventConfig config, EventInfo info) {
         this.id = id;
         this.time = time;
         this.level = level;
@@ -86,7 +82,5 @@ public final class Event implements Serializable {
         this.usage = usage;
         this.config = config;
         this.info = info;
-        this.image = image;
-        this.blob = blob;
     }
 }

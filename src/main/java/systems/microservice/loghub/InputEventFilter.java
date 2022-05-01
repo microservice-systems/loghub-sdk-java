@@ -75,4 +75,12 @@ public final class InputEventFilter implements Serializable {
                          String message, Object param1, Object param2, Object param3, Object param4, Object param5) {
         return match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message);
     }
+
+    public static InputEventFilter parse(String value) {
+        if (value != null) {
+            return new InputEventFilter(0L, Long.MAX_VALUE);
+        } else {
+            return null;
+        }
+    }
 }

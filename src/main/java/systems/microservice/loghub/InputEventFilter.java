@@ -25,4 +25,54 @@ import java.io.Serializable;
  */
 public final class InputEventFilter implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    public final long begin;
+    public final long end;
+
+    public InputEventFilter(long begin, long end) {
+        this.begin = begin;
+        this.end = end;
+    }
+
+    public boolean match(long time, Input input,
+                         String clazz, String method, String statement, String file, int line,
+                         Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
+                         String message) {
+        return (time >= begin) && (time <= end);
+    }
+
+    public boolean match(long time, Input input,
+                         String clazz, String method, String statement, String file, int line,
+                         Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
+                         String message, Object param1) {
+        return match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message);
+    }
+
+    public boolean match(long time, Input input,
+                         String clazz, String method, String statement, String file, int line,
+                         Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
+                         String message, Object param1, Object param2) {
+        return match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message);
+    }
+
+    public boolean match(long time, Input input,
+                         String clazz, String method, String statement, String file, int line,
+                         Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
+                         String message, Object param1, Object param2, Object param3) {
+        return match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message);
+    }
+
+    public boolean match(long time, Input input,
+                         String clazz, String method, String statement, String file, int line,
+                         Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
+                         String message, Object param1, Object param2, Object param3, Object param4) {
+        return match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message);
+    }
+
+    public boolean match(long time, Input input,
+                         String clazz, String method, String statement, String file, int line,
+                         Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
+                         String message, Object param1, Object param2, Object param3, Object param4, Object param5) {
+        return match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message);
+    }
 }

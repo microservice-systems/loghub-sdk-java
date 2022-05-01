@@ -25,27 +25,29 @@ import java.util.UUID;
  * @since 1.0
  */
 public final class ConfigDefaults {
-    public static String central = "loghub.dev";
-    public static String organization = null;
-    public static String environment = null;
-    public static String registry = null;
-    public static String group = null;
-    public static String application = null;
-    public static String version = null;
-    public static String revision = null;
-    public static String name = null;
-    public static String description = null;
-    public static String repository = null;
-    public static String job = null;
-    public static String pipeline = null;
-    public static String branch = null;
-    public static String commit = null;
-    public static String commitBefore = null;
-    public static String commitMessage = null;
-    public static String maintainer = null;
-    public static String maintainerName = null;
-    public static String maintainerEmail = null;
-    public static String instance = createInstance();
+    public static String LOGHUB_CENTRAL = "loghub.dev";
+    public static String LOGHUB_ORGANIZATION = null;
+    public static String LOGHUB_ENVIRONMENT = null;
+    public static String LOGHUB_REGISTRY = null;
+    public static String LOGHUB_GROUP = null;
+    public static String LOGHUB_APPLICATION = null;
+    public static String LOGHUB_VERSION = null;
+    public static String LOGHUB_REVISION = null;
+    public static String LOGHUB_NAME = null;
+    public static String LOGHUB_DESCRIPTION = null;
+    public static String LOGHUB_REPOSITORY = null;
+    public static String LOGHUB_JOB = null;
+    public static String LOGHUB_PIPELINE = null;
+    public static String LOGHUB_BRANCH = null;
+    public static String LOGHUB_COMMIT = null;
+    public static String LOGHUB_COMMIT_BEFORE = null;
+    public static String LOGHUB_COMMIT_MESSAGE = null;
+    public static String LOGHUB_MAINTAINER = null;
+    public static String LOGHUB_MAINTAINER_NAME = null;
+    public static String LOGHUB_MAINTAINER_EMAIL = null;
+    public static String LOGHUB_INSTANCE = createInstance();
+    public static String LOGHUB_EVENT_INCLUDE = null;
+    public static String LOGHUB_EVENT_EXCLUDE = null;
 
     private ConfigDefaults() {
     }

@@ -24,7 +24,7 @@ import java.util.UUID;
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public final class ConfigDefaults {
+public final class Defaults {
     public static String LOGHUB_CENTRAL = "loghub.dev";
     public static String LOGHUB_ORGANIZATION = null;
     public static String LOGHUB_ENVIRONMENT = null;
@@ -49,7 +49,7 @@ public final class ConfigDefaults {
     public static String LOGHUB_EVENT_INCLUDE = null;
     public static String LOGHUB_EVENT_EXCLUDE = null;
 
-    private ConfigDefaults() {
+    private Defaults() {
     }
 
     private static String getHostName() {

@@ -81,6 +81,12 @@ public class InfoOutputStream extends OutputStream {
             if (metricSize != null) {
                 metricSize.collect(1L);
             }
+        } else {
+            if (name != null) {
+                throw new IllegalStateException(String.format("InfoOutputStream '%s' is closed", name));
+            } else {
+                throw new IllegalStateException("InfoOutputStream is closed");
+            }
         }
     }
 
@@ -96,6 +102,12 @@ public class InfoOutputStream extends OutputStream {
             if (metricSize != null) {
                 metricSize.collect(len);
             }
+        } else {
+            if (name != null) {
+                throw new IllegalStateException(String.format("InfoOutputStream '%s' is closed", name));
+            } else {
+                throw new IllegalStateException("InfoOutputStream is closed");
+            }
         }
     }
 
@@ -104,6 +116,12 @@ public class InfoOutputStream extends OutputStream {
         if (!closed) {
             if (output != null) {
                 output.flush();
+            }
+        } else {
+            if (name != null) {
+                throw new IllegalStateException(String.format("InfoOutputStream '%s' is closed", name));
+            } else {
+                throw new IllegalStateException("InfoOutputStream is closed");
             }
         }
     }

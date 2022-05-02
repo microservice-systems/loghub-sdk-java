@@ -29,16 +29,13 @@ import java.util.concurrent.atomic.AtomicLong;
  * @since 1.0
  */
 public class InfoOutputStream extends OutputStream {
-    protected static final Metric METRIC_SIZE = new Metric(String.format("%s.size", InfoOutputStream.class.getCanonicalName()), 0, "bytes");
-
     protected final OutputStream output;
     protected final String name;
     protected final long begin;
     protected final AtomicLong end;
     protected final AtomicLong size;
-    protected long rateBegin;
-    protected final AtomicLong rate;
     protected final Metric metricSize;
+    protected boolean closed;
 
     public InfoOutputStream(OutputStream output, String name) {
         this.output = output;
@@ -46,22 +43,79 @@ public class InfoOutputStream extends OutputStream {
         this.begin = System.currentTimeMillis();
         this.end = new AtomicLong(-1L);
         this.size = new AtomicLong(0L);
-        this.rateBegin = begin / 1000L;
-        this.rate = new AtomicLong(0L);
         this.metricSize = (name != null) ? new Metric(String.format("%s.instances.%s.size", this.getClass().getCanonicalName(), name), 0, "bytes") : null;
+        this.closed = false;
+    }
+
+    public OutputStream getOutput() {
+        return output;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public long getBegin() {
+        return begin;
+    }
+
+    public long getEnd() {
+        return end.get();
+    }
+
+    public long getSize() {
+        return size.get();
+    }
+
+    public boolean isClosed() {
+        return end.get() != -1L;
     }
 
     @Override
     public void write(int b) throws IOException {
+        if (!closed) {
+            if (output != null) {
+                output.write(b);
+            }
+            size.incrementAndGet();
+            if (metricSize != null) {
+                metricSize.collect(1L);
+            }
+        }
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        super.write(b, off, len);
+        Validator.inRangeInt("len", len, 0, Integer.MAX_VALUE);
+
+        if (!closed) {
+            if (output != null) {
+                output.write(b, off, len);
+            }
+            size.addAndGet(len);
+            if (metricSize != null) {
+                metricSize.collect(len);
+            }
+        }
+    }
+
+    @Override
+    public void flush() throws IOException {
+        if (!closed) {
+            if (output != null) {
+                output.flush();
+            }
+        }
     }
 
     @Override
     public void close() throws IOException {
-        super.close();
+        if (!closed) {
+            if (output != null) {
+                output.close();
+            }
+            end.set(System.currentTimeMillis());
+            closed = true;
+        }
     }
 }

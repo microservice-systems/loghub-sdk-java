@@ -31,6 +31,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class Facade {
     private static final AtomicLong eventNumber = new AtomicLong(0L);
+    private static final InputEventFilter eventInclude = Config.LOGHUB_EVENT_INCLUDE;
+    private static final InputEventFilter eventExclude = Config.LOGHUB_EVENT_EXCLUDE;
     private static final ThreadLocal<ThreadInfo> threadInfo = ThreadLocal.withInitial(() -> new ThreadInfo());
     private static final Connector[] connectors = createConnectors();
 
@@ -58,26 +60,6 @@ public final class Facade {
         return threadInfo.get().inside;
     }
 
-    public static boolean isEnabled(Level level) {
-        Validator.notNull("level", level);
-
-        ThreadInfo ti = threadInfo.get();
-        if (!ti.inside) {
-            ti.inside = true;
-            try {
-                Connector[] cs = connectors;
-                for (int i = 0, ci = cs.length; i < ci; ++i) {
-                    if (cs[i].isEnabled(level)) {
-                        return true;
-                    }
-                }
-            } finally {
-                ti.inside = false;
-            }
-        }
-        return false;
-    }
-
     public static void log(long time, Input input,
                            String clazz, String method, String statement, String file, int line,
                            Level level, String logger, Type type, Throwable exception, Tag tag, Tag[] tags,
@@ -89,20 +71,22 @@ public final class Facade {
         Validator.notNull("type", type);
         Validator.notNull("message", message);
 
-        if (isEnabled(level)) {
-            ThreadInfo ti = threadInfo.get();
-            if (!ti.inside) {
-                ti.inside = true;
-                try {
-                    Connector[] cs = connectors;
-                    for (int i = 0, ci = cs.length; i < ci; ++i) {
-                        cs[i].log(time, eventNumber.getAndIncrement(), input,
-                                  clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags,
-                                  message);
+        if ((eventInclude == null) || (eventInclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message))) {
+            if ((eventExclude == null) || (!eventExclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message))) {
+                ThreadInfo ti = threadInfo.get();
+                if (!ti.inside) {
+                    ti.inside = true;
+                    try {
+                        Connector[] cs = connectors;
+                        for (int i = 0, ci = cs.length; i < ci; ++i) {
+                            cs[i].log(time, eventNumber.getAndIncrement(), input,
+                                    clazz, method, statement, file, line,
+                                    level, logger, type, exception, tag, tags,
+                                    message);
+                        }
+                    } finally {
+                        ti.inside = false;
                     }
-                } finally {
-                    ti.inside = false;
                 }
             }
         }
@@ -119,20 +103,22 @@ public final class Facade {
         Validator.notNull("type", type);
         Validator.notNull("message", message);
 
-        if (isEnabled(level)) {
-            ThreadInfo ti = threadInfo.get();
-            if (!ti.inside) {
-                ti.inside = true;
-                try {
-                    Connector[] cs = connectors;
-                    for (int i = 0, ci = cs.length; i < ci; ++i) {
-                        cs[i].log(time, eventNumber.getAndIncrement(), input,
-                                  clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags,
-                                  message, param1);
+        if ((eventInclude == null) || (eventInclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1))) {
+            if ((eventExclude == null) || (!eventExclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1))) {
+                ThreadInfo ti = threadInfo.get();
+                if (!ti.inside) {
+                    ti.inside = true;
+                    try {
+                        Connector[] cs = connectors;
+                        for (int i = 0, ci = cs.length; i < ci; ++i) {
+                            cs[i].log(time, eventNumber.getAndIncrement(), input,
+                                    clazz, method, statement, file, line,
+                                    level, logger, type, exception, tag, tags,
+                                    message, param1);
+                        }
+                    } finally {
+                        ti.inside = false;
                     }
-                } finally {
-                    ti.inside = false;
                 }
             }
         }
@@ -149,20 +135,22 @@ public final class Facade {
         Validator.notNull("type", type);
         Validator.notNull("message", message);
 
-        if (isEnabled(level)) {
-            ThreadInfo ti = threadInfo.get();
-            if (!ti.inside) {
-                ti.inside = true;
-                try {
-                    Connector[] cs = connectors;
-                    for (int i = 0, ci = cs.length; i < ci; ++i) {
-                        cs[i].log(time, eventNumber.getAndIncrement(), input,
-                                  clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags,
-                                  message, param1, param2);
+        if ((eventInclude == null) || (eventInclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2))) {
+            if ((eventExclude == null) || (!eventExclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2))) {
+                ThreadInfo ti = threadInfo.get();
+                if (!ti.inside) {
+                    ti.inside = true;
+                    try {
+                        Connector[] cs = connectors;
+                        for (int i = 0, ci = cs.length; i < ci; ++i) {
+                            cs[i].log(time, eventNumber.getAndIncrement(), input,
+                                    clazz, method, statement, file, line,
+                                    level, logger, type, exception, tag, tags,
+                                    message, param1, param2);
+                        }
+                    } finally {
+                        ti.inside = false;
                     }
-                } finally {
-                    ti.inside = false;
                 }
             }
         }
@@ -179,20 +167,22 @@ public final class Facade {
         Validator.notNull("type", type);
         Validator.notNull("message", message);
 
-        if (isEnabled(level)) {
-            ThreadInfo ti = threadInfo.get();
-            if (!ti.inside) {
-                ti.inside = true;
-                try {
-                    Connector[] cs = connectors;
-                    for (int i = 0, ci = cs.length; i < ci; ++i) {
-                        cs[i].log(time, eventNumber.getAndIncrement(), input,
-                                  clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags,
-                                  message, param1, param2, param3);
+        if ((eventInclude == null) || (eventInclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2, param3))) {
+            if ((eventExclude == null) || (!eventExclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2, param3))) {
+                ThreadInfo ti = threadInfo.get();
+                if (!ti.inside) {
+                    ti.inside = true;
+                    try {
+                        Connector[] cs = connectors;
+                        for (int i = 0, ci = cs.length; i < ci; ++i) {
+                            cs[i].log(time, eventNumber.getAndIncrement(), input,
+                                    clazz, method, statement, file, line,
+                                    level, logger, type, exception, tag, tags,
+                                    message, param1, param2, param3);
+                        }
+                    } finally {
+                        ti.inside = false;
                     }
-                } finally {
-                    ti.inside = false;
                 }
             }
         }
@@ -209,20 +199,22 @@ public final class Facade {
         Validator.notNull("type", type);
         Validator.notNull("message", message);
 
-        if (isEnabled(level)) {
-            ThreadInfo ti = threadInfo.get();
-            if (!ti.inside) {
-                ti.inside = true;
-                try {
-                    Connector[] cs = connectors;
-                    for (int i = 0, ci = cs.length; i < ci; ++i) {
-                        cs[i].log(time, eventNumber.getAndIncrement(), input,
-                                  clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags,
-                                  message, param1, param2, param3, param4);
+        if ((eventInclude == null) || (eventInclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2, param3, param4))) {
+            if ((eventExclude == null) || (!eventExclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2, param3, param4))) {
+                ThreadInfo ti = threadInfo.get();
+                if (!ti.inside) {
+                    ti.inside = true;
+                    try {
+                        Connector[] cs = connectors;
+                        for (int i = 0, ci = cs.length; i < ci; ++i) {
+                            cs[i].log(time, eventNumber.getAndIncrement(), input,
+                                    clazz, method, statement, file, line,
+                                    level, logger, type, exception, tag, tags,
+                                    message, param1, param2, param3, param4);
+                        }
+                    } finally {
+                        ti.inside = false;
                     }
-                } finally {
-                    ti.inside = false;
                 }
             }
         }
@@ -239,20 +231,22 @@ public final class Facade {
         Validator.notNull("type", type);
         Validator.notNull("message", message);
 
-        if (isEnabled(level)) {
-            ThreadInfo ti = threadInfo.get();
-            if (!ti.inside) {
-                ti.inside = true;
-                try {
-                    Connector[] cs = connectors;
-                    for (int i = 0, ci = cs.length; i < ci; ++i) {
-                        cs[i].log(time, eventNumber.getAndIncrement(), input,
-                                  clazz, method, statement, file, line,
-                                  level, logger, type, exception, tag, tags,
-                                  message, param1, param2, param3, param4, param5);
+        if ((eventInclude == null) || (eventInclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2, param3, param4, param5))) {
+            if ((eventExclude == null) || (!eventExclude.match(time, input, clazz, method, statement, file, line, level, logger, type, exception, tag, tags, message, param1, param2, param3, param4, param5))) {
+                ThreadInfo ti = threadInfo.get();
+                if (!ti.inside) {
+                    ti.inside = true;
+                    try {
+                        Connector[] cs = connectors;
+                        for (int i = 0, ci = cs.length; i < ci; ++i) {
+                            cs[i].log(time, eventNumber.getAndIncrement(), input,
+                                    clazz, method, statement, file, line,
+                                    level, logger, type, exception, tag, tags,
+                                    message, param1, param2, param3, param4, param5);
+                        }
+                    } finally {
+                        ti.inside = false;
                     }
-                } finally {
-                    ti.inside = false;
                 }
             }
         }

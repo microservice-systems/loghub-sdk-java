@@ -17,9 +17,51 @@
 
 package loghub.io;
 
+import loghub.Metric;
+import loghub.config.Validator;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class InfoOutputStream {
+public class InfoOutputStream extends OutputStream {
+    protected static final Metric METRIC_SIZE = new Metric(String.format("%s.size", InfoOutputStream.class.getCanonicalName()), 0, "bytes");
+
+    protected final OutputStream output;
+    protected final String name;
+    protected final long begin;
+    protected final AtomicLong end;
+    protected final AtomicLong size;
+    protected long rateBegin;
+    protected final AtomicLong rate;
+    protected final Metric metricSize;
+
+    public InfoOutputStream(OutputStream output, String name) {
+        this.output = output;
+        this.name = name;
+        this.begin = System.currentTimeMillis();
+        this.end = new AtomicLong(-1L);
+        this.size = new AtomicLong(0L);
+        this.rateBegin = begin / 1000L;
+        this.rate = new AtomicLong(0L);
+        this.metricSize = (name != null) ? new Metric(String.format("%s.instances.%s.size", this.getClass().getCanonicalName(), name), 0, "bytes") : null;
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        super.write(b, off, len);
+    }
+
+    @Override
+    public void close() throws IOException {
+        super.close();
+    }
 }

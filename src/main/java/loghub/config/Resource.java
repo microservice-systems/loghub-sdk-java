@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.config;
+package loghub.config;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.concurrent;
+package loghub.concurrent;
 
-import systems.microservice.loghub.Tag;
-import systems.microservice.loghub.config.Validator;
+import loghub.Tag;
+import loghub.config.Validator;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

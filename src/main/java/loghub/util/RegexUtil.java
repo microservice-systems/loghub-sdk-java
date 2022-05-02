@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.util;
+package loghub.util;
 
-import systems.microservice.loghub.config.Validator;
+import loghub.config.Validator;
 
 import java.util.LinkedList;
 import java.util.List;

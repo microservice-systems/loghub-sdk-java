@@ -15,14 +15,12 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.connector;
+package loghub.connector;
 
-import systems.microservice.loghub.Blob;
-import systems.microservice.loghub.Image;
-import systems.microservice.loghub.Input;
-import systems.microservice.loghub.Level;
-import systems.microservice.loghub.Tag;
-import systems.microservice.loghub.Type;
+import loghub.Input;
+import loghub.Level;
+import loghub.Tag;
+import loghub.Type;
 
 /**
  * @author Dmitry Kotlyarov

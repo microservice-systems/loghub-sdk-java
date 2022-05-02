@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub;
+package loghub;
 
-import systems.microservice.loghub.config.Validator;
-import systems.microservice.loghub.io.ArrayOutputStream;
+import loghub.config.Validator;
+import loghub.io.ArrayOutputStream;
 
 import javax.imageio.ImageIO;
 import java.awt.AWTException;

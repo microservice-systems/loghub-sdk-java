@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.connector;
+package loghub.connector;
 
 /**
  * @author Dmitry Kotlyarov

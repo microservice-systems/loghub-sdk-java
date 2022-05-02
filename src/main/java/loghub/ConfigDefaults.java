@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub;
+package loghub;
 
 import java.net.InetAddress;
 import java.util.UUID;

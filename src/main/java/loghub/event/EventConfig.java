@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.event;
+package loghub.event;
 
-import systems.microservice.loghub.io.FormatInputStream;
+import loghub.io.FormatInputStream;
 
 import java.io.Serializable;
 

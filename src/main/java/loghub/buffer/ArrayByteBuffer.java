@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.buffer;
+package loghub.buffer;
 
-import systems.microservice.loghub.concurrent.ThreadSection;
-import systems.microservice.loghub.config.Validator;
+import loghub.concurrent.ThreadSection;
+import loghub.config.Validator;
 
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicInteger;

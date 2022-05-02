@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.usage;
+package loghub.usage;
 
 import java.io.File;
 import java.io.Serializable;

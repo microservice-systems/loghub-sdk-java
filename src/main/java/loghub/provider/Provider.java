@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.provider;
+package loghub.provider;
 
 /**
  * @author Dmitry Kotlyarov

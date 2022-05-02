@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub;
+package loghub;
 
-import systems.microservice.loghub.config.Property;
-import systems.microservice.loghub.config.Validator;
+import loghub.config.Property;
+import loghub.config.Validator;
 
 /**
  * @author Dmitry Kotlyarov

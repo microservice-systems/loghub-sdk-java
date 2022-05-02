@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.event;
+package loghub.event;
 
-import systems.microservice.loghub.config.Validator;
-import systems.microservice.loghub.io.FormatInputStream;
+import loghub.config.Validator;
+import loghub.io.FormatInputStream;
 
 import java.io.Serializable;
 import java.util.Map;

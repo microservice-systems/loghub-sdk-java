@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub;
+package loghub;
 
-import systems.microservice.loghub.config.Validator;
-import systems.microservice.loghub.connector.Connector;
-import systems.microservice.loghub.connector.ConnectorFactory;
+import loghub.config.Validator;
+import loghub.connector.Connector;
+import loghub.connector.ConnectorFactory;
 
 import java.util.ArrayList;
 import java.util.ServiceLoader;

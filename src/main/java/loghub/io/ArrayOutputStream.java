@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.io;
+package loghub.io;
 
-import systems.microservice.loghub.config.Validator;
+import loghub.config.Validator;
 
 import java.io.IOException;
 import java.io.OutputStream;

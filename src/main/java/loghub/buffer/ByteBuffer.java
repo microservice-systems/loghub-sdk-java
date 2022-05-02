@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.buffer;
+package loghub.buffer;
 
 import java.io.OutputStream;
 

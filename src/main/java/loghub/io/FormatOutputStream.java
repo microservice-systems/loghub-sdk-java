@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.io;
+package loghub.io;
 
 /**
  * @author Dmitry Kotlyarov

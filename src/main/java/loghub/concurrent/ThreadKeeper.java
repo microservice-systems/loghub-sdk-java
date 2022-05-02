@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.concurrent;
+package loghub.concurrent;
 
 /**
  * @author Dmitry Kotlyarov

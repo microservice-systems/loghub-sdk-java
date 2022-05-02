@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.usage;
+package loghub.usage;
 
-import systems.microservice.loghub.config.Validator;
-import systems.microservice.loghub.util.StringUtil;
+import loghub.config.Validator;
+import loghub.util.StringUtil;
 
 import java.io.Serializable;
 import java.util.Collections;

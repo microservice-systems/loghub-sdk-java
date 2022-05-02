@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.event;
+package loghub.event;
 
-import systems.microservice.loghub.Order;
-import systems.microservice.loghub.config.Validator;
+import loghub.Order;
+import loghub.config.Validator;
 
 import java.util.concurrent.atomic.AtomicLong;
 

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.util;
+package loghub.util;
 
 import java.security.SecureRandom;
 

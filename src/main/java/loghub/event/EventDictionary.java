@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.event;
+package loghub.event;
 
 import java.io.Serializable;
 

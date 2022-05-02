@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package systems.microservice.loghub.concurrent;
+package loghub.concurrent;
 
-import systems.microservice.loghub.config.Validator;
+import loghub.config.Validator;
 
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;

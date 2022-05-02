@@ -17,9 +17,21 @@
 
 package loghub.io;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * @author Dmitry Kotlyarov
  * @since 1.0
  */
-public class FormatOutputStream {
+public class FormatOutputStream extends OutputStream {
+    protected final OutputStream output;
+
+    public FormatOutputStream(OutputStream output) {
+        this.output = output;
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+    }
 }

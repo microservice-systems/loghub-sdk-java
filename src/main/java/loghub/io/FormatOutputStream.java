@@ -17,6 +17,8 @@
 
 package loghub.io;
 
+import loghub.config.Validator;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -26,12 +28,65 @@ import java.io.OutputStream;
  */
 public class FormatOutputStream extends OutputStream {
     protected final OutputStream output;
+    protected boolean closed;
 
     public FormatOutputStream(OutputStream output) {
         this.output = output;
+        this.closed = false;
+    }
+
+    public OutputStream getOutput() {
+        return output;
+    }
+
+    public boolean isClosed() {
+        return closed;
     }
 
     @Override
     public void write(int b) throws IOException {
+        if (!closed) {
+            if (output != null) {
+                output.write(b);
+            }
+        } else {
+            throw new IllegalStateException("FormatOutputStream is closed");
+        }
+    }
+
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        Validator.notNull("b", b);
+        Validator.inRangeInt("off", off, 0, b.length);
+        Validator.inRangeInt("len", len, 0, b.length - off);
+
+        if (!closed) {
+            if (output != null) {
+                output.write(b, off, len);
+            }
+        } else {
+            throw new IllegalStateException("FormatOutputStream is closed");
+        }
+    }
+
+    @Override
+    public void flush() throws IOException {
+        if (!closed) {
+            if (output != null) {
+                output.flush();
+            }
+        } else {
+            throw new IllegalStateException("FormatOutputStream is closed");
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (!closed) {
+            if (output != null) {
+                output.close();
+            }
+            closed = true;
+        }
     }
 }

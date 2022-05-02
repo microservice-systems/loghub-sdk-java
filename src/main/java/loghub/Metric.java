@@ -48,4 +48,12 @@ public class Metric implements Serializable {
         this.precision = precision;
         this.unit = unit;
     }
+
+    public void collect(long value) {
+        collect(1L, value);
+    }
+
+    public void collect(long count, long value) {
+        Facade.collect(metric, count, value, precision, unit);
+    }
 }

@@ -92,7 +92,9 @@ public class InfoOutputStream extends OutputStream {
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        Validator.inRangeInt("len", len, 0, Integer.MAX_VALUE);
+        Validator.notNull("b", b);
+        Validator.inRangeInt("off", off, 0, b.length);
+        Validator.inRangeInt("len", len, 0, b.length - off);
 
         if (!closed) {
             if (output != null) {

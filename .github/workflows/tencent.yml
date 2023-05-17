@@ -59,7 +59,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    environment: production
+    environment: release
     steps:
 
     - name: release

@@ -40,7 +40,16 @@ jobs:
       uses: actions/checkout@v3
 
   deploy-dev:
-    name: DeployDev
+    name: Deploy-DEV
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+
+    - name: dev-1
+      uses: actions/checkout@v3
+
+  test-dev:
+    name: Test-DEV
     runs-on: ubuntu-latest
     environment: production
     steps:

@@ -48,11 +48,30 @@ jobs:
     - name: dev-1
       uses: actions/checkout@v3
 
+  deploy-dev-2:
+    name: Deploy-DEV-2
+    runs-on: ubuntu-latest
+    environment: dev
+    needs: build
+    steps:
+    - name: dev-2
+      uses: actions/checkout@v3
+
   test-dev:
     name: Test-DEV
     runs-on: ubuntu-latest
     environment: dev
     needs: deploy-dev
+    steps:
+
+    - name: dev-1
+      uses: actions/checkout@v3
+
+  test-dev-2:
+    name: Test-DEV-2
+    runs-on: ubuntu-latest
+    environment: dev
+    needs: deploy-dev-2
     steps:
 
     - name: dev-1
